@@ -1,0 +1,53 @@
+<div class="container mt-25">
+  <!-- <div class="block-header">
+    <h2>Matters</h2>
+
+    <ul class="actions">
+      <li>
+        <a href=""><i class="zmdi zmdi-trending-up"></i></a>
+      </li>
+      <li>
+        <a href=""><i class="zmdi zmdi-check-all"></i></a>
+      </li>
+      <li class="dropdown" uib-dropdown>
+        <a href="" uib-dropdown-toggle><i class="zmdi zmdi-more-vert"></i></a>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li><a href="">Refresh</a></li>
+          <li><a href="">Manage Widgets</a></li>
+          <li><a href="">Widgets Settings</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div> -->
+
+  <div class="card">
+    <div class="card-header">
+      <h2>MATTERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Practice Area</th>
+            <th>Status</th>
+            <th>Open Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="m in matterList">
+            <td><a ui-sref="page.matter-details({id: m.id})">{{m.name}}</a></td>
+            <td>{{m.practice_area}}</td>
+            <td>
+              <div class="flag flag-success">{{m.status}}</div>
+              <div class="flag flag-pending">Pending</div>
+              <div class="flag flag-closed">Closed</div>
+            </td>
+            <td>{{m.open_date}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="block-header">
+    <h2><a ui-sref="page.matter-list"><i class="zmdi zmdi-arrow-left"></i> Back</a></h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>
+        MATTER DETAILS .. (Qui ci va la lettera d'incarico)
+        <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+      </h2>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Practice Area</th>
+            <th>Status</th>
+            <th>Open Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{matter.name}}</td>
+            <td>{{matter.practice_area}}</td>
+            <td>
+              <div class="flag flag-success">{{matter.status}}</div>
+              <div class="flag flag-pending">Pending</div>
+              <div class="flag flag-closed">Closed</div>
+            </td>
+            <td>{{matter.open_date}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

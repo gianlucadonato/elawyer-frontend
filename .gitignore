@@ -1,0 +1,9 @@
+*.log
+npm-debug.log
+node_modules
+src/bower_components
+.DS_Store
+dist/scripts
+dist/styles
+dist/views
+

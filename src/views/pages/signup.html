@@ -1,0 +1,59 @@
+<div class="row mt-25">
+  <div class="col-sm-6 col-sm-offset-3">
+    <!-- SIGNUP -->
+    <div class="card">
+      <div class="card-header ch-alt">
+        <h2>SIGNUP</h2>
+      </div>
+
+      <div class="card-body card-padding">
+        <form name="signupForm" ng-submit="signup(form)">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="fg-line">
+                  <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="First Name" required>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="fg-line">
+                  <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Last Name" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="fg-line">
+                  <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
+                </div>
+                <div ng-messages="signupForm.email.$error" class="form-errors">
+                  <div ng-message="invalid">Invalid Email.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="fg-line">
+                  <input type="password" name="password" class="form-control input-sm" placeholder="Password" ng-model="form.password" required>
+                </div>
+                <div ng-messages="signupForm.password.$error" class="form-errors">
+                  <div ng-message="invalid">Invalid Password length (min 8 characters)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block waves-effect">SIGNUP NOW!</button>
+          </div>
+          <div class="text-center">Already registered?</div>
+          <a ui-sref="auth.login" class="btn bgm-t-blue btn-block waves-effect m-t-5">LOGIN</a>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

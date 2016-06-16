@@ -1,0 +1,52 @@
+<header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include src="'views/partials/header.html'" data-ng-controller="HeaderCtrl as hctrl"></header>
+
+<section id="main">
+  <aside id="sidebar" data-ng-include src="'views/partials/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.left === true }"></aside>
+
+  <aside id="chat" data-ng-include src="'views/partials/chat.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.right === true }"></aside>
+
+  <section id="content" class="page-view mt-25">
+    <div class="container">
+
+      <div class="card" id="profile-main" data-ng-controller="ProfileCtrl as pctrl">
+        <div class="pm-overview c-overflow">
+          <div class="pmo-pic">
+            <div class="p-relative">
+              <a href="">
+                <img class="img-responsive" ng-src="{{user.avatar_url}}" default-src alt="avatar">
+              </a>
+
+              <div class="dropdown pmop-message">
+                <button uib-dropdown-toggle class="btn bgm-white btn-float">
+                  <i class="zmdi zmdi-account"></i>
+                </button>
+              </div>
+
+              <div class="pmop-edit">
+                <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
+                <input type="file" ngf-select="pctrl.uploadAvatar($file)" class="upload-avatar-image">
+              </div>
+            </div>
+
+            <div class="pmo-stat">
+              <h2 class="m-0 c-white">
+                {{user.first_name}} {{user.last_name}}
+              </h2> {{user.email}}
+            </div>
+          </div>
+        </div>
+
+        <div class="pm-body clearfix">
+          <ul class="tab-nav tn-justified">
+            <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="profile.about">About</a></li>
+            <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="profile.timeline">Timeline</a></li>
+          </ul>
+          <data ui-view></data>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<footer id="footer" data-ng-include src="'views/partials/footer.html'"></footer>

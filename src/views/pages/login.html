@@ -1,0 +1,39 @@
+<div class="row mt-25">
+  <div class="col-sm-6 col-sm-offset-3">
+    <!-- LOGIN -->
+    <div class="card">
+      <div class="card-header ch-alt">
+        <h2>LOGIN</h2>
+      </div>
+
+      <div class="card-body card-padding">
+        <form name="loginForm" ng-submit="login(form)">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+            <div class="fg-line">
+              <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
+            </div>
+            <div ng-messages="loginForm.email.$error" class="form-errors">
+              <div ng-message="invalid">Invalid Email.</div>
+            </div>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
+            <div class="fg-line">
+              <input type="password" name="password" class="form-control input-sm" placeholder="Password" ng-model="form.password" required>
+            </div>
+            <div ng-messages="loginForm.password.$error" class="form-errors">
+              <div ng-message="invalid">Invalid Password.</div>
+            </div>
+          </div>
+          <div class="form-group m-t-10">
+            <button type="submit" class="btn btn-primary btn-block waves-effect">LOGIN</button>
+          </div>
+          <div class="text-center">Not registered yet?</div>
+          <a ui-sref="auth.signup" class="btn bgm-t-blue btn-block waves-effect m-t-5">SIGNUP</a>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

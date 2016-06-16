@@ -1,0 +1,178 @@
+<div class="pmb-block">
+  <div class="pmbb-header">
+    <h2><i class="zmdi zmdi-account-circle m-r-5"></i> Profile Informations</h2>
+    <ul class="actions" data-ng-if="!editProfileInfo">
+      <li class="dropdown">
+        <a href="" data-ng-click="toggleProfileInfo()">
+          <i class="zmdi zmdi-edit"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="pmbb-body p-l-30">
+    <div class="pmbb-view" data-ng-if="!editProfileInfo">
+      <dl class="dl-horizontal">
+        <dt>Full Name</dt>
+        <dd>{{ user.first_name}} {{ user.last_name}}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Email</dt>
+        <dd>{{ user.email }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Gender</dt>
+        <dd>{{ user.gender }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Birthday</dt>
+        <dd>{{ user.birthday | amDateFormat:'DD/MM/YYYY'}}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Phone</dt>
+        <dd>{{ user.phone }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Skype</dt>
+        <dd>{{ user.skype }}</dd>
+      </dl>
+    </div>
+
+    <form class="pmbb-edit" data-ng-if="editProfileInfo">
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">First Name</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.first_name" type="text" class="form-control" value="{{ user.first_name }}" placeholder="eg. Mario">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Last Name</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.last_name" type="text" class="form-control" value="{{ user.last_name }}" placeholder="eg. Rossi">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Email</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.email" type="email" class="form-control" placeholder="eg. mario.rossi@gmail.com">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Gender</dt>
+        <dd>
+          <div class="fg-line">
+            <select class="form-control" ng-model="user.gender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Birthday</dt>
+        <dd>
+          <div class="dtp-container dropdown fg-line">
+            <input type='text' class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Mobile Phone</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Skype</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.skype" type="text" class="form-control" placeholder="eg. mario.rossi">
+          </div>
+        </dd>
+      </dl>
+      <div class="m-t-30">
+        <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">Save</button>
+        <button class="btn btn-link btn-sm" data-ng-click="toggleProfileInfo()" >Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="pmb-block">
+  <div class="pmbb-header">
+    <h2><i class="zmdi zmdi-card m-r-5"></i> Billing Information</h2>
+    <ul class="actions" data-ng-if="!editBillingInfo">
+      <li class="dropdown">
+        <a href="" data-ng-click="toggleBillingInfo()">
+          <i class="zmdi zmdi-edit"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="pmbb-body p-l-30">
+    <div class="pmbb-view" data-ng-if="!editBillingInfo">
+      <dl class="dl-horizontal">
+        <dt>Holder Name</dt>
+        <dd>{{ user.billing_holder }} </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Address</dt>
+        <dd>{{ user.address }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Fiscal Code</dt>
+        <dd>{{ user.fiscal_number }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>VAT Number (P.Iva)</dt>
+        <dd>{{ user.vat_number }}</dd>
+      </dl>
+    </div>
+
+    <form class="pmbb-edit" data-ng-if="editBillingInfo">
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Holder</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.billing_holder" type="text" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Address</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="user.address" placeholder="Address" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">VAT Number (P.Iva)</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.vat_number" type="text" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Fiscal Code</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.fiscal_code" type="text" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <div class="m-t-30">
+          <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">Save</button>
+          <button class="btn btn-link btn-sm" data-ng-click="toggleBillingInfo()" >Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

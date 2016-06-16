@@ -1,0 +1,128 @@
+<ul class="header-inner clearfix">
+
+  <li id="menu-trigger" ng-click="mactrl.toggleSidebar('left')" ng-class="{'open': mactrl.showSidebar.left === true}">
+    <div class="line-wrap">
+      <div class="line top"></div>
+      <div class="line center"></div>
+      <div class="line bottom"></div>
+    </div>
+  </li>
+
+  <li class="logo hidden-xs">
+    <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)">
+      <div class="logo-box"><strong>C</strong></div>
+      <div class="logo-box"><strong>R</strong></div>
+      <div class="logo-box"><strong>C</strong></div>
+      <div class="logo-box">L</div>
+      <div class="logo-box">E</div>
+      <div class="logo-box">X</div>
+      <!-- <div class="logo-box"><strong>CRC</strong>LEX</div> -->
+    </a>
+  </li>
+
+  <!-- Right Content -->
+  <li class="pull-right" ng-if="isAuthenticated">
+    <ul class="top-menu">
+
+      <!-- Messages -->
+      <li class="dropdown" uib-dropdown>
+        <a uib-dropdown-toggle href="">
+          <i class="tm-icon zmdi zmdi-email"></i>
+          <i class="tmn-counts">6</i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg stop-propagate pull-right">
+          <div class="listview">
+            <div class="lv-header">Messages</div>
+            <div class="lv-body">
+              <a class="lv-item" ng-href="" ng-repeat="w in hctrl.messageResult.list">
+                <div class="media">
+                  <div class="pull-left">
+                    <img class="lv-img-sm" ng-src="{{ w.img }}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="lv-title">{{ w.user }}</div>
+                    <small class="lv-small">{{ w.text }}</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <a class="lv-footer" href="">View All</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Notification -->
+      <li class="dropdown" uib-dropdown>
+        <a uib-dropdown-toggle href="">
+          <i class="tm-icon zmdi zmdi-notifications"></i>
+          <i class="tmn-counts">9</i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg stop-propagate pull-right">
+          <div class="listview" id="notifications">
+            <div class="lv-header">
+              Notification
+              <ul class="actions">
+                <li>
+                  <a href="" data-ng-click="hctrl.clearNotification($event)">
+                    <i class="zmdi zmdi-check-all"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="lv-body">
+              <a class="lv-item" ng-href="" ng-repeat="w in hctrl.messageResult.list">
+                <div class="media">
+                  <div class="pull-left">
+                    <img class="lv-img-sm" ng-src="{{ w.img }}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="lv-title">{{ w.user }}</div>
+                    <small class="lv-small">{{ w.text }}</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="clearfix"></div>
+            <a class="lv-footer" href="">View Previous</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="dropdown" uib-dropdown>
+        <a uib-dropdown-toggle href="">
+          <i class="tm-icon zmdi zmdi-more-vert"></i>
+        </a>
+        <ul class="dropdown-menu dm-icon pull-right">
+
+          <li>
+            <a ui-sref="profile.about"><i class="zmdi zmdi-mood"></i> Profile</a>
+          </li>
+          <li>
+            <a href=""><i class="zmdi zmdi-settings"></i> Settings</a>
+          </li>
+          <li ng-controller="AuthenticationCtrl">
+            <a data-ng-click="logout()" href=""><i class="zmdi zmdi-time-restore"></i> Logout</a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+  </li> <!-- Right Content: isAuthenticated -->
+
+  <li class="pull-right" ng-if="!isAuthenticated">
+    <ul class="top-menu">
+      <li><a ui-sref="auth.login"><span class="tm-label">LOGIN</span></a></li>
+      <li><a ui-sref="auth.signup"><span class="tm-label">SIGNUP</span></a></li>
+    </ul>
+  </li>
+
+</ul>
+
+<!-- Top Search Content -->
+<div id="top-search-wrap">
+  <div class="tsw-inner">
+    <i id="top-search-close" class="zmdi zmdi-arrow-left" data-ng-click="hctrl.closeSearch()"></i>
+    <input type="text">
+  </div>
+</div>
