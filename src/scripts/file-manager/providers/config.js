@@ -9,8 +9,8 @@
             defaultLang: 'en',
 
             listUrl: API.host + '/api/filemanager/list',
-            uploadUrl: 'bridges/php/handler.php',
-            renameUrl: 'bridges/php/handler.php',
+            uploadUrl: API.host + '/api/filemanager/upload',
+            renameUrl: API.host + '/api/filemanager/update',
             copyUrl: 'bridges/php/handler.php',
             moveUrl: 'bridges/php/handler.php',
             removeUrl: API.host + '/api/filemanager/delete',

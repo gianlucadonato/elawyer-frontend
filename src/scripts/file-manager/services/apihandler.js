@@ -75,77 +75,77 @@
         };
 
         ApiHandler.prototype.move = function(apiUrl, items, path) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-                action: 'move',
-                items: items,
-                newPath: path
-            };
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_moving'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
-            return deferred.promise;
+          var self = this;
+          var deferred = $q.defer();
+          var data = {
+            action: 'move',
+            items: items,
+            newPath: path
+          };
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, data).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_moving'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
+          return deferred.promise;
         };
 
         ApiHandler.prototype.remove = function(apiUrl, items) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-              action: 'remove',
-              fileId: items[0]
-            };
+          var self = this;
+          var deferred = $q.defer();
+          var data = {
+            action: 'remove',
+            fileIds: items
+          };
 
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
-            return deferred.promise;
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, data).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
+          return deferred.promise;
         };
 
-        ApiHandler.prototype.upload = function(apiUrl, destination, files) {
-            var self = this;
-            var deferred = $q.defer();
-            self.inprocess = true;
-            self.progress = 0;
-            self.error = '';
+        ApiHandler.prototype.upload = function(apiUrl, parentId, files) {
+          var self = this;
+          var deferred = $q.defer();
+          self.inprocess = true;
+          self.progress = 0;
+          self.error = '';
 
-            var data = {
-                destination: destination
-            };
+          var data = {
+            parentId: parentId,
+          };
 
-            for (var i = 0; i < files.length; i++) {
-                data['file-' + i] = files[i];
-            }
+          for (var i = 0; i < files.length; i++) {
+            var fileName = files[i].name || 'file-'+i;
+            data[fileName] = files[i];
+          }
 
-            if (files && files.length) {
-                Upload.upload({
-                    url: apiUrl,
-                    data: data
-                }).then(function (data) {
-                    self.deferredHandler(data, deferred);
-                }, function (data) {
-                    self.deferredHandler(data, deferred, 'Unknown error uploading files');
-                }, function (evt) {
-                    self.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total)) - 1;
-                })['finally'](function() {
-                    self.inprocess = false;
-                    self.progress = 0;
-                });
-            }
-
-            return deferred.promise;
+          if (files && files.length) {
+            Upload.upload({
+              url: apiUrl,
+              data: data
+            }).then(function (data) {
+              self.deferredHandler(data, deferred);
+            }, function (data) {
+              self.deferredHandler(data, deferred, 'Unknown error uploading files');
+            }, function (evt) {
+              self.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total)) - 1;
+            })['finally'](function() {
+              self.inprocess = false;
+              self.progress = 0;
+            });
+          }
+          return deferred.promise;
         };
 
         ApiHandler.prototype.getContent = function(apiUrl, itemPath) {
@@ -190,32 +190,33 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.rename = function(apiUrl, itemPath, newPath) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-                action: 'rename',
-                item: itemPath,
-                newItemPath: newPath
-            };
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
-            return deferred.promise;
+        ApiHandler.prototype.rename = function(apiUrl, item) {
+          var self = this;
+          var deferred = $q.defer();
+          var data = {
+            action: 'rename',
+            fileId: item.model.id,
+            name: item.tempModel.name
+          };
+          console.log('new name', item.tempModel.name);
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, data).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
+          return deferred.promise;
         };
 
         ApiHandler.prototype.getUrl = function(apiUrl, path) {
-            var data = {
-                action: 'download',
-                path: path
-            };
-            return path && [apiUrl, $.param(data)].join('?');
+          var data = {
+            action: 'download',
+            path: path
+          };
+          return path && [apiUrl, $.param(data)].join('?');
         };
 
         ApiHandler.prototype.download = function(apiUrl, itemPath, toFilename, downloadByAjax, forceNewWindow) {
