@@ -1,16 +1,19 @@
 (function(angular, $) {
-    'use strict';
-    angular.module('FileManagerApp').controller('FileManagerCtrl', [
-        '$scope', '$rootScope', '$window', '$translate', 'fileManagerConfig', 'item', 'fileNavigator', 'apiMiddleware',
-        function($scope, $rootScope, $window, $translate, fileManagerConfig, Item, FileNavigator, ApiMiddleware) {
+  'use strict';
+
+  angular
+    .module('FileManagerApp')
+    .controller('FileManagerCtrl', [
+      '$scope', '$rootScope', '$window', '$translate', 'fileManagerConfig', 'item', 'fileNavigator', 'apiMiddleware',
+      function($scope, $rootScope, $window, $translate, fileManagerConfig, Item, FileNavigator, ApiMiddleware) {
 
         var $storage = $window.localStorage;
         $scope.config = fileManagerConfig;
         $scope.reverse = false;
         $scope.predicate = ['model.type', 'model.name'];
         $scope.order = function(predicate) {
-            $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
-            $scope.predicate[1] = predicate;
+          $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
+          $scope.predicate[1] = predicate;
         };
         $scope.query = '';
         $scope.fileNavigator = new FileNavigator();
@@ -21,18 +24,18 @@
         $scope.temps = [];
 
         $scope.$watch('temps', function() {
-            if ($scope.singleSelection()) {
-                $scope.temp = $scope.singleSelection();
-            } else {
-                $scope.temp = new Item({rights: 644});
-                $scope.temp.multiple = true;
-            }
-            $scope.temp.revert();
+          if ($scope.singleSelection()) {
+            $scope.temp = $scope.singleSelection();
+          } else {
+            $scope.temp = new Item({rights: 644});
+            $scope.temp.multiple = true;
+          }
+          $scope.temp.revert();
         });
 
         $scope.fileNavigator.onRefresh = function() {
-            $scope.temps = [];
-            $rootScope.selectedModalPath = $scope.fileNavigator.currentPath;
+          $scope.temps = [];
+          $rootScope.selectedModalPath = $scope.fileNavigator.currentPath;
         };
 
         $scope.setTemplate = function(name) {
@@ -49,87 +52,100 @@
         };
 
         $scope.isSelected = function(item) {
-            return $scope.temps.indexOf(item) !== -1;
+          return $scope.temps.indexOf(item) !== -1;
         };
 
         $scope.selectOrUnselect = function(item, $event) {
-            var indexInTemp = $scope.temps.indexOf(item);
-            var isRightClick = $event && $event.which == 3;
+          var indexInTemp = $scope.temps.indexOf(item);
+          var isRightClick = $event && $event.which === 3;
 
-            if ($event && $event.target.hasAttribute('prevent')) {
-                $scope.temps = [];
-                return;
+          if ($event && $event.target.hasAttribute('prevent')) {
+            $scope.temps = [];
+            return;
+          }
+          if (!item || (isRightClick && $scope.isSelected(item))) {
+            return;
+          }
+          if ($event && $event.shiftKey && !isRightClick) {
+            var list = $scope.fileList;
+            var indexInList = list.indexOf(item);
+            var lastSelected = $scope.temps[0];
+            var i = list.indexOf(lastSelected);
+            var current = undefined;
+            if (lastSelected && list.indexOf(lastSelected) < indexInList) {
+              $scope.temps = [];
+              while (i <= indexInList) {
+                current = list[i];
+                !$scope.isSelected(current) && $scope.temps.push(current);
+                i++;
+              }
+              return;
             }
-            if (! item || (isRightClick && $scope.isSelected(item))) {
-                return;
+            if (lastSelected && list.indexOf(lastSelected) > indexInList) {
+              $scope.temps = [];
+              while (i >= indexInList) {
+                current = list[i];
+                !$scope.isSelected(current) && $scope.temps.push(current);
+                i--;
+              }
+              return;
             }
-            if ($event && $event.shiftKey && !isRightClick) {
-                var list = $scope.fileList;
-                var indexInList = list.indexOf(item);
-                var lastSelected = $scope.temps[0];
-                var i = list.indexOf(lastSelected);
-                var current = undefined;
-                if (lastSelected && list.indexOf(lastSelected) < indexInList) {
-                    $scope.temps = [];
-                    while (i <= indexInList) {
-                        current = list[i];
-                        !$scope.isSelected(current) && $scope.temps.push(current);
-                        i++;
-                    }
-                    return;
-                }
-                if (lastSelected && list.indexOf(lastSelected) > indexInList) {
-                    $scope.temps = [];
-                    while (i >= indexInList) {
-                        current = list[i];
-                        !$scope.isSelected(current) && $scope.temps.push(current);
-                        i--;
-                    }
-                    return;
-                }
-            }
-            if ($event && $event.ctrlKey && !isRightClick) {
-                $scope.isSelected(item) ? $scope.temps.splice(indexInTemp, 1) : $scope.temps.push(item);
-                return;
-            }
-            $scope.temps = [item];
+          }
+          if ($event && $event.ctrlKey && !isRightClick) {
+            $scope.isSelected(item) ? $scope.temps.splice(indexInTemp, 1) : $scope.temps.push(item);
+            return;
+          }
+          $scope.temps = [item];
         };
 
         $scope.singleSelection = function() {
-            return $scope.temps.length === 1 && $scope.temps[0];
+          return $scope.temps.length === 1 && $scope.temps[0];
         };
 
         $scope.totalSelecteds = function() {
-            return {
-                total: $scope.temps.length
-            };
+          return {
+            total: $scope.temps.length
+          };
         };
 
         $scope.selectionHas = function(type) {
-            return $scope.temps.find(function(item) {
-                return item && item.model.type === type;
-            });
+          return $scope.temps.find(function(item) {
+            return item && item.model.type === type;
+          });
         };
 
         $scope.prepareNewFolder = function() {
-            var item = new Item(null, $scope.fileNavigator.currentPath);
-            $scope.temps = [item];
-            return item;
+          var item = new Item(null, $scope.fileNavigator.currentPath, ($scope.fileNavigator.parent || {}).folderId);
+          $scope.temps = [item];
+          console.log('fileNav', $scope.fileNavigator);
+          console.log('item?', item);
+          return item;
         };
 
         $scope.smartClick = function(item) {
-            if (item.isFolder()) {
-                return $scope.fileNavigator.folderClick(item);
-            }
-            if (item.isImage()) {
-                if ($scope.config.previewImagesInModal) {
-                    return $scope.openImagePreview(item);
-                }
-                return $scope.apiMiddleware.download(item, true);
-            }
-            if (item.isEditable()) {
-                return $scope.openEditItem(item);
-            }
+          if (item.isFolder()) {
+            return $scope.fileNavigator.folderClick(item);
+          }
+          else if (item.isEditable()) {
+            return $scope.openEditItem(item);
+          }
+          else if(item.model.webViewLink){
+            // Open Doc with Google Drive Preview
+            $window.open(item.model.webViewLink, '_blank');
+          }
+          // if (item.isImage()) {
+          //   if ($scope.config.previewImagesInModal) {
+          //     return $scope.openImagePreview(item);
+          //   }
+          //   return $scope.apiMiddleware.download(item, true);
+          // }
+        };
+
+        $scope.openFilePreview = function() {
+          var item = $scope.singleSelection();
+          if(item.model.webViewLink) {
+            $window.open(item.model.webViewLink, '_blank');
+          }
         };
 
         $scope.openImagePreview = function() {
@@ -186,12 +202,13 @@
         $scope.download = function() {
             var item = $scope.singleSelection();
             if ($scope.selectionHas('dir')) {
-                return;
+              return;
             }
-            if (item) {
-                return $scope.apiMiddleware.download(item);
+            if (item.model.webContentLink) {
+              // return $scope.apiMiddleware.download(item);
+              $window.open(item.model.webContentLink, '_self');
             }
-            return $scope.apiMiddleware.downloadMultiple($scope.temps);
+            // return $scope.apiMiddleware.downloadMultiple($scope.temps);
         };
 
         $scope.copy = function() {
@@ -264,10 +281,10 @@
         };
 
         $scope.remove = function() {
-            $scope.apiMiddleware.remove($scope.temps).then(function() {
-                $scope.fileNavigator.refresh();
-                $scope.modal('remove', true);
-            });
+          $scope.apiMiddleware.remove($scope.temps).then(function() {
+            $scope.fileNavigator.refresh();
+            $scope.modal('remove', true);
+          });
         };
 
         $scope.move = function() {
@@ -297,15 +314,15 @@
         };
 
         $scope.createFolder = function() {
-            var item = $scope.singleSelection();
-            var name = item.tempModel.name;
-            if (!name || $scope.fileNavigator.fileNameExists(name)) {
-                return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
-            }
-            $scope.apiMiddleware.createFolder(item).then(function() {
-                $scope.fileNavigator.refresh();
-                $scope.modal('newfolder', true);
-            });
+          var item = $scope.singleSelection();
+          var name = item.tempModel.name;
+          if (!name || $scope.fileNavigator.fileNameExists(name)) {
+            return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
+          }
+          $scope.apiMiddleware.createFolder(item).then(function() {
+            $scope.fileNavigator.refresh(item.model.parentId);
+            $scope.modal('newfolder', true);
+          });
         };
 
         $scope.addForUpload = function($files) {

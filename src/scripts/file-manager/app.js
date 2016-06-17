@@ -12,9 +12,9 @@
      * jQuery inits
      */
     $(window.document).on('shown.bs.modal', '.modal', function() {
-        window.setTimeout(function() {
-            $('[autofocus]', this).focus();
-        }.bind(this), 100);
+      window.setTimeout(function() {
+        $('[autofocus]', this).focus();
+      }.bind(this), 100);
     });
 
     $(window.document).on('click', function() {
@@ -22,25 +22,25 @@
     });
 
     $(window.document).on('contextmenu', '.main-navigation .table-files tr.item-list:has("td"), .item-list', function(e) {
-        var menu = $('#context-menu');
+      var menu = $('#context-menu');
 
-        if (e.pageX >= window.innerWidth - menu.width()) {
-            e.pageX -= menu.width();
-        }
-        if (e.pageY >= window.innerHeight - menu.height()) {
-            e.pageY -= menu.height();
-        }
+      if (e.pageX >= window.innerWidth - menu.width()) {
+        e.pageX -= menu.width();
+      }
+      if (e.pageY >= window.innerHeight - menu.height()) {
+        e.pageY -= menu.height();
+      }
 
-        menu.hide().css({
-            left: e.pageX,
-            top: e.pageY
-        }).show();
-        e.preventDefault();
+      menu.hide().css({
+        left: e.pageX,
+        top: e.pageY
+      }).show();
+      e.preventDefault();
     });
 
     if (! Array.prototype.find) {
         Array.prototype.find = function(predicate) {
-            if (this == null) {
+            if (this === null) {
                 throw new TypeError('Array.prototype.find called on null or undefined');
             }
             if (typeof predicate !== 'function') {

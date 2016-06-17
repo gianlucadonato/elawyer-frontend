@@ -32,15 +32,13 @@
           return deferred.resolve(data);
         };
 
-        ApiHandler.prototype.list = function(apiUrl, path, customDeferredHandler) {
+        ApiHandler.prototype.list = function(data, apiUrl, path, customDeferredHandler) {
           var self = this;
           var dfHandler = customDeferredHandler || self.deferredHandler;
           var deferred = $q.defer();
 
-          var data = {
-            action: 'list',
-            path: path
-          };
+          data.action = 'list';
+          data.path = path;
 
           self.inprocess = true;
           self.error = '';
@@ -100,8 +98,8 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-                action: 'remove',
-                items: items
+              action: 'remove',
+              fileId: items[0]
             };
 
             self.inprocess = true;
@@ -294,69 +292,66 @@
         };
 
         ApiHandler.prototype.extract = function(apiUrl, item, folderName, path) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-                action: 'extract',
-                item: item,
-                destination: path,
-                folderName: folderName
-            };
+          var self = this;
+          var deferred = $q.defer();
+          var params = {
+            action: 'extract',
+            item: item,
+            destination: path,
+            folderName: folderName
+          };
 
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_extracting'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
-            return deferred.promise;
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, params).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_extracting'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
+          return deferred.promise;
         };
 
         ApiHandler.prototype.changePermissions = function(apiUrl, items, permsOctal, permsCode, recursive) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-                action: 'changePermissions',
-                items: items,
-                perms: permsOctal,
-                permsCode: permsCode,
-                recursive: !!recursive
-            };
+          var self = this;
+          var deferred = $q.defer();
+          var params = {
+            action: 'changePermissions',
+            items: items,
+            perms: permsOctal,
+            permsCode: permsCode,
+            recursive: !!recursive
+          };
 
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_changing_perms'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
-            return deferred.promise;
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, params).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_changing_perms'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
+          return deferred.promise;
         };
 
-        ApiHandler.prototype.createFolder = function(apiUrl, path) {
-            var self = this;
-            var deferred = $q.defer();
-            var data = {
-                action: 'createFolder',
-                newPath: path
-            };
+        ApiHandler.prototype.createFolder = function(apiUrl, params) {
+          var self = this;
+          var deferred = $q.defer();
+          params.action = 'createFolder';
 
-            self.inprocess = true;
-            self.error = '';
-            $http.post(apiUrl, data).success(function(data) {
-                self.deferredHandler(data, deferred);
-            }).error(function(data) {
-                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
-            })['finally'](function() {
-                self.inprocess = false;
-            });
+          self.inprocess = true;
+          self.error = '';
+          $http.post(apiUrl, params).success(function(data) {
+            self.deferredHandler(data, deferred);
+          }).error(function(data) {
+            self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+          })['finally'](function() {
+            self.inprocess = false;
+          });
 
-            return deferred.promise;
+          return deferred.promise;
         };
 
         return ApiHandler;

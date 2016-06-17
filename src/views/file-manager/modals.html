@@ -248,8 +248,10 @@
               <h4 class="modal-title">{{'new_folder' | translate}}</h4>
             </div>
             <div class="modal-body">
-              <label class="radio">{{'folder_name' | translate}}</label>
-              <input class="form-control" ng-model="singleSelection().tempModel.name" autofocus="autofocus">
+              <div class="fg-line">
+                <input class="form-control fg-input" ng-model="singleSelection().tempModel.name" autofocus="autofocus" placeholder="{{'folder_name' | translate}}">
+                <!-- <label class="fg-label">{{'folder_name' | translate}}</label> -->
+              </div>
               <div ng-include data-src="'error-bar'" class="clearfix"></div>
             </div>
             <div class="modal-footer">
@@ -274,13 +276,13 @@
             </div>
             <div class="modal-body">
               <label class="radio">
-                {{"files_will_uploaded_to" | translate}} 
+                {{"files_will_uploaded_to" | translate}}
                 <b>/{{fileNavigator.currentPath.join('/')}}</b>
               </label>
               <button class="btn btn-default btn-block" ngf-select="$parent.addForUpload($files)" ngf-multiple="true">
                 {{"select_files" | translate}}
               </button>
-              
+
               <div class="upload-list">
                 <ul class="list-group">
                   <li class="list-group-item" ng-repeat="(index, uploadFile) in $parent.uploadFileList">
@@ -350,13 +352,13 @@
               </div>
               <div class="clearfix mt10">
                   <span class="label label-primary pull-left" ng-hide="temp.multiple">
-                    {{'original' | translate}}: 
-                    {{temp.model.perms.toCode(selectionHas('dir') ? 'd':'-')}} 
+                    {{'original' | translate}}:
+                    {{temp.model.perms.toCode(selectionHas('dir') ? 'd':'-')}}
                     ({{temp.model.perms.toOctal()}})
                   </span>
                   <span class="label label-primary pull-right">
-                    {{'changes' | translate}}: 
-                    {{temp.tempModel.perms.toCode(selectionHas('dir') ? 'd':'-')}} 
+                    {{'changes' | translate}}:
+                    {{temp.tempModel.perms.toCode(selectionHas('dir') ? 'd':'-')}}
                     ({{temp.tempModel.perms.toOctal()}})
                   </span>
               </div>
@@ -402,7 +404,7 @@
   <div class="panel panel-primary mt10 mb0">
     <div class="panel-body">
         <div class="detail-sources">
-          <code class="mr5"><b>{{"Selection" | translate}}:</b>  
+          <code class="mr5"><b>{{"Selection" | translate}}:</b>
             <span ng-include="'selected-files-msg'"></span>
           </code>
         </div>

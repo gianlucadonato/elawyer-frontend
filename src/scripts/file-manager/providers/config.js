@@ -13,7 +13,7 @@
             renameUrl: 'bridges/php/handler.php',
             copyUrl: 'bridges/php/handler.php',
             moveUrl: 'bridges/php/handler.php',
-            removeUrl: 'bridges/php/handler.php',
+            removeUrl: API.host + '/api/filemanager/delete',
             editUrl: 'bridges/php/handler.php',
             getContentUrl: 'bridges/php/handler.php',
             createFolderUrl: API.host + '/api/filemanager/create_folder',
