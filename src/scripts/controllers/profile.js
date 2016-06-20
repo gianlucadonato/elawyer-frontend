@@ -6,20 +6,20 @@
   * Profile Controller
   =========================================================*/
 
-  App.controller('ProfileCtrl', function($rootScope, $scope, $http, User, Auth, Notify, Upload, API) {
+  App.controller('ProfileCtrl', function($rootScope, $scope, $http, $stateParams, User, Auth, Notify, Upload, API) {
 
     $scope.editProfileInfo = false;
     $scope.editBillingInfo = false;
 
     function activate() {
-      getUser();
+      getUser($stateParams.id);
     }
 
     activate();
 
-    function getUser() {
+    function getUser(userId) {
       User
-        .get(Auth.getUser())
+        .get({id: userId})
         .then(function(user){
           $scope.user = user;
         })

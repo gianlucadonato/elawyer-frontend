@@ -1,0 +1,29 @@
+<div class="container mt-25">
+
+  <div class="card">
+    <div class="card-header card-header-flex">
+      <h2>CUSTOMERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <a href="" class="btn btn-success" ng-click="openNewCustomerModal()">
+        <i class="zmdi zmdi-account-add"></i> New Customer
+      </a>
+    </div>
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="c in customers">
+            <td><a ui-sref="profile.details({id: c.id})">{{c.first_name}} {{c.last_name}}</a></td>
+            <td>{{c.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

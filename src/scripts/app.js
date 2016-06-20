@@ -7,6 +7,8 @@ var App = angular.module('eLawyer', [
   'ngMessages',
   'ui.router',
   'ui.bootstrap',
+  'permission',
+  'permission.ui',
   'angular-loading-bar',
   'oc.lazyLoad',
   'nouislider',
@@ -53,11 +55,21 @@ App.config(function($httpProvider) {
 
 // APP RUN
 // -----------------------------------
-App.run(function($rootScope, $state, Auth, amMoment, $templateCache) {
+App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) {
 
   amMoment.changeLocale('it');
 
-  Auth.isAuthenticated();
+  // RoleStore.defineRole('USER', function () {
+  //   return Auth.isAuthenticated();
+  // });
+
+  RoleStore.defineRole('ADMIN', function () {
+    if(Auth.isAuthenticated()) {
+      return Auth.getUser().role === 100;
+    } else {
+      return false;
+    }
+  });
 
   // Redirect user to login page if not authenticated
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
@@ -67,7 +79,7 @@ App.run(function($rootScope, $state, Auth, amMoment, $templateCache) {
     }
     else if(toState.title === 'Login' && Auth.isAuthenticated()) {
       event.preventDefault();
-      $state.go('profile.about');
+      $state.go('profile.details', Auth.getUser());
     }
   });
 

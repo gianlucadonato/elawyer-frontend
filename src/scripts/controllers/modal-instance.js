@@ -9,18 +9,19 @@
   // Please note that $uibModalInstance represents a modal window (instance) dependency.
   // It is not the same as the $modal service used above.
 
-  App.controller('ModalInstanceCtrl', function ($scope, $modalInstance, content) {
+  App.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, content) {
 
     $scope.modalContent = content;
 
     $scope.ok = function () {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
   })
+
   //Add event Controller (Modal Instance)
   .controller('AddEventCtrl', function($scope, $modalInstance, calendarData){
 

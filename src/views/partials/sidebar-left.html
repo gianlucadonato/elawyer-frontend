@@ -13,7 +13,7 @@
 
     <ul class="main-menu">
       <li>
-        <a data-ui-sref="profile.about" data-ng-click="mactrl.sidebarStat($event)">
+        <a data-ui-sref="profile.details({id: current_user.id})" data-ng-click="mactrl.sidebarStat($event)">
           <i class="zmdi zmdi-account"></i> View Profile
         </a>
       </li>
@@ -30,6 +30,13 @@
 
     <li data-ui-sref-active="active">
       <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
+    </li>
+
+    <li data-ui-sref-active="active">
+      <a data-ui-sref="page.customer-list" data-ng-click="mactrl.sidebarStat($event)"
+         permission permission-only="'ADMIN'">
+        <i class="zmdi zmdi-accounts"></i> Customers
+      </a>
     </li>
 
     <li data-ui-sref-active="active">

@@ -21,7 +21,7 @@
       Auth
         .signup(credentials)
         .then(function(res){
-          $state.go('profile.about');
+          $state.go('profile.details', {id: res.data.user.id});
         }, function(err){
           for(var key in err.data.data) {
             $scope.signupForm[key].$error.invalid = true;
@@ -39,8 +39,8 @@
 
       Auth
         .login(credentials)
-        .then(function(res){
-          $state.go('profile.about', {id: res.id});
+        .then(function(user){
+          $state.go('profile.details', {id: user.id});
         })
         .catch(function(err){
           if(err.status === 404) // Invalid Email
