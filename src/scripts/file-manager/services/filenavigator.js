@@ -10,6 +10,7 @@
         this.requesting = false;
         this.fileList = [];
         this.currentPath = [];
+        this.currentFolderId = 'root';
         this.history = [];
         this.error = '';
         this.onRefresh = function() {};
@@ -39,13 +40,14 @@
         return this.apiMiddleware.list(params, this.currentPath, this.deferredHandler.bind(this));
       };
 
-      FileNavigator.prototype.refresh = function(folderId) {
+      FileNavigator.prototype.refresh = function() {
         var self = this;
         var path = self.currentPath.join('/');
         self.requesting = true;
         self.fileList = [];
-        if(!folderId) folderId = 'root';
-        return self.list({folderId: folderId}).then(function(data) {
+        return self.list({
+          folderId: self.currentFolderId
+        }).then(function(data) {
           self.fileList = (data.result || []).map(function(file) {
             return new Item(file, self.currentPath);
           });
@@ -108,12 +110,12 @@
       FileNavigator.prototype.folderClick = function(item) {
         this.currentPath = [];
         this.currentPath = [];
-        var folderId;
+        this.currentFolderId = 'root';
         if (item && item.isFolder()) {
           this.currentPath = item.model.fullPath().split('/').splice(1);
-          folderId = item.model.id;
+          this.currentFolderId = item.model.id;
         }
-        this.refresh(folderId);
+        this.refresh();
       };
 
       FileNavigator.prototype.upDir = function() {

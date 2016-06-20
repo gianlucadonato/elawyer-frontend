@@ -34,8 +34,14 @@
   "src/bower_components/summernote/dist/summernote.min.js",
   "src/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js",
   "src/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+<<<<<<< HEAD
   "src/bower_components/angular-ui-tree/dist/angular-ui-tree.js",
   "src/bower_components/angular-ui-tree/dist/angular-ui-tree.min.css",
+=======
+  "src/bower_components/angular-permission/dist/angular-permission.min.js",
+  "src/bower_components/angular-permission/dist/angular-permission-ui.min.js",
+
+>>>>>>> 3185d2d8844e515d54dad67ab82fa56be6de1c82
   "src/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
   "src/bower_components/summernote/dist/summernote.css",
   "src/bower_components/animate.css/animate.min.css",

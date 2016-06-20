@@ -43,12 +43,12 @@
           return this.apiHandler.remove(fileManagerConfig.removeUrl, items);
         };
 
-        ApiMiddleware.prototype.upload = function(files, path) {
+        ApiMiddleware.prototype.upload = function(files, parentId) {
           if (! $window.FormData) {
             throw new Error('Unsupported browser version');
           }
-          var destination = this.getPath(path);
-          return this.apiHandler.upload(fileManagerConfig.uploadUrl, destination, files);
+          // var destination = this.getPath(path);
+          return this.apiHandler.upload(fileManagerConfig.uploadUrl, parentId, files);
         };
 
         ApiMiddleware.prototype.getContent = function(item) {
@@ -62,10 +62,9 @@
         };
 
         ApiMiddleware.prototype.rename = function(item) {
-          var itemPath = this.getFilePath(item);
-          var newPath = item.tempModel.fullPath();
-
-          return this.apiHandler.rename(fileManagerConfig.renameUrl, itemPath, newPath);
+          // var itemPath = this.getFilePath(item);
+          // var newPath = item.tempModel.fullPath();
+          return this.apiHandler.rename(fileManagerConfig.renameUrl, item);
         };
 
         ApiMiddleware.prototype.getUrl = function(item) {

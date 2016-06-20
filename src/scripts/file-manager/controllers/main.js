@@ -115,10 +115,8 @@
         };
 
         $scope.prepareNewFolder = function() {
-          var item = new Item(null, $scope.fileNavigator.currentPath, ($scope.fileNavigator.parent || {}).folderId);
+          var item = new Item(null, $scope.fileNavigator.currentPath, $scope.fileNavigator.currentFolderId);
           $scope.temps = [item];
-          console.log('fileNav', $scope.fileNavigator);
-          console.log('item?', item);
           return item;
         };
 
@@ -300,17 +298,17 @@
         };
 
         $scope.rename = function() {
-            var item = $scope.singleSelection();
-            var name = item.tempModel.name;
-            var samePath = item.tempModel.path.join('') === item.model.path.join('');
-            if (!name || (samePath && $scope.fileNavigator.fileNameExists(name))) {
-                $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
-                return false;
-            }
-            $scope.apiMiddleware.rename(item).then(function() {
-                $scope.fileNavigator.refresh();
-                $scope.modal('rename', true);
-            });
+          var item = $scope.singleSelection();
+          var name = item.tempModel.name;
+          var samePath = item.tempModel.path.join('') === item.model.path.join('');
+          if (!name || (samePath && $scope.fileNavigator.fileNameExists(name))) {
+            $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
+            return false;
+          }
+          $scope.apiMiddleware.rename(item).then(function() {
+            $scope.fileNavigator.refresh();
+            $scope.modal('rename', true);
+          });
         };
 
         $scope.createFolder = function() {
@@ -320,42 +318,43 @@
             return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
           }
           $scope.apiMiddleware.createFolder(item).then(function() {
-            $scope.fileNavigator.refresh(item.model.parentId);
+            $scope.fileNavigator.refresh(
+              );
             $scope.modal('newfolder', true);
           });
         };
 
         $scope.addForUpload = function($files) {
-            $scope.uploadFileList = $scope.uploadFileList.concat($files);
-            $scope.modal('uploadfile');
+          $scope.uploadFileList = $scope.uploadFileList.concat($files);
+          $scope.modal('uploadfile');
         };
 
         $scope.removeFromUpload = function(index) {
-            $scope.uploadFileList.splice(index, 1);
+          $scope.uploadFileList.splice(index, 1);
         };
 
         $scope.uploadFiles = function() {
-            $scope.apiMiddleware.upload($scope.uploadFileList, $scope.fileNavigator.currentPath).then(function() {
-                $scope.fileNavigator.refresh();
-                $scope.uploadFileList = [];
-                $scope.modal('uploadfile', true);
-            }, function(data) {
-                var errorMsg = data.result && data.result.error || $translate.instant('error_uploading_files');
-                $scope.apiMiddleware.apiHandler.error = errorMsg;
-            });
+          $scope.apiMiddleware.upload($scope.uploadFileList, $scope.fileNavigator.currentFolderId).then(function() {
+            $scope.fileNavigator.refresh();
+            $scope.uploadFileList = [];
+            $scope.modal('uploadfile', true);
+          }, function(data) {
+            var errorMsg = data.result && data.result.error || $translate.instant('error_uploading_files');
+            $scope.apiMiddleware.apiHandler.error = errorMsg;
+          });
         };
 
         var validateSamePath = function(item) {
-            var selectedPath = $rootScope.selectedModalPath.join('');
-            var selectedItemsPath = item && item.model.path.join('');
-            return selectedItemsPath === selectedPath;
+          var selectedPath = $rootScope.selectedModalPath.join('');
+          var selectedItemsPath = item && item.model.path.join('');
+          return selectedItemsPath === selectedPath;
         };
 
         var getQueryParam = function(param) {
-            var found = $window.location.search.substr(1).split('&').filter(function(item) {
-                return param ===  item.split('=')[0];
-            });
-            return found[0] && found[0].split('=')[1] || undefined;
+          var found = $window.location.search.substr(1).split('&').filter(function(item) {
+            return param ===  item.split('=')[0];
+          });
+          return found[0] && found[0].split('=')[1] || undefined;
         };
 
         $scope.changeLanguage(getQueryParam('lang'));

@@ -46,15 +46,16 @@
       // PROFILE
       //------------------------------
       .state ('profile', {
-        url: '/profile',
+        url: '/profile/:id',
+        abstract: true,
         requireLogin: true,
         templateUrl: helper.pagesPath('profile.html'),
         resolve: helper.resolveFor('lightgallery')
       })
-      .state ('profile.about', {
-        url: '/about',
+      .state ('profile.details', {
+        url: '/details',
         requireLogin: true,
-        templateUrl: helper.pagesPath('profile-about.html')
+        templateUrl: helper.pagesPath('profile-details.html')
       })
       .state ('profile.timeline', {
         url: '/timeline',
@@ -115,6 +116,21 @@
         controller: 'DocumentsCtrl'
       })
 
+      //------------------------------
+      // ADMIN PAGES
+      //------------------------------
+      .state('page.customer-list', {
+        url: '/customers',
+        title: 'Customer List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('customer-list.html'),
+        controller: 'CustomerListCtrl',
+        data: {
+          permissions: {
+            only: ['ADMIN']
+          }
+        }
+      })
       //------------------------------
       // TYPOGRAPHY
       //------------------------------
