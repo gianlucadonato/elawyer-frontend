@@ -14,7 +14,8 @@ var App = angular.module('eLawyer', [
   'angularMoment',
   'ngFileUpload',
   'appConstants',
-  'FileManagerApp'
+  'FileManagerApp',
+  'ui.tree'
 ]);
 
 // APP CONFIG
@@ -50,6 +51,7 @@ App.config(function($httpProvider) {
     };
   });
 });
+
 
 // APP RUN
 // -----------------------------------

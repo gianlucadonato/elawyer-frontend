@@ -17,11 +17,11 @@ var config = {
       './src/scripts/constants.js',
       './src/scripts/file-manager/**/*.js',
       './src/scripts/app.js',
-      './src/scripts/routes.js',
       './src/scripts/controllers/**/*.js',
       './src/scripts/directives/*.js',
       './src/scripts/services/*.js',
-      './src/scripts/filters/*.js'
+      './src/scripts/filters/*.js',
+      './src/scripts/routes.js'
     ],
     dest: 'dist/scripts/'
   },

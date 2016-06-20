@@ -78,6 +78,13 @@
         abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
+      .state('page.matter-create', {
+        url: '/matters/create',
+        title: 'Create Matter',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-edit.html'),
+        controller: 'MatterCreateCtrl'
+      })
       .state('page.matter-list', {
         url: '/matters',
         title: 'Matter List',
@@ -92,6 +99,14 @@
         templateUrl: helper.pagesPath('matter-details.html'),
         controller: 'MatterDetailsCtrl'
       })
+      .state('page.matter-edit', {
+        url: '/matters/:id/edit',
+        title: 'Edit Matter',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-edit.html'),
+        controller: 'MatterEditCtrl'
+      })
+      
       .state('page.documents', {
         url: '/documents',
         title: 'Documents',

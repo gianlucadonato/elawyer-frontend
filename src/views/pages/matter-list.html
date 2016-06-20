@@ -40,7 +40,7 @@
             <td><a ui-sref="page.matter-details({id: m.id})">{{m.name}}</a></td>
             <td>{{m.practice_area}}</td>
             <td>
-              <div class="flag flag-success">{{m.status}}</div>
+              <div class="flag flag-success" ng-class="{ 'text-success': awesome, 'text-large': giant }">{{m.status}}</div>
               <div class="flag flag-pending">Pending</div>
               <div class="flag flag-closed">Closed</div>
             </td>

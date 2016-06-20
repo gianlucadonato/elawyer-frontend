@@ -14,7 +14,7 @@
     $scope.signup = function(credentials) {
       // Reset Form
       $scope.signupForm.$setPristine();
-      $scope.signupForm.$setUntouched();
+      // $scope.signupForm.$setUntouched();
       $scope.signupForm.email.$error.invalid = false;
       $scope.signupForm.password.$error.invalid = false;
 
@@ -33,7 +33,7 @@
     $scope.login = function(credentials) {
       // Reset Form
       $scope.loginForm.$setPristine();
-      $scope.loginForm.$setUntouched();
+      // $scope.loginForm.$setUntouched();
       $scope.loginForm.email.$error.invalid = false;
       $scope.loginForm.password.$error.invalid = false;
 
