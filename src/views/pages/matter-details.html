@@ -1,13 +1,13 @@
 <div class="container">
   <div class="block-header">
-    <h2><a ui-sref="page.matter-list"><i class="zmdi zmdi-arrow-left"></i> Backo</a></h2>
+    <h2><a ui-sref="page.matter-list"><i class="zmdi zmdi-arrow-left"></i> Back</a></h2>
   </div>
 
   <div class="card">
     <div class="card-header">
       <h2>
-        MATTER DETAILS .. (Qui ci va la lettera d'incarico)
-        <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+        {{matter.title}}
+        <small>{{matter.description}}</small>
       </h2>
     </div>
 
@@ -23,110 +23,76 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{matter.name}}</td>
-            <td>{{matter.practice_area}}</td>
+            <td>{{matter.title}}</td>
+            <td>{{matter.area}}</td>
             <td>
-              <div class="flag flag-success">{{matter.status}}</div>
-              <div class="flag flag-pending">Pending</div>
-              <div class="flag flag-closed">Closed</div>
+              <div class="flag flag-success" ng-if="matter.status == 'success'">Open</div>
+              <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
+              <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
             </td>
-            <td>{{matter.open_date}}</td>
+            <td>{{matter.open_date | date}}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="">
+  <div class="row">
 
 
-    <div class="card col-sm-8">
-      <div class="card-header">
+    <div class="col-sm-8">
+        <div class="card">
+          <div class="card-header">
 
 
-        <div ui-tree>
-          <ol ui-tree-nodes="" ng-model="services">
-            <li ng-repeat="item in services" ui-tree-node>
-              <div ui-tree-handle>
-                {{item.title}}
-              </div>
-              <ol ui-tree-nodes="" ng-model="item.items">
-                <li ng-repeat="subItem in item.items" ui-tree-node>
+            <div ui-tree>
+              <ol ui-tree-nodes="" ng-model="services">
+                <li ng-repeat="item in services" ui-tree-node>
                   <div ui-tree-handle>
-                    {{subItem.title}}
+                    {{item.title}}
                   </div>
+                  <ol ui-tree-nodes="" ng-model="item.items">
+                    <li ng-repeat="subItem in item.items" ui-tree-node>
+                      <div ui-tree-handle>
+                        {{subItem.title}}
+                      </div>
+                    </li>
+                  </ol>
                 </li>
               </ol>
-            </li>
-          </ol>
-        </div>
-
-
-        <div class="service">
-
-              <h3>1. Registro startup innovativa
-
-                <div class="toggle-switch" data-ts-color="blue" style="float:right">
-                    <!-- <label for="ts3" class="ts-label">Attiva Servizio</label> -->
-                    <input id="ts3" type="checkbox" hidden="hidden">
-                    <label for="ts3" class="ts-helper"></label>
-                </div>
-              </h3>
-
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-          <div class="sub-services">
-            <div class="sub-service-item">
-              <h2>a. Patto Parasociale</h2>
-              <br/>
-              <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
-            <div class="sub-service-item">
-              <h2>b. Azioni di Policy</h2>
-              <br/>
-              <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+
+            <div class="service" ng-repeat="i in matter.items">
+
+              <h3>{{$index + 1}}. {{i.title}}</h3>
+
+
+              <p>{{i.description}}</p>
+
+              <div class="sub-services">
+                <div class="sub-service-item" ng-repeat="a in i.items">
+                  <h2>{{$index + 1}}. {{a.title}}</h2>
+                  <br/>
+                  <p>{{a.description}}</p>
+                </div>
+
+              </div>
+
             </div>
 
           </div>
-
         </div>
-
-        <div class="service">
-
-              <h3>2. Approfondimento giuridico del modello di business
-
-                <div class="toggle-switch" data-ts-color="blue" style="float:right">
-                    <!-- <label for="ts3" class="ts-label">Attiva Servizio</label> -->
-                    <input id="ts3" type="checkbox" hidden="hidden">
-                    <label for="ts3" class="ts-helper"></label>
-                </div>
-              </h3>
-
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-          <div class="sub-service">
-            <h2>1.a Patto Parasociale</h2>
-            <br/>
-
-            <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-          </div>
-
-        </div>
-
-      </div>
     </div>
 
 
 
-    <div id="todo-lists" class="col-sm-4" data-spy="affix" data-offset-top="270">
+    <div id="todo-lists" class="col-sm-4">
       <div id="wrap">
         <br/>
         <h2>Sommario</h2>
         <br/>
-        <p>Add, edit and manage your Todo Lists</p>
+        <p>Seleziona solo i servizi desiderati</p>
 
         <!-- <ul class="actions actions-alt">
             <li class="dropdown" uib-dropdown>
@@ -150,10 +116,15 @@
             </ul> -->
 
 
-          <div class="" ng-repeat="w in services">
+          <div class="" ng-repeat="w in matter.items">
             <div class="checkbox m-b-15">
-              <label>
-                <input type="checkbox" value="">
+              <label ng-if="!w.mandatory">
+                <input type="checkbox" value="" ng-model="w.selected" ng-value="w.selected">
+                <i class="input-helper"></i>
+                {{w.title}}
+              </label>
+              <label ng-if="w.mandatory">
+                <input type="checkbox" value="" checked disabled>
                 <i class="input-helper"></i>
                 {{w.title}}
               </label>
@@ -162,168 +133,86 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-        <div class="card-header ch-alt text-center">
-            <img class="i-logo" src="img/demo/invoice-logo.png" alt="">
-        </div>
-
-        <div class="card-body card-padding">
-            <div class="row m-b-25">
-                <div class="col-xs-6">
-                    <div class="text-right">
-                        <p class="c-gray">Invoice from</p>
-
-                        <h4>David Designs LLC</h4>
-
-                        <span class="text-muted">
-                            <address>
-                                44, Qube Towers
-                                Dubai Media City, Dubai<br>
-                                United Arab Emirates
-                            </address>
-
-                            0097154686384<br/>
-                            david.atom@ddesign.com
-                        </span>
-                    </div>
-                </div>
-
-                <div class="col-xs-6">
-                    <div class="i-to">
-                        <p class="c-gray">Invoice to</p>
-
-                        <h4>Mallinda Hollaway</h4>
-
-                        <span class="text-muted">
-                            <address>
-                                10098 ABC Towers
-                                Dubai Silicon Oasis, Dubai<br>
-                                United Arab Emirates.
-                            </address>
-
-                            00971123456789<br/>
-                            malinda.h@gmail.com
-                        </span>
-                    </div>
-                </div>
-
+    <div class="card col-sm-8">
+            <div class="card-header">
+                <h2>Sommario <small></small></h2>
             </div>
 
-            <div class="clearfix"></div>
-
-            <div class="row m-t-25 p-0 m-b-25">
-                <div class="col-xs-3">
-                    <div class="bgm-amber brd-2 p-15">
-                        <div class="c-white m-b-5">Invoice#</div>
-                        <h2 class="m-0 c-white f-300">456213</h2>
-                    </div>
-                </div>
-
-                <div class="col-xs-3">
-                    <div class="bgm-blue brd-2 p-15">
-                        <div class="c-white m-b-5">Date</div>
-                        <h2 class="m-0 c-white f-300">20/06/2015</h2>
-                    </div>
-                </div>
-
-                <div class="col-xs-3">
-                    <div class="bgm-green brd-2 p-15">
-                        <div class="c-white m-b-5">Whatever</div>
-                        <h2 class="m-0 c-white f-300">472-000</h2>
-                    </div>
-                </div>
-
-                <div class="col-xs-3">
-                    <div class="bgm-red brd-2 p-15">
-                        <div class="c-white m-b-5">Grand Total</div>
-                        <h2 class="m-0 c-white f-300">$23,980</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <table class="table i-table m-t-25 m-b-25">
-                <thead class="text-uppercase">
-                    <th class="c-gray">ITEM DESCRIPTION</th>
-                    <th class="c-gray">UNIT PRICE</th>
-                    <th class="c-gray">QUANTITY</th>
-                    <th class="highlight">TOTAL</th>
-                </thead>
-
-                <tbody>
+            <div class="table-responsive">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td width="50%">
-                                <h5 class="text-uppercase f-400">Curabitur lobortis</h5>
-                                <p class="text-muted">Nullam consectetur dolor nec ullamcorper finibus. Quisque a porta mauris, non venenatis mi. Pellentesque habitant morbi tristique</p>
-                            </td>
-
-                            <td>$450.00</td>
-                            <td>05</td>
-                            <td class="highlight">$2250.00</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <h5 class="text-uppercase f-400">Phasellus idarcu suscipit nun</h5>
-                                <p class="text-muted">Pellentesque habitant morbi tristique senectus</p>
-                            </td>
-                            <td>$20.00</td>
-                            <td>02</td>
-                            <td class="highlight">$40.00</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <h5 class="text-uppercase f-400">Vivamus</h5>
-                                <p class="text-muted">Maecenas nec faucibus lectus. Ut cursus elit ante, rutrum pretium augue tincidunt ut. Suspendisse ultrices sapien sit amet</p>
-                            </td>
-                            <td>$2322.00</td>
-                            <td>01</td>
-                            <td class="highlight">$2322.00</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <h5 class="text-uppercase f-400">Nullam consectetur dolor</h5>
-                                <p class="text-muted">Quisque a porta mauris, non venenatis mi. Pellentesque habitant morbi</p>
-                            </td>
-                            <td>$1290.00</td>
-                            <td>12</td>
-                            <td class="highlight">$15,480.00</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="highlight">$20,092.00</td>
+                            <th>Servizio</th>
+                            <th>Importo</th>
                         </tr>
                     </thead>
-                </tbody>
-            </table>
+                    <tbody>
+                        <tr ng-repeat="i in matter.items" ng-if="i.selected || i.mandatory">
+                            <td>{{i.title}}</td>
+                            <td>€ {{i.price}}</td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th>Imponibile Prestazioni</th>
+                            <th>€ {{totale}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rimborso spese generali (15%)</th>
+                            <th>€ {{totale | percentage: 15}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{totale + (totale | percentage: 15)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rivalsa parziale contributi previdenziali (4%)</th>
+                            <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Iva (22%)</th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
 
-            <div class="clearfix"></div>
+                        
+                        <tr>
+                            <th><strong><span ng-if="item.ritenuta">Totale fattura</span><span ng-if="!item.ritenuta">Netto da Versare</span></strong></th>
+                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
+                        </tr>
 
-            <div class="p-25">
-                <h4 class="c-green f-400">REMARKS</h4>
-                <p class="c-gray">Ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum.</p>
+                        <tr ng-if="item.ritenuta">
+                            <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
+                            <th>€ {{(totale + (totale | percentage: 15)) | percentage: 20}}</th>
+                        </tr>
 
-                <br/>
 
-                <h4 class="c-green f-400">MERCY FOR YOUR BUSINESS</h4>
-                <p class="c-gray">Proin ac iaculis metus. Etiam nisi nulla, fermentum blandit consectetur sed, ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum sit amet.</p>
+                        <tr ng-if="item.ritenuta">
+                            <th><strong>Netto da versare</strong></th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
             </div>
         </div>
 
-        <footer class="m-t-15 p-20">
-            <ul class="list-inline text-center list-unstyled">
-                <li class="m-l-5 m-r-5"><small>support@company.com</small></li>
-                <li class="m-l-5 m-r-5"><small>00971 452 9900</small></li>
-                <li class="m-l-5 m-r-5"><small>www.company.com</small></li>
-            </ul>
-        </footer>
-    </div>
+  </div>
+
+
 
 
 

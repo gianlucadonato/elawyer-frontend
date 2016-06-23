@@ -68,7 +68,7 @@
       return deferred.promise;
     };
 
-    auth.login = function(credentials) {
+    auth.login = function(credentials) {   
       var deferred = $q.defer();
       $http
         .post(API.host + '/api/auth/sign_in', credentials)

@@ -22,7 +22,12 @@
 
   <div class="card">
     <div class="card-header">
-      <h2>MATTERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <h2>
+        <button ui-sref="page.matter-create" style="float: right" class="btn btn-primary btn-icon-text waves-effect"><i class="zmdi zmdi-plus"></i> New</button>
+        MATTERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+
+      </h2>
+
     </div>
 
     <div class="table-responsive">
@@ -37,14 +42,17 @@
         </thead>
         <tbody>
           <tr ng-repeat="m in matterList">
-            <td><a ui-sref="page.matter-details({id: m.id})">{{m.name}}</a></td>
-            <td>{{m.practice_area}}</td>
-            <td>
-              <div class="flag flag-success" ng-class="{ 'text-success': awesome, 'text-large': giant }">{{m.status}}</div>
-              <div class="flag flag-pending">Pending</div>
-              <div class="flag flag-closed">Closed</div>
+            <td><a ui-sref="page.matter-details({id: m.id})">{{m.title}}</a> 
+              <a data-ui-sref="page.matter-edit({id: m.id})"permission permission-only="'ADMIN'" style="float:right">
+              <i class="zmdi zmdi-edit"></i> Edit</a>
             </td>
-            <td>{{m.open_date}}</td>
+            <td>{{m.area}}</td>
+            <td>
+              <div class="flag flag-success" ng-if="m.status == 'success'">{{m.status}}</div>
+              <div class="flag flag-pending" ng-if="m.status == 'pending'">Pending</div>
+              <div class="flag flag-closed" ng-if="m.status == 'closed'">Closed</div>
+            </td>
+            <td>{{m.open_date | date}}</td>
           </tr>
         </tbody>
       </table>

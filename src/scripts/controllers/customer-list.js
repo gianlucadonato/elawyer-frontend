@@ -29,17 +29,23 @@
 
     $scope.openNewCustomerModal = function() {
       self.newCustomerModal = $uibModal.open({
-        animation: true,
+        animation: false,
         size: '',
         backdrop: true,
         keyboard: true,
         templateUrl: 'views/modals/newCustomer.html',
-        controller: function($scope, $uibModalInstance){
+        resolve: {
+          customers: function () {
+            return $scope.customers;
+          }
+        },
+        controller: function($scope, $uibModalInstance, customers){
           $scope.createUser = function(data) {
             User
               .create(data)
               .then(function(user){
                 $uibModalInstance.dismiss();
+                customers.push(data);
                 Notify.success('OK!','User created successfully!');
               })
               .catch(function(err){

@@ -6,147 +6,274 @@
     <div class="card">
         <div class="card-header">
             <h2>
-                <input type="text" class="form-control input-lg" placeholder="Title" ng-value="title" ng-model="title">
-                <small><input type="text" class="form-control input-sm" placeholder="Description" ng-value="description" ng-model="description"></small>
+                <input type="text" class="form-control input-lg" placeholder="Title" ng-value="matter.title" ng-model="matter.title">
+                <small><input type="text" class="form-control input-sm" placeholder="Description" ng-value="matter.description" ng-model="matter.description"></small>
             </h2>
+
+            <div class="select" ng-hide="createMode == true" placeholder="select..">
+                <select class="form-control" ng-model="matter.area" ng-value="matter.area">
+                    <option value="{{i}}" ng-repeat="i in areas">{{i}}</option>
+                    <option value="__area_create">Immetti manualmente</option>
+                </select>
+            </div>
+            <input type="text" class="form-control input-sm" ng-if="createMode" placeholder="Area" ng-value="matter.area" ng-model="matter.area"></small>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Practice Area</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" class="form-control input-sm" placeholder="Description" ng-value="description" ng-model="description"></td>
-                        <td>
-                            <div class="select">
-                                <select class="form-control">
-                                    <option value="Select an Option">Select an Option</option>
-                                    <option value="Option 1">Option 1</option>
-                                    <option value="Option 2">Option 2</option>
-                                    <option value="Option 3">Option 3</option>
-                                    <option value="Option 4">Option 4</option>
-                                    <option value="Option 5">Option 5</option>
-                                </select>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
     </div>
 
+<div class="row">
 
+    <div class="col-sm-8">
 
-    <div class="card col-sm-8">
-        <div class="card-header" ui-tree>
-            <div ui-tree-nodes="" ng-model="services">
-                <div class="service" ng-repeat="item in services" ui-tree-node>
-                    <div>
-                        <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="item.title" ng-model="item.title">
-                            <div style="float: right">
-                                <div class="actions">
-                                    <button class="btn bgm-lightgreen waves-effect" ng-click="saveService(item)"><i class="zmdi zmdi-cloud-upload"></i></button>
-                                    <div class="btn btn-info waves-effect" ui-tree-handle><i class="zmdi zmdi-more-vert"></i></div>
-                                    <button class="btn btn-danger waves-effect" ng-click="remove()"><i class="zmdi zmdi-close"></i></button>
+        <div class="card" style="overflow:hidden !important">
+            <div class="card-header" ui-tree>
+                <div ui-tree-nodes="" ng-model="services">
+                    <div class="service" ng-repeat="item in services" ui-tree-node>
+                        <div>
+                            <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="item.title" ng-model="item.title">
+                                <div style="float: right">
+                                    <div class="actions">
+                                        <button class="btn bgm-lightgreen waves-effect" ng-click="saveService(item)"><i class="zmdi zmdi-cloud-upload"></i></button>
+                                        <div class="btn btn-info waves-effect" ui-tree-handle><i class="zmdi zmdi-more-vert"></i></div>
+                                        <button class="btn btn-danger waves-effect" ng-click="remove()"><i class="zmdi zmdi-close"></i></button>
+                                    </div>  
+                                </div>
+                            </h3>
+
+                            <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="item.description"></textarea>
+
+                            <div class="input-group">
+                            <span class="input-group-addon"><i class="zmdi zmdi-card"></i></span>
+                            <div class="fg-line">
+                                    <input type="text" class="form-control" placeholder="Price" ng-model="item.price" ng-value="item.price">
                                 </div>
                             </div>
-                        </h3>
 
-                        <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="item.description"></textarea>
-
-                        <input type="text" class="form-control ng-isolate-scope" placeholder="€ 1500" maxlength="22" autocomplete="off"> Prezzo servizio
-
-                        <div class="checkbox m-b-15">
-                          <label class="ng-binding">
-                            <input type="checkbox" value="" ng-model="item.mandatory" ng-value="item.mandatory">
-                            <i class="input-helper"></i>
-                            Il servizio è obbligatorio
-                          </label>
+                            <div class="checkbox m-b-15">
+                              <label class="ng-binding">
+                                <input type="checkbox" value="" ng-model="item.mandatory" ng-value="item.mandatory">
+                                <i class="input-helper"></i>
+                                Il servizio è obbligatorio
+                              </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="sub-services" ui-tree-nodes="" ng-model="item.items">
-                        <div class="sub-service-item" ng-repeat="subItem in item.items" ui-tree-node>
-                            <div>
-                                <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="subItem.title" ng-model="subItem.title">
-                                    <div style="float: right">
-                                        <div class="actions">
-                                            <button class="btn btn-default waves-effect" ng-click="saveService(subItem)"><i class="zmdi zmdi-cloud-upload"></i></button>
-                                            <div class="btn btn-default waves-effect" ui-tree-handle><i class="zmdi zmdi-more-vert"></i></div>
-                                            <button class="btn btn-default waves-effect" ng-click="removeSub(item, $index)"><i class="zmdi zmdi-close"></i></button>
+                        <div class="sub-services" ui-tree-nodes="" ng-model="item.items">
+                            <div class="sub-service-item" ng-repeat="subItem in item.items" ui-tree-node>
+                                <div>
+                                    <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="subItem.title" ng-model="subItem.title">
+                                        <div style="float: right">
+                                            <div class="actions">
+                                                <button class="btn btn-default waves-effect" ng-click="saveService(subItem)"><i class="zmdi zmdi-cloud-upload"></i></button>
+                                                <div class="btn btn-default waves-effect" ui-tree-handle><i class="zmdi zmdi-more-vert"></i></div>
+                                                <button class="btn btn-default waves-effect" ng-click="removeSub(item, $index)"><i class="zmdi zmdi-close"></i></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </h3>
+                                    </h3>
 
 
-                                <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="subItem.description"></textarea>
+                                    <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="subItem.description"></textarea>
 
-                                
+                                    
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <br/>
-                    <button class="btn btn-primary waves-effect" ng-click="addSubItem(item)">Aggiungi sotto servizio</button>
+                        <br/>
+                        <button class="btn btn-primary waves-effect" ng-click="addSubItem(item)">Aggiungi sotto servizio</button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <button class="btn btn-primary" ng-click="addItem()" style="margin-left: 50px">Aggiungi servizio</button>
+            <br/><br/>
+
+            <div class="button-group right" style="float:right;">
+                <button class="btn btn-info waves-effect" ng-if="draftable" ng-click="save(true)">Salva come bozza</button>
+                <button class="btn btn-success waves-effect" ng-click="save()" style="margin-right: 25px">Salva</button>
+            </div>
+            <br/><br/><br/>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Sommario <small>
+                    <div class="checkbox m-b-15">
+                      <label class="ng-binding">
+                        <input type="checkbox" value="" ng-model="matter.ritenuta" ng-value="matter.ritenuta">
+                        <i class="input-helper"></i>
+                        Ritenuta d'acconto
+                      </label>
+                    </div></small></h2>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Servizio</th>
+                            <th>Importo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in services">
+                            <td>{{i.title}}</td>
+                            <td>€ {{i.price}}</td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th>Imponibile Prestazioni</th>
+                            <th>€ {{totale}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rimborso spese generali (15%)</th>
+                            <th>€ {{totale | percentage: 15}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{totale + (totale | percentage: 15)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rivalsa parziale contributi previdenziali (4%)</th>
+                            <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
+                        </tr>
+                        <tr>
+                            <th>Iva (22%)</th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+
+                        
+                        <tr>
+                            <th><strong><span ng-if="item.ritenuta">Totale fattura</span><span ng-if="!item.ritenuta">Netto da Versare</span></strong></th>
+                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
+                        </tr>
+
+                        <tr ng-if="item.ritenuta">
+                            <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
+                            <th>€ {{(totale + (totale | percentage: 15)) | percentage: 20}}</th>
+                        </tr>
+
+
+                        <tr ng-if="item.ritenuta">
+                            <th><strong>Netto da versare</strong></th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <div id="todo-lists" class="card">
+            <div class="ng-scope">
+                <div class="ch-alt m-b-20 card-header">
+                    <h2>Servizi <br/><small>Scegli un servizio dal tuo bucket di servizi predefiniti</small></h2>
+                </div>
+
+                <div class="">
+                    <div class="listview">
+
+                        <a class="lv-item ng-scope" href="" ng-repeat="w in serv" style="">
+                            <div class="media" ng-click="openService(w, $index)">
+                                <div class="pull-left">
+                                    <button ng-click="getFromBucket(w, $event)" class="btn bgm-cyan waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title ng-binding">{{w.title}}</div>
+                                    <small class="lv-small ng-binding">{{w.description}}</small>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="pagination-centered">
+                            <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
+                                <li ng-hide="page == 0" class="ng-scope">
+                                    <a ng-click="page = page - 1">
+                                        <i class="zmdi zmdi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li ng-hide="serv.length !== per_page">
+                                    <a ng-click="page = page + 1">
+                                        <i class="zmdi zmdi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <br/>
-        <button class="btn btn-primary waves-effect" ng-click="addItem()">Aggiungi servizio</button>
-        <br/><br/>
-    </div>
 
+        <div id="todo-lists" class="card">
+            <div class="ng-scope">
+                <div class="ch-alt m-b-20 card-header">
+                    <h2>Bozze <br/><small>Scegli una bozza dal tuo bucket di lettere di incarico predefinite</small></h2>
+                </div>
 
+                <div class="">
+                    <div class="listview">
 
-    <div id="todo-lists" class="col-sm-4">
-        <div class="card ng-scope">
-            <div class="card-header ch-alt m-b-20">
-                <h2>Servizi <small>Scegli un servizio dal tuo bucket di servizi predefiniti</small></h2>
-            </div>
-
-            <div class="card-body">
-                <div class="listview">
-
-                    <a class="lv-item ng-scope" href="" ng-repeat="w in serv" style="">
-                        <div class="media">
-                            <div class="pull-left">
-                                <button ng-click="getFromBucket(w)" class="btn bgm-cyan waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
+                        <a class="lv-item ng-scope" href="" ng-repeat="w in drafts" style="">
+                            <div class="media" ng-click="openDraft(w, $index)">
+                                <div class="pull-left">
+                                    <button ng-click="getMFromBucket(w, $event)" class="btn bgm-cyan waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title ng-binding">{{w.title}}</div>
+                                    <small class="lv-small ng-binding">{{w.description}}</small>
+                                </div>
                             </div>
-                            <div class="media-body">
-                                <div class="lv-title ng-binding">{{w.title}}</div>
-                                <small class="lv-small ng-binding">{{w.description}}</small>
-                            </div>
+                        </a>
+
+                        <div class="pagination-centered">
+                            <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
+                                <li ng-hide="u_page == 0" class="ng-scope">
+                                    <a ng-click="u_page = u_page - 1">
+                                        <i class="zmdi zmdi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li ng-hide="serv.length !== u_per_page">
+                                    <a ng-click="u_page = u_page + 1">
+                                        <i class="zmdi zmdi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    </a>
 
-                    <div class="pagination-centered">
-                        <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
-                            <li ng-hide="page == 0" class="ng-scope">
-                                <a ng-click="page = page - 1">
-                                    <i class="zmdi zmdi-chevron-left"></i>
-                                </a>
-                            </li>
-                            <li ng-hide="serv.length !== per_page">
-                                <a ng-click="page = page + 1">
-                                    <i class="zmdi zmdi-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="clearfix"></div>
                     </div>
-
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
-    </div>
-  </div>
 
-  <div class="card">
+    </div>
+
+    
+
+</div>
+
+  <!-- <div class="card">
         <div class="card-header ch-alt text-center">
             <img class="i-logo" src="img/demo/invoice-logo.png" alt="">
         </div>
@@ -305,5 +432,5 @@
                 <li class="m-l-5 m-r-5"><small>www.company.com</small></li>
             </ul>
         </footer>
-    </div>  
+    </div> -->  
 </div>
