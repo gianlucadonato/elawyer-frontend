@@ -9,6 +9,11 @@ var args        = require('yargs').argv,
 var isProduction = false;
 var useSourceMaps = false;
 
+// dynamically include environments vars
+function include_env() {
+  return isProduction ? './env.prod.js' : './env.dev.js';
+}
+
 // CONFIG PATHS
 var config = {
   scripts: {
@@ -50,7 +55,9 @@ var config = {
 // APP SCRIPTS
 gulp.task('scripts', function() {
   log.info('Building scripts..');
-  return gulp.src(config.scripts.src)
+  var source_scripts = config.scripts.src;
+  source_scripts.push(include_env());
+  return gulp.src(source_scripts)
     .pipe( $.if( useSourceMaps, $.sourcemaps.init() ))
     .pipe($.ngAnnotate())
     .on('error', handleError)
@@ -87,14 +94,14 @@ gulp.task('vendors', function() {
     .pipe(jsFilter)
     .pipe( $.if( useSourceMaps, $.sourcemaps.init() ))
     .pipe($.concat('vendors.js'))
-    .pipe($.if( isProduction, $.uglify({preserveComments:'some'}) ))
-    .on('error', handleError)
+    // .pipe($.if( isProduction, $.uglify({preserveComments:'some'}) ))
+    // .on('error', handleError)
     .pipe( $.if( useSourceMaps, $.sourcemaps.write() ))
     .pipe(gulp.dest(config.vendors.destJs))
     .pipe(jsFilter.restore)
     .pipe(cssFilter)
     .pipe($.concat('vendors.css'))
-    .pipe($.if( isProduction, $.minifyCss() ))
+    // .pipe($.if( isProduction, $.minifyCss() ))
     .pipe(gulp.dest(config.vendors.destCss));
 });
 
@@ -102,7 +109,7 @@ gulp.task('vendors', function() {
 gulp.task('views', function() {
   log.info('Building application views..');
   return gulp.src(config.views.src)
-    .pipe( $.if( isProduction, $.htmlMinifier({collapseWhitespace: true}) ))
+    // .pipe( $.if( isProduction, $.htmlMinifier({collapseWhitespace: true}) ))
     .pipe(gulp.dest(config.views.dest));
 });
 

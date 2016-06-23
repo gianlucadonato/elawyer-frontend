@@ -49,8 +49,8 @@
         url: '/profile/:id',
         abstract: true,
         requireLogin: true,
-        templateUrl: helper.pagesPath('profile.html'),
-        resolve: helper.resolveFor('lightgallery')
+        templateUrl: helper.pagesPath('profile.html')
+        // resolve: helper.resolveFor('lightgallery')
       })
       .state ('profile.details', {
         url: '/details',
@@ -107,7 +107,7 @@
         templateUrl: helper.pagesPath('matter-edit.html'),
         controller: 'MatterCreateCtrl'
       })
-      
+
       .state('page.documents', {
         url: '/documents',
         title: 'Documents',
