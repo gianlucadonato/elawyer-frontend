@@ -105,7 +105,7 @@
         title: 'Edit Matter',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterEditCtrl'
+        controller: 'MatterCreateCtrl'
       })
 
       .state('page.documents', {

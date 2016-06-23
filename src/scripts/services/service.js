@@ -35,10 +35,31 @@
       return deferred.promise;
     };
 
-    api.update = function(a) {
+    api.delete = function(id) {
       var deferred = $q.defer();
       $http
-        .put(API.host + '/api/services/' + a.id, a)
+        .delete(API.host + '/api/services/' + id)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+    api.update = function(a) {
+
+      console.log('a is: ', a);
+      var r = angular.extend({}, a);
+
+      console.log(r)
+
+      console.log(r.items.length)
+
+      var deferred = $q.defer();
+      $http
+        .put(API.host + '/api/services/' + a.id, r)
         .then(function(res){
           deferred.resolve(res.data);
         })

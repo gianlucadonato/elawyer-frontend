@@ -1,0 +1,62 @@
+<div class="modal-body" style="overflow:hidden">
+	<div class="card-header">
+      	<div>
+                <div class="service">
+                    <div>
+                        <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="item.title" ng-model="item.title">
+                        </h3>
+
+                        <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="item.description"></textarea>
+
+                        <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-card"></i></span>
+                        <div class="fg-line">
+                                <input type="text" class="form-control" placeholder="Price" ng-model="item.price" ng-value="item.price">
+                            </div>
+                        </div>
+
+                        <div class="checkbox m-b-15">
+                          <label class="ng-binding">
+                            <input type="checkbox" value="" ng-model="item.mandatory" ng-value="item.mandatory">
+                            <i class="input-helper"></i>
+                            Il servizio è obbligatorio
+                          </label>
+                        </div>
+                    </div>
+
+                    <div ui-tree>
+
+                    <div class="sub-services" ui-tree-nodes="" ng-model="item.items">
+                        <div class="sub-service-item" ng-repeat="subItem in item.items" ui-tree-node>
+                            <div>
+                                <h3>{{$index + 1}}. <input type="text" class="form-control input-lg title-matter-input" placeholder="Title" ng-value="subItem.title" ng-model="subItem.title">
+                                    <div style="float: right">
+                                        <div class="actions">
+                                            <div class="btn btn-default waves-effect" ui-tree-handle><i class="zmdi zmdi-more-vert"></i></div>
+                                            <button class="btn btn-default waves-effect" ng-click="removeSub(item, $index)"><i class="zmdi zmdi-close"></i></button>
+                                        </div>
+                                    </div>
+                                </h3>  
+
+
+                                <textarea class="form-control matter-textarea" rows="5" placeholder="Insert service description" ng-model="subItem.description"></textarea>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                	</div>
+
+                    <br/>
+                    <button class="btn btn-primary waves-effect" ng-click="addSubItem(item)">Aggiungi sotto servizio</button>
+                </div>
+            </div>
+        </div>
+  
+    <div class="button-group right" style="float:right;">
+    	<button class="btn btn-warning waves-effect" ng-click="close()">DISMISS</button>
+    	<button class="btn btn-danger waves-effect" ng-click="delete(item)">DELETE</button>
+      	<button class="btn btn-primary waves-effect" ng-click="update(item)">SAVE</button>
+    </div>
+</div>
