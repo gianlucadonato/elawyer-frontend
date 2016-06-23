@@ -8,10 +8,6 @@
 
   angular
     .module('appConstants', [])
-    .constant('API', {
-      host: 'http://localhost:5000',
-      // host: 'http://crclex.herokuapp.com'
-    })
     .constant('APP_REQUIRES', {
       scripts: {
         'sparklines':    ['vendors/jquery.sparkline.min.js'],
