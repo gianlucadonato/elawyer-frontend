@@ -297,11 +297,11 @@
         url: '/pages',
         templateUrl: 'views/demos/common.html'
       })
-      .state ('pages.listview', {
+      .state('pages.listview', {
         url: '/listview',
         templateUrl: 'views/demos/list-view.html'
       })
-      .state ('pages.messages', {
+      .state('pages.messages', {
         url: '/messages',
         templateUrl: 'views/demos/messages.html'
       })
