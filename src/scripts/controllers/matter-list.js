@@ -9,53 +9,33 @@
   App.controller('MatterListCtrl', function($rootScope, $scope, $state, Matter) {
 
     $scope.matterList = [];
+    $scope.drafts = [];
 
-    function activate() {
-      getMatterList();
-    }
-
-   $scope.page = 0; $scope.per_page = 15;
+    $scope.page = 0; $scope.per_page = 15;
     $scope.getExistingMatters = function() {
-      Matter.index($scope.page, $scope.per_page).then(function(res) {
-        $scope.matterList = res;
-      }, function() {});
+        Matter.api.index({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model:false}).then(function(res) {
+          $scope.matterList = res;
+        }, function() {});
     }
 
     $scope.$watch('[page,per_page]', function () {
-      $scope.serv = [];
-      $scope.getExistingMatters();
+        $scope.serv = [];
+        $scope.getExistingMatters();
     }, true);
 
-    activate();
-
-    function getMatterList() {
-      $scope.matterList = [
-        {
-          id: 1,
-          name: 'Matter#1',
-          description: 'Lorem ipsum',
-          practice_area: 'Diritto Societario',
-          status: 'open',
-          open_date: new Date()
-        },
-        {
-          id: 2,
-          name: 'Matter#2',
-          description: 'Lorem ipsum',
-          practice_area: 'Diritto Societario',
-          status: 'open',
-          open_date: new Date()
-        },
-        {
-          id: 3,
-          name: 'Matter#3',
-          description: 'Lorem ipsum',
-          practice_area: 'Diritto Societario',
-          status: 'open',
-          open_date: new Date()
-        }
-      ];
+    $scope.u_page = 0; $scope.u_per_page = 15;
+    $scope.getExistingDrafts = function() {
+        Matter.api.index({page: $scope.u_page, per_page: $scope.u_per_page, is_draft: true, is_model:false}).then(function(res) {
+          $scope.drafts = res;
+        }, function() {});
     }
+
+    $scope.$watch('[u_page,u_per_page]', function () {
+        $scope.drafts = [];
+        $scope.getExistingDrafts();
+    }, true);
+
+
 
 
   });

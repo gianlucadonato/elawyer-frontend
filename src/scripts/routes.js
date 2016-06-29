@@ -86,6 +86,12 @@
         templateUrl: helper.pagesPath('matter-edit.html'),
         controller: 'MatterCreateCtrl'
       })
+      .state('page.matter-template', {
+        url: '/matters/templates/:id',
+        title: 'Matter Template',
+        requireLogin: true,
+        controller: 'MatterCreateCtrl'
+      })
       .state('page.matter-list', {
         url: '/matters',
         title: 'Matter List',

@@ -73,6 +73,22 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
     }
   });
 
+  RoleStore.defineRole('LAWYER', function () {
+    if(Auth.isAuthenticated()) {
+      return Auth.getUser().role >= 10 && Auth.getUser().role != 1;
+    } else {
+      return false;
+    }
+  });
+
+  RoleStore.defineRole('CUSTOMER', function () {
+    if(Auth.isAuthenticated()) {
+      return Auth.getUser().role >= 1;
+    } else {
+      return false;
+    }
+  });
+
   // Redirect user to login page if not authenticated
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     if(toState.requireLogin && !Auth.isAuthenticated()) {
