@@ -9,6 +9,14 @@
   App.factory('Service', function ($rootScope, $q, $http, API) {
     var api = {};
 
+    var template = {
+      title: '',
+      description: '',
+      price: 0,
+      mandatory: false,
+      items: []
+    }
+
     api.post = function(user) {
       var deferred = $q.defer();
       $http
@@ -50,12 +58,7 @@
 
     api.update = function(a) {
 
-      console.log('a is: ', a);
       var r = angular.extend({}, a);
-
-      console.log(r)
-
-      console.log(r.items.length)
 
       var deferred = $q.defer();
       $http
@@ -69,7 +72,7 @@
       return deferred.promise;
     };
 
-    return api;
+    return {api: api, template: function() {return angular.copy(template)}};
   });
 
 })();
