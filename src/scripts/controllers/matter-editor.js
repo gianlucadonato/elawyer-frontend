@@ -13,13 +13,10 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
 
 
    var Saving = function(bool) {
-    if (bool) {
-      $scope.saving_text = 'Saving..';
-      $scope.saving = true;
+    if (!bool) {
+      $scope.saved = false;
     } else {
-      $scope.saving_text = 'Saved';
-
-      $scope.saving = false;
+      $scope.saved = true;
     }
    }
 
@@ -29,26 +26,27 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
 
     $timeout(function() {
       startWatching();
-    },1000);
+    },500);
     
     $scope.draftable = true;
   } else {
      Matter.api.get($stateParams.id).then(function (res) {
       $scope.matter = res;
 
+      if (!res.items)
+        $scope.matter.items = [];
+
       // if (!$scope.matter.items)
       //   $scope.matter.items = new Array();
 
       $timeout(function() {
         startWatching();
-      },1000);
+      },500);
      }, function(err) {
        
      })
   }
 
-  $scope.saving_text = 'Save';
-  $scope.saved_text = 'Not saved';
 
   var interval;
 
@@ -62,25 +60,24 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
         $scope.totale+= parseFloat($scope.matter.items[i].price) || 0;
       }
 
-      if (interval) {
-        $scope.saved_text = 'Not saved';
-      } else if (!angular.equals(oldval, newval)) {
+      if (!angular.equals(oldval, newval)) {
+
+        Saving(false);
+
+        $interval.cancel(interval);
+        interval = null;
+        
         interval = $interval(function() {
-          console.log('saving', $scope.unsaved)
 
           if (!$scope.unsaved) 
               $scope.matter.is_draft = true;
           else 
             $scope.matter.is_draft = false;
 
-          Saving(false);
-
-
+          
           Matter.editor.save($scope.matter, function(res) {
 
-            $scope.saving_text = 'Save';
-            $scope.saved_text = 'Saved';
-            $scope.saving = false;
+             Saving(true);
 
             if (res && res.id) {
               console.log(res)
@@ -90,7 +87,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
           });
           $interval.cancel(interval);
           interval = null;
-        }, 5000);
+        }, 1000);
       }
     }, true);
   }
@@ -98,13 +95,32 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
 
   
   $scope.save = function(matter) {
-    $scope.unsaved = true;
-    Saving(true);
-    matter.is_draft = false;
-    Matter.editor.save(matter, function(res) {
-       Saving(false);
-       $scope.saved_text = "Saved";
-    })
+    console.log(matter)
+
+      console.log(matter)
+
+      if (matter.title && matter.description && matter.area && !(!matter.items || matter.items.length == 0)) {
+
+        if (!matter.customer_id) {
+            swal("Errore", "Devi associare la pratica ad un cliente prima di poterla salvare", "error");
+          } else {
+              $scope.unsaved = true;
+              matter.is_draft = false;
+              Matter.editor.save(matter, function(res) {
+                $scope.matter.id = res.id;
+                 Saving(true);
+              })
+            }
+        } else {
+          if (!matter.items || matter.items.length == 0)
+            swal("Errore", "Stai inviando una pratica vuota. Inserisci almeno un servizio", "error");
+          else
+            swal("Errore", "Inserisci un Titolo, una descrizione e una categoria a questa pratica prima di inviarla al cliente", "error");
+        }
+
+      
+
+    
   }
 
 
@@ -112,10 +128,21 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
     if (matter.id) {
        delete matter.id;
        delete matter.customer_id;
-    }
-     
+    }     
     matter.is_model = true;
-    Matter.editor.save(matter, function(res) {})
+    matter.is_draft = false;
+
+    Matter.editor.save(matter, function(res) {
+
+      $scope.undraftable = true;
+      $scope.drafts.push(res);
+
+      $timeout(function() {
+        $scope.undraftable = false;
+      }, 5000);
+
+
+    });
   }
 
 
@@ -141,28 +168,41 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
   $scope.getFromBucket = function(item, $event) {
     $event.stopPropagation();
     $event.preventDefault();
-    var item = angular.extend({}, item);
+    var item = angular.copy(item);
     $scope.matter.items.push(item);
+     swal("Servizio aggiunto correttamente", "success");
   }
 
   $scope.getMFromBucket = function(item, $event) {
     $event.stopPropagation();
     $event.preventDefault();
-    var item = angular.extend({}, item);
+    var item = angular.copy(item);
+
+    if (!$scope.matter.title)
+      $scope.matter.title = item.title;
+
+    if (!$scope.matter.description)
+      $scope.matter.description = item.description;
+
+    if (!$scope.matter.area)
+      $scope.matter.area = item.area;
+
 
     for (var i in item.items) {
       $scope.matter.items.push(item.items[i]);
     }
+
+    swal("Modello importato correttamente", "success");
   }
 
   $scope.getExistingServices = function(a) {
-    Service.api.get({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model: false}).then(function(res) {
+    Service.api.get({page: $scope.page, per_page: $scope.per_page}).then(function(res) {
       a(res)
     }, function() {});
   }
 
   $scope.getExistingDrafts = function(a) {
-    Matter.api.index({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model: false}).then(function(res) {
+    Matter.api.index({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model: true}).then(function(res) {
       a(res)
     }, function() {});
   }
@@ -188,18 +228,24 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
     })
   }
 
-  $scope.openModel = function(service, index) {
+  $scope.openModel = function(w, index) {
       var modalInstance = $uibModal.open({
         animation: false,
-        templateUrl: 'views/pages/modal-edit-template.html',
-        controller: 'editServiceCtrl',
-        size: "80%",
+        templateUrl: 'views/partials/modal-edit-template.html',
+        controller: 'editModelCtrl',
+        size: "100%",
         resolve: {
-          service: function () {
-            return service;
+          matter: function () {
+            return w;
           },
-          serv: function() {
-            return $scope.serv;
+          models: function () {
+            return $scope.drafts;
+          },
+          services: function() {
+            return $scope.services;
+          },
+          areas: function() {
+            return $scope.areas;
           },
           index: function() {
             return index;

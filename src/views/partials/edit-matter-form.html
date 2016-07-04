@@ -62,12 +62,18 @@
     
 
     <div class="button-group right" style="float:right;">
-        <button class="btn btn-info waves-effect" ng-if="draftable && !draft" ng-click="editor.saveAsTemplate(matter)">Salva come modello</button>
-        <button class="btn btn-success waves-effect" ng-disabled="saving" ng-click="save(matter)" style="margin-right: 25px">{{saving_text}}</button>
+        <button class="btn btn-info waves-effect" ng-if="!undraftable" ng-click="saveAsModel(matter)">Salva come modello</button>
+        <button ng-if="!matter.customer && !matter.company" class="btn btn-success waves-effect" ng-click="save(matter)" style="margin-right: 25px">
+            Invia al cliente
+        </button>
     </div>
 
     <div style="float:right; width: 100%; text-align: right; padding: 25px; padding-top: 0">
-        <h3><small>{{saved_text}}</small></h3>
+        <h3>
+            <small ng-if="saved">La lettera di incarico è stata salvata sul server remoto.</small>
+            <small ng-if="!saved">La lettera di incarico non è ancora stata salvata. Attendi un istante..</small>
+
+        </h3>
     </div>
     <br/><br/><br/>
 </div>
@@ -87,67 +93,67 @@
 
     <div class="table-responsive">
         <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Servizio</th>
-                    <th>Importo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="i in matter.items">
-                    <td>{{i.title}}</td>
-                    <td>€ {{i.price}}</td>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
-                <tr>
-                    <th>Imponibile Prestazioni</th>
-                    <th>€ {{totale}}</th>
-                </tr>
-                <tr>
-                    <th>Rimborso spese generali (15%)</th>
-                    <th>€ {{totale | percentage: 15}}</th>
-                </tr>
-                <tr>
-                    <th>Totale imponibile</th>
-                    <th>€ {{totale + (totale | percentage: 15)}}</th>
-                </tr>
-                <tr>
-                    <th>Rivalsa parziale contributi previdenziali (4%)</th>
-                    <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
-                </tr>
-                <tr>
-                    <th>Totale imponibile</th>
-                    <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
-                </tr>
-                <tr>
-                    <th>Iva (22%)</th>
-                    <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
+                    <thead>
+                        <tr>
+                            <th>Servizio</th>
+                            <th>Importo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in matter.items">
+                            <td>{{i.title}}</td>
+                            <td>€ {{i.price | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th>Imponibile Prestazioni</th>
+                            <th>€ {{totale | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rimborso spese generali (15%)</th>
+                            <th>€ {{(totale | percentage: 15) | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{(totale + (totale | percentage: 15)) | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>Rivalsa parziale contributi previdenziali (4%)</th>
+                            <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4) | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>Totale imponibile</th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)) | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>Iva (22%)</th>
+                            <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
 
-                
-                <tr>
-                    <th><strong><span ng-if="matter.ritenuta">Totale fattura</span><span ng-if="!matter.ritenuta">Netto da Versare</span></strong></th>
-                    <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
-                </tr>
+                        
+                        <tr>
+                            <th><strong><span ng-if="matter.ritenuta">Totale fattura</span><span ng-if="!matter.ritenuta">Netto da Versare</span></strong></th>
+                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                        </tr>
 
-                <tr ng-if="matter.ritenuta">
-                    <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
-                    <th>€ {{(totale + (totale | percentage: 15)) | percentage: 20}}</th>
-                </tr>
+                        <tr ng-if="matter.ritenuta">
+                            <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
+                            <th>€ {{((totale + (totale | percentage: 15)) | percentage: 20) | prettyNumber}}</th>
+                        </tr>
 
 
-                <tr ng-if="matter.ritenuta">
-                    <th><strong>Netto da versare</strong></th>
-                    <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)}}</th>
-                </tr>
-            </tbody>
-        </table>
+                        <tr ng-if="matter.ritenuta">
+                            <th><strong>Netto da versare</strong></th>
+                            <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
+                        </tr>
+                    </tbody>
+                </table>
     </div>
 </div>
