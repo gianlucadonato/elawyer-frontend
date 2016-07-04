@@ -6,6 +6,15 @@
   * User Service
   =========================================================*/
 
+
+  function computeParams(obj) {
+    var a = "?";
+    for (var i in obj) {
+      a += i + "=" + obj[i] + "&";     
+    }
+    return a;
+  }
+
   App.factory('Service', function ($rootScope, $q, $http, API) {
     var api = {};
 
@@ -30,10 +39,13 @@
       return deferred.promise;
     };
 
-    api.get = function(p, pp) {
+    api.get = function(params) {
       var deferred = $q.defer();
+
+      var p = computeParams(params);
+
       $http
-        .get(API.host + '/api/services?page='+p+"&per_page="+pp)
+        .get(API.host + '/api/services' + p)
         .then(function(res){
           deferred.resolve(res.data);
         })

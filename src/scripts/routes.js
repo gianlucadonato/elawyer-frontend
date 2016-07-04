@@ -6,7 +6,7 @@
    * App routes and resources configuration
    =========================================================*/
 
-  App.config(function ($stateProvider, $locationProvider, $urlRouterProvider, RouteHelpersProvider) {
+  App.config(function ($stateProvider, $locationProvider, $urlRouterProvider, RouteHelpersProvider, StripeCheckoutProvider) {
 
     var helper = RouteHelpersProvider;
     $locationProvider.html5Mode(false);
@@ -104,7 +104,10 @@
         title: 'Matter Details',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-details.html'),
-        controller: 'MatterDetailsCtrl'
+        controller: 'MatterDetailsCtrl',
+        resolve: {
+          stripe: StripeCheckoutProvider.load
+        }
       })
       .state('page.matter-edit', {
         url: '/matters/:id/edit',

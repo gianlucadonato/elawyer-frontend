@@ -17,12 +17,19 @@ var App = angular.module('eLawyer', [
   'ngFileUpload',
   'appConstants',
   'FileManagerApp',
-  'ui.tree'
+  'ui.tree',
+  'stripe.checkout'
 ]);
 
 // APP CONFIG
 // -----------------------------------
-App.config(function($httpProvider) {
+App.config(function($httpProvider, StripeCheckoutProvider) {
+
+
+  StripeCheckoutProvider.defaults({
+    key: "pk_test_w8PwVaNe6M1kGOWmHUxoiLa2"
+  });
+
   // Auth Interceptor
   $httpProvider.interceptors.push(function($rootScope, $injector, $q) {
     return {

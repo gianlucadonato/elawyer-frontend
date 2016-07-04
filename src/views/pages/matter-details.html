@@ -38,49 +38,70 @@
     </div>
   </div>
 
-  <div class="row">
+  <div ng-class="{'row': !confirm}">
 
 
-    <div class="col-sm-8">
+    <div ng-class="{'col-sm-8': !confirm}" id="lettera">
         <div class="card">
+
           <div class="card-header">
 
+            <div ng-include="'views/partials/logo.html'"></div>  
 
-            <div ui-tree>
-              <ol ui-tree-nodes="" ng-model="services">
-                <li ng-repeat="item in services" ui-tree-node>
-                  <div ui-tree-handle>
-                    {{item.title}}
-                  </div>
-                  <ol ui-tree-nodes="" ng-model="item.items">
-                    <li ng-repeat="subItem in item.items" ui-tree-node>
-                      <div ui-tree-handle>
-                        {{subItem.title}}
-                      </div>
-                    </li>
-                  </ol>
-                </li>
-              </ol>
-            </div>
+            <h3>Lettera di incarico</h3>
+            <hr/>
+            Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’“Incarico”).<br/><br/>
+
+            Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.<br/><br/>
+
+            <h4>Oggetto dell’Incarico</h4>
+            L'incarico avrà per oggetto le seguenti attività:<br/><br/>
 
 
-            <div class="service" ng-repeat="i in matter.items">
-
-              <h3>{{$index + 1}}. {{i.title}}</h3>
-
-
+            <div class="service" ng-repeat="i in matter.items" ng-show="!confirm">
+              <h4>{{$index + 1}}. {{i.title}} <small style="float:right">€ {{i.price}}</small></h4>
+                <div class="checkbox m-b-15">
+                  <label ng-if="!i.mandatory">
+                    <input type="checkbox" value="" ng-model="i.selected" ng-value="i.selected">
+                    <i class="input-helper"></i>
+                    <span ng-if="i.selected">Servizio Attivato</span>
+                    <span ng-if="!i.selected">Servizio Disattivato</span>
+                  </label>
+                  <label ng-if="i.mandatory">
+                    <input type="checkbox" value="" checked disabled>
+                    <i class="input-helper"></i>
+                    Servizio Obbligatorio
+                  </label>
+                </div>
               <p>{{i.description}}</p>
-
               <div class="sub-services">
                 <div class="sub-service-item" ng-repeat="a in i.items">
                   <h2>{{$index + 1}}. {{a.title}}</h2>
                   <br/>
                   <p>{{a.description}}</p>
                 </div>
-
               </div>
-
             </div>
+
+            <div class="service" ng-repeat="i in matter.items" ng-show="confirm" ng-if="i.selected || i.mandatory">
+              <h3>{{$index + 1}}. {{i.title}} <small style="float:right">€ {{i.price}}</small></h3>
+              <p>{{i.description}}</p>
+              <div class="sub-services">
+                <div class="sub-service-item" ng-repeat="a in i.items">
+                  <h2>{{$index + 1}}. {{a.title}}</h2>
+                  <br/>
+                  <p>{{a.description}}</p>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="button-group right" style="float:right;">
+                <button ng-show="!confirm" class="btn btn-success waves-effect" ng-click="next()">Continua</button>
+                <button ng-show="confirm" class="btn btn-info waves-effect" ng-click="download()">Scarica</button>
+                <button ng-show="confirm" class="btn btn-warning waves-effect" ng-click="previous()">Indietro</button>
+            </div>
+            <br/><br/>
 
           </div>
         </div>
@@ -88,7 +109,7 @@
 
 
 
-    <div id="todo-lists" class="col-sm-4">
+    <div class="col-sm-4 card" ng-show="!confirm">
       <div id="wrap">
         <br/>
         <h2>Sommario</h2>
@@ -122,94 +143,100 @@
               <label ng-if="!w.mandatory">
                 <input type="checkbox" value="" ng-model="w.selected" ng-value="w.selected">
                 <i class="input-helper"></i>
-                {{w.title}}
+                {{w.title}} <strong>€ {{w.price | prettyNumber}}</strong>
               </label>
               <label ng-if="w.mandatory">
                 <input type="checkbox" value="" checked disabled>
                 <i class="input-helper"></i>
-                {{w.title}}
+                {{w.title}} <strong>€ {{w.price | prettyNumber}}</strong>
               </label>
             </div>
           </div>
+
+          <hr/>
+          <strong>Netto da Versare: </strong> {{totale | prettyNumber}}
+          <hr/>
         </div>
       </div>
     </div>
 
-    <div class="card col-sm-8">
-            <div class="card-header">
-                <h2>Sommario <small></small></h2>
-            </div>
+    <div class="card col-sm-12" ng-if="confirm" style="padding: 0">
+      <div class="card-header">
+          <div ng-include="'views/partials/logo.html'"></div>
+          <h2>Nota pro forma <small>Riepilogo dei servizi</small></h2>
+      </div>
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Servizio</th>
-                            <th>Importo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="i in matter.items" ng-if="i.selected || i.mandatory">
-                            <td>{{i.title}}</td>
-                            <td>€ {{i.price}}</td>
-                        </tr>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                            <th>Imponibile Prestazioni</th>
-                            <th>€ {{totale}}</th>
-                        </tr>
-                        <tr>
-                            <th>Rimborso spese generali (15%)</th>
-                            <th>€ {{totale | percentage: 15}}</th>
-                        </tr>
-                        <tr>
-                            <th>Totale imponibile</th>
-                            <th>€ {{totale + (totale | percentage: 15)}}</th>
-                        </tr>
-                        <tr>
-                            <th>Rivalsa parziale contributi previdenziali (4%)</th>
-                            <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
-                        </tr>
-                        <tr>
-                            <th>Totale imponibile</th>
-                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)}}</th>
-                        </tr>
-                        <tr>
-                            <th>Iva (22%)</th>
-                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
-                        </tr>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
+      <div class="table-responsive">
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>Servizio</th>
+                      <th>Importo</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="i in matter.items" ng-if="i.selected || i.mandatory">
+                      <td>{{i.title}}</td>
+                      <td>€ {{i.price | prettyNumber}}</td>
+                  </tr>
+                  <tr>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                  </tr>
+                  <tr>
+                      <th>Imponibile Prestazioni</th>
+                      <th>€ {{totale | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>Rimborso spese generali (15%)</th>
+                      <th>€ {{(totale | percentage: 15) | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>Totale imponibile</th>
+                      <th>€ {{(totale + (totale | percentage: 15)) | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>Rivalsa parziale contributi previdenziali (4%)</th>
+                      <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4) | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>Totale imponibile</th>
+                      <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)) | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>Iva (22%)</th>
+                      <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                  </tr>
+                  <tr>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                  </tr>
 
-                        
-                        <tr>
-                            <th><strong><span ng-if="item.ritenuta">Totale fattura</span><span ng-if="!item.ritenuta">Netto da Versare</span></strong></th>
-                            <th>€ {{totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)}}</th>
-                        </tr>
+                  
+                  <tr>
+                      <th><strong><span ng-if="matter.ritenuta">Totale fattura</span><span ng-if="!matter.ritenuta">Netto da Versare</span></strong></th>
+                      <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                  </tr>
 
-                        <tr ng-if="item.ritenuta">
-                            <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
-                            <th>€ {{(totale + (totale | percentage: 15)) | percentage: 20}}</th>
-                        </tr>
-
-
-                        <tr ng-if="item.ritenuta">
-                            <th><strong>Netto da versare</strong></th>
-                            <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)}}</th>
-                        </tr>
-                    </tbody>
-                </table>
+                  <tr ng-if="matter.ritenuta">
+                      <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
+                      <th>€ {{((totale + (totale | percentage: 15)) | percentage: 20) | prettyNumber}}</th>
+                  </tr>
 
 
-
-
-            </div>
-        </div>
+                  <tr ng-if="matter.ritenuta">
+                      <th><strong>Netto da versare</strong></th>
+                      <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
+                  </tr>
+              </tbody>
+          </table>
+          <br/>
+          <div class="button-group center">
+              <button class="btn btn-info waves-effect" ng-click="pay()" style="margin-left: auto; margin-right: auto; display: block;">Termina e Paga</button>
+          </div>
+          <br/><br/>
+      </div>
+    </div>
 
   </div>
 
