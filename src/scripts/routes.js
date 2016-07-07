@@ -17,21 +17,21 @@
     // -----------------------------------
 
     $stateProvider
-      .state('home', {
-        url: '/',
-        title: 'Home',
-        templateUrl: helper.pagesPath('home.html'),
-        controller: 'HomeCtrl'
-      })
+      // .state('home', {
+      //   url: '/',
+      //   title: 'Home',
+      //   templateUrl: helper.pagesPath('home.html'),
+      //   controller: 'HomeCtrl'
+      // })
       //------------------------------
       // AUTHENTICATION
       //------------------------------
       .state ('auth', {
-        url: '/auth',
+        abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
       .state('auth.login', {
-        url: '/login',
+        url: '/',
         title: 'Login',
         templateUrl: helper.pagesPath('login.html'),
         controller: 'AuthenticationCtrl'
@@ -79,6 +79,30 @@
         abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
+      .state('page.matter-list', {
+        url: '/matters/list',
+        title: 'Matter List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-list.html'),
+        controller: 'MatterListCtrl'
+      })
+      .state('page.matter-draft', {
+        url: '/matters/draft',
+        title: 'Matter Draft',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-draft.html'),
+        controller: 'MatterListCtrl'
+      })
+      .state('page.matter-details', {
+        url: '/matters/:id',
+        title: 'Matter Details',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-details.html'),
+        controller: 'MatterDetailsCtrl',
+        resolve: {
+          stripe: StripeCheckoutProvider.load
+        }
+      })
       .state('page.matter-create', {
         url: '/matters/create',
         title: 'Create Matter',
@@ -91,23 +115,6 @@
         title: 'Matter Template',
         requireLogin: true,
         controller: 'MatterCreateCtrl'
-      })
-      .state('page.matter-list', {
-        url: '/matters',
-        title: 'Matter List',
-        requireLogin: true,
-        templateUrl: helper.pagesPath('matter-list.html'),
-        controller: 'MatterListCtrl'
-      })
-      .state('page.matter-details', {
-        url: '/matters/:id',
-        title: 'Matter Details',
-        requireLogin: true,
-        templateUrl: helper.pagesPath('matter-details.html'),
-        controller: 'MatterDetailsCtrl',
-        resolve: {
-          stripe: StripeCheckoutProvider.load
-        }
       })
       .state('page.matter-edit', {
         url: '/matters/:id/edit',

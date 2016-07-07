@@ -32,6 +32,7 @@
                 </div>
                 <div ng-messages="signupForm.email.$error" class="form-errors">
                   <div ng-message="invalid">Invalid Email.</div>
+                  <div ng-message="alreadyInUse">Email already in use.</div>
                 </div>
               </div>
             </div>
@@ -47,10 +48,10 @@
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block waves-effect">SIGNUP NOW!</button>
+            <button type="submit" class="btn btn-orange btn-block waves-effect">SIGNUP NOW!</button>
           </div>
           <div class="text-center">Already registered?</div>
-          <a ui-sref="auth.login" class="btn bgm-t-blue btn-block waves-effect m-t-5">LOGIN</a>
+          <a ui-sref="auth.login" class="btn bgm-t-orange btn-block waves-effect m-t-5">LOGIN</a>
         </form>
 
       </div>

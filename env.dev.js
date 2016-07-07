@@ -11,6 +11,9 @@
     .constant('API', {
       host: 'http://localhost:5000',
       // host: 'http://crclex.herokuapp.com'
+    })
+    .constant('ENV', {
+      stripe_key: 'pk_test_w8PwVaNe6M1kGOWmHUxoiLa2'
     });
 
 })();

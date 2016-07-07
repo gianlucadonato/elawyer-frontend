@@ -23,11 +23,10 @@ var App = angular.module('eLawyer', [
 
 // APP CONFIG
 // -----------------------------------
-App.config(function($httpProvider, StripeCheckoutProvider) {
-
+App.config(function($httpProvider, StripeCheckoutProvider, ENV) {
 
   StripeCheckoutProvider.defaults({
-    key: "pk_test_w8PwVaNe6M1kGOWmHUxoiLa2"
+    key: ENV.stripe_key
   });
 
   // Auth Interceptor
@@ -68,10 +67,6 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
 
   amMoment.changeLocale('it');
 
-  // RoleStore.defineRole('USER', function () {
-  //   return Auth.isAuthenticated();
-  // });
-
   RoleStore.defineRole('ADMIN', function () {
     if(Auth.isAuthenticated()) {
       return Auth.getUser().role === 100;
@@ -82,7 +77,7 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
 
   RoleStore.defineRole('LAWYER', function () {
     if(Auth.isAuthenticated()) {
-      return Auth.getUser().role >= 10 && Auth.getUser().role != 1;
+      return Auth.getUser().role === 10;
     } else {
       return false;
     }
@@ -90,7 +85,7 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
 
   RoleStore.defineRole('CUSTOMER', function () {
     if(Auth.isAuthenticated()) {
-      return Auth.getUser().role >= 1;
+      return Auth.getUser().role === 1;
     } else {
       return false;
     }

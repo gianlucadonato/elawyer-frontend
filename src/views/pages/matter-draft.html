@@ -3,10 +3,7 @@
   <div class="card">
     <div class="card-header">
       <h2>
-        <button ui-sref="page.matter-create" class="btn btn-primary btn-icon-text waves-effect pull-right">
-          <i class="zmdi zmdi-plus"></i> New
-        </button>
-        MATTERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+        Bozze <small>Le bozze che non hai ancora inviato al cliente.</small>
       </h2>
     </div>
 
@@ -20,14 +17,12 @@
             <th permission permission-only="['LAWYER', 'ADMIN']">Customer</th>
             <th permission permission-only="['CUSTOMER', 'ADMIN']">Lawyer</th>
             <th>Open Date</th>
-            <th permission permission-only="['LAWYER', 'ADMIN']">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="m in matterList">
-            <td>
-              <a ui-sref="page.matter-details({id: m.id})" >{{m.title}}</a>
-            </td>
+          <tr ng-repeat="m in drafts">
+            <td><a ui-sref="page.matter-details({id: m.id})">{{m.title}}</a></td>
             <td>{{m.area}}</td>
             <td>
               <div class="flag flag-success" ng-if="m.status == 'success'">{{m.status}}</div>
@@ -42,7 +37,7 @@
             </td>
             <td>{{m.open_date | date}}</td>
             <td permission permission-only="['LAWYER', 'ADMIN']">
-              <a ng-click="open(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
+              <a data-ui-sref="page.matter-edit({id: m.id})"><i class="zmdi zmdi-edit"></i> Edit</a>
             </td>
           </tr>
         </tbody>
@@ -51,18 +46,17 @@
   </div>
 
   <div class="pagination-centered" style="margin-top: -25px">
-    <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
-      <li ng-hide="page == 0" class="ng-scope">
-        <a ng-click="page = page - 1">
-          <i class="zmdi zmdi-chevron-left"></i>
-        </a>
-      </li>
-      <li ng-hide="matterList.length !== per_page">
-        <a ng-click="page = page + 1">
-          <i class="zmdi zmdi-chevron-right"></i>
-        </a>
-      </li>
-    </ul>
+      <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
+          <li ng-hide="u_page == 0" class="ng-scope">
+              <a ng-click="u_page = u_page - 1">
+                  <i class="zmdi zmdi-chevron-left"></i>
+              </a>
+          </li>
+          <li ng-hide="drafts.length !== u_per_page">
+              <a ng-click="u_page = u_page + 1">
+                  <i class="zmdi zmdi-chevron-right"></i>
+              </a>
+          </li>
+      </ul>
   </div>
-
 </div>
