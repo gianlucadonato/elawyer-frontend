@@ -143,7 +143,7 @@
         controller: 'CustomerListCtrl',
         data: {
           permissions: {
-            only: ['ADMIN']
+            only: ['LAWYER', 'ADMIN']
           }
         }
       })

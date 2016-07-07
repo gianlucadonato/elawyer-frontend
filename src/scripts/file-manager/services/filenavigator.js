@@ -10,7 +10,7 @@
         this.requesting = false;
         this.fileList = [];
         this.currentPath = [];
-        this.currentFolderId = undefined;
+        this.currentFolderId = 'root';
         this.history = [];
         this.error = '';
         this.onRefresh = function() {};
@@ -46,7 +46,7 @@
         self.requesting = true;
         self.fileList = [];
         return self.list({
-          folderId: self.currentFolderId
+          parentId: self.currentFolderId
         }).then(function(data) {
           self.fileList = (data.result || []).map(function(file) {
             return new Item(file, self.currentPath);
@@ -110,7 +110,7 @@
       FileNavigator.prototype.folderClick = function(item) {
         this.currentPath = [];
         this.currentPath = [];
-        this.currentFolderId = undefined;
+        this.currentFolderId = 'root';
         if (item && item.isFolder()) {
           this.currentPath = item.model.fullPath().split('/').splice(1);
           this.currentFolderId = item.model.id;

@@ -41,6 +41,11 @@
         },
         controller: function($scope, $uibModalInstance, customers){
           $scope.createUser = function(data) {
+            if(data.birthday) {
+              // Transform data in ms
+              var bd = data.birthday.split('/');
+              data.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
+            }
             User
               .create(data)
               .then(function(user){

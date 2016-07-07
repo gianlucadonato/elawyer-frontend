@@ -45,6 +45,11 @@
     };
 
     this.updateUser = function(user) {
+      if(user.birthday) {
+        // Transform data in ms
+        var bd = user.birthday.split('/');
+        user.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
+      }
       User
         .update(user)
         .then(function(user){
