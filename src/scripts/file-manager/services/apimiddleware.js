@@ -123,6 +123,7 @@
         };
 
         ApiMiddleware.prototype.createFolder = function(item) {
+          console.log('item', item);
           var data = {
             folderName: item.tempModel.name,
             parentId: item.tempModel.parentId

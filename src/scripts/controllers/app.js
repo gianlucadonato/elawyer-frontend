@@ -79,7 +79,7 @@
     this.wallLink = false;
 
     //Skin Switch
-    this.currentSkin = 'blue';
+    this.currentSkin = 'darkorange';
 
     this.skinList = [
       'lightblue',
@@ -88,6 +88,8 @@
       'teal',
       'green',
       'orange',
+      'darkorange',
+      'deeporange',
       'blue',
       'purple'
     ];

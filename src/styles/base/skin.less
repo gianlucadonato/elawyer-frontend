@@ -7,7 +7,7 @@
         padding: 15px 0 8px;
         text-align: center;
     }
-    
+
     .ss-skin {
         width: 16px;
         height: 16px;
@@ -31,16 +31,16 @@
         right: 58px;
         bottom: 23px;
         z-index: 1;
-        
+
         .btn {
             background: #fff;
             width: 50px;
-            height: 50px; 
+            height: 50px;
             border-radius: 50%;
             font-size: 25px;
             z-index: 2;
         }
-        
+
         .dropdown-menu {
             min-width: 130px;
             height: 130px;
@@ -51,8 +51,8 @@
             z-index: 1;
             .transform-origin(center);
             .scale-rotate(0, -360deg);
-            .transition-duration(500ms); 
-            
+            .transition-duration(500ms);
+
             .ss-skin {
                 position: absolute;
 
@@ -101,7 +101,7 @@
                 }
             }
         }
-        
+
         &.open {
             .dropdown-menu {
                 .scale-rotate(1, 0deg);
@@ -122,16 +122,16 @@
     height: 16px;
     border-radius: 50%;
     cursor: pointer;
-    
+
     &:hover {
         .opacity(0.8);
     }
 }
 .current-skin(@color) {
     background-color: @color;
-    
+
     .ss-icon { color: @color; }
-    
+
     .ha-menu {
         @media (max-width: @screen-xs-max) {
             background: @color;
@@ -144,6 +144,8 @@
 [data-current-skin="blue"] { .current-skin(@m-blue); }
 [data-current-skin="purple"] { .current-skin(@m-purple); }
 [data-current-skin="orange"] { .current-skin(@m-orange); }
+[data-current-skin="darkorange"] { .current-skin(@m-darkorange); }
+[data-current-skin="deeporange"] { .current-skin(@m-deeporange); }
 [data-current-skin="cyan"] { .current-skin(@m-cyan); }
 [data-current-skin="green"] { .current-skin(@m-green); }
 [data-current-skin="teal"] { .current-skin(@m-teal); }

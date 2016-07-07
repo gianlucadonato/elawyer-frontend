@@ -6,10 +6,10 @@
 
         <!-- <input type="text" class="form-control input-sm file-search" ng-show="config.searchForm" placeholder="{{'search' | translate}}..." ng-model="$parent.query"> -->
 
-        <button class="btn btn-default btn-sm" ng-click="modal('newfolder') && prepareNewFolder()">
+        <button class="btn btn-orange btn-sm" ng-click="modal('newfolder') && prepareNewFolder()">
             <i class="glyphicon glyphicon-plus"></i> {{"new_folder" | translate}}
         </button>
-        <button class="btn btn-default btn-sm" ng-show="config.allowedActions.upload" ng-click="modal('uploadfile')">
+        <button class="btn btn-orange btn-sm" ng-show="config.allowedActions.upload" ng-click="modal('uploadfile')">
             <i class="glyphicon glyphicon-cloud-upload"></i> {{"upload_files" | translate}}
         </button>
 
@@ -31,10 +31,10 @@
           <li role="presentation"><a role="menuitem" tabindex="-1" href="" ng-click="changeLanguage('tr')">{{"turkish" | translate}}</a></li>
         </ul> -->
 
-        <button class="btn btn-default btn-sm" ng-click="$parent.setTemplate('main-icons.html')" ng-show="$parent.viewTemplate !== 'main-icons.html'" title="{{'icons' | translate}}">
+        <button class="btn btn-orange btn-sm" ng-click="$parent.setTemplate('main-icons.html')" ng-show="$parent.viewTemplate !== 'main-icons.html'" title="{{'icons' | translate}}">
             <i class="glyphicon glyphicon-th-large"></i>
         </button>
-        <button class="btn btn-default btn-sm" ng-click="$parent.setTemplate('main-table.html')" ng-show="$parent.viewTemplate !== 'main-table.html'" title="{{'list' | translate}}">
+        <button class="btn btn-orange btn-sm" ng-click="$parent.setTemplate('main-table.html')" ng-show="$parent.viewTemplate !== 'main-table.html'" title="{{'list' | translate}}">
             <i class="glyphicon glyphicon-th-list"></i>
         </button>
 

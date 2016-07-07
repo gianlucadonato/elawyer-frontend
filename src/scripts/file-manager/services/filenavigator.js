@@ -10,7 +10,7 @@
         this.requesting = false;
         this.fileList = [];
         this.currentPath = [];
-        this.currentFolderId = 'root';
+        this.currentFolderId = undefined;
         this.history = [];
         this.error = '';
         this.onRefresh = function() {};
@@ -110,7 +110,7 @@
       FileNavigator.prototype.folderClick = function(item) {
         this.currentPath = [];
         this.currentPath = [];
-        this.currentFolderId = 'root';
+        this.currentFolderId = undefined;
         if (item && item.isFolder()) {
           this.currentPath = item.model.fullPath().split('/').splice(1);
           this.currentFolderId = item.model.id;
