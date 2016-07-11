@@ -93,6 +93,13 @@
         templateUrl: helper.pagesPath('matter-draft.html'),
         controller: 'MatterListCtrl'
       })
+      .state('page.matter-create', {
+        url: '/matters/create',
+        title: 'Create Matter',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-edit.html'),
+        controller: 'MatterCreateCtrl'
+      })
       .state('page.matter-details', {
         url: '/matters/:id',
         title: 'Matter Details',
@@ -102,13 +109,6 @@
         resolve: {
           stripe: StripeCheckoutProvider.load
         }
-      })
-      .state('page.matter-create', {
-        url: '/matters/create',
-        title: 'Create Matter',
-        requireLogin: true,
-        templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterCreateCtrl'
       })
       .state('page.matter-template', {
         url: '/matters/templates/:id',

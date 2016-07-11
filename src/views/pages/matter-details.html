@@ -46,7 +46,7 @@
 
           <div class="card-header">
 
-            <div ng-include="'views/partials/logo.html'"></div>  
+            <div ng-include="'views/partials/logo.html'"></div>
 
             <h3>Lettera di incarico</h3>
             <hr/>
@@ -131,7 +131,7 @@
                     </li>
                     <li>
                         <a href="">Widgets Settings</a>
-                        
+
                     </li>
                 </ul>
             </li>
@@ -212,7 +212,7 @@
                       <th>&nbsp;</th>
                   </tr>
 
-                  
+
                   <tr>
                       <th><strong><span ng-if="matter.ritenuta">Totale fattura</span><span ng-if="!matter.ritenuta">Netto da Versare</span></strong></th>
                       <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
@@ -245,5 +245,5 @@
 
 
 
-  
+
 </div>
