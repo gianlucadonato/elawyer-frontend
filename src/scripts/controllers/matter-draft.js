@@ -6,12 +6,11 @@
   * MatterDraft Controller
   =========================================================*/
 
-  App.controller('MatterDraftCtrl', function($scope, Matter, Notify) {
+  App.controller('MatterDraftCtrl', function($scope, $filter, Matter, Notify, ngTableParams) {
 
     $scope.drafts = [];
     $scope.isLoading = false;
-    $scope.perPage = 15;
-    $scope.currentPage = 0;
+    $scope.perPage = 14;
     $scope.totalItems = 0;
 
     function activate() {
@@ -24,21 +23,39 @@
       $scope.isLoading = true;
       Matter.api.index({
         is_draft: true,
-        page: $scope.currentPage,
         per_page: $scope.perPage
       }).then(function(data){
         $scope.drafts = data.matters;
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
+        initTable();
       }).catch(function(err){
         $scope.isLoading = false;
       });
     }
 
-    $scope.nextMatter = function(page) {
-      $scope.currentPage = page-1;
-      getDrafts();
-    };
+    function initTable() {
+      $scope.mattersTable = new ngTableParams({
+        page: 1,
+        count: $scope.perPage
+      }, {
+        total: $scope.totalItems,
+        getData: function($defer, params) {
+          console.log('here');
+          Matter.api.index({
+            is_draft: true,
+            page: params.page() - 1,
+            per_page: params.count()
+          }).then(function(data){
+            $scope.totalItems = data.total_items;
+            $scope.drafts = params.sorting() ? $filter('orderBy')(data.matters, params.orderBy()) : data.matters;
+            $defer.resolve($scope.drafts);
+          }).catch(function(err){
+            Notify.error('Error!', "Unable to fetch matters");
+          });
+        }
+      });
+    }
 
     $scope.deleteMatter = function(m) {
       swal({
