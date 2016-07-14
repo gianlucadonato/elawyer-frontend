@@ -45,7 +45,7 @@
               </td>
               <td>{{m.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
               <td permission permission-only="['LAWYER', 'ADMIN']">
-                <a ng-click="open(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
+                <a ui-sref="page.matter-edit(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
               </td>
             </tr>
           </tbody>

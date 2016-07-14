@@ -1,3 +1,6 @@
+/* =================
+ * MATTER COMMONS
+ * ==================*/
 .matter {
 
   .table-bordered {
@@ -17,7 +20,57 @@
   }
 }
 
-.matter-create {
+/* =================
+ * MATTER DETAILS
+ * ==================*/
+.matter-details {
+  table.services {
+    ul, ol {
+      list-style: none;
+      margin-bottom: 0px;
+      li {
+        margin-bottom: 10px;
+      }
+    }
+    ul {
+      padding-left: 0;
+    }
+    ol {
+      padding-left: 20px;
+    }
+
+    .service-title {
+      margin: 2px 0;
+      font-weight: 400;
+      line-height: 1;
+    }
+    h2.service-title {
+      font-size: 17px;
+    }
+    h3.service-title {
+      font-size: 16px;
+    }
+  }
+
+  .matter-summary-card {
+    .card-header .actions {
+      top: 25px;
+      right: 25px;
+    }
+  }
+
+  #summary-box.fixed-top {
+    @media screen and (min-width: @screen-sm-min) {
+      position: fixed;
+      top: 50px;
+    }
+  }
+}
+
+/* =================
+ * MATTER CREATE
+ * ==================*/
+.matter-create, .matter-edit {
 
   .card-header {
     input, select {
@@ -100,50 +153,24 @@
   }
 }
 
-/* =================
- * MATTER DETAILS
- * ==================*/
-.matter-details {
-  table.services {
-    ul, ol {
-      list-style: none;
-      margin-bottom: 0px;
-      li {
-        margin-bottom: 10px;
-      }
-    }
-    ul {
-      padding-left: 0;
-    }
-    ol {
-      padding-left: 20px;
-    }
 
-    .service-title {
-      margin: 2px 0;
-      font-weight: 400;
+/* ==================
+ * MATTER EDIT
+ * ===================*/
+.matter-edit {
+  .block-header {
+    a {
+      display: block;
+      margin-left: 5px;
+      font-size: 16px;
       line-height: 1;
     }
-    h2.service-title {
-      font-size: 17px;
-    }
-    h3.service-title {
-      font-size: 16px;
-    }
   }
-
-  .matter-summary-card {
-    .card-header .actions {
-      top: 25px;
-      right: 25px;
-    }
-  }
-
-  #summary-box.fixed-top {
-    @media screen and (min-width: @screen-sm-min) {
-      position: fixed;
-      top: 50px;
+  .card-header {
+    table {
+      margin-bottom: 20px;
     }
   }
 }
+
 

@@ -6,7 +6,7 @@
   * Create New Matter
   =========================================================*/
 
-  App.controller('MatterNewCtrl', function($rootScope, $scope, $state, $uibModal, Matter, Service, Notify) {
+  App.controller('MatterNewCtrl', function($rootScope, $scope, $stateParams, $state, $uibModal, Matter, Service, Notify) {
 
     var self = this;
     $scope.matter = Matter.template();
@@ -21,6 +21,22 @@
     $scope.totalSrvItems = 0;
     $scope.perPage = 5;
 
+    function activate() {
+      if($stateParams.id) {
+        // Edit Page
+        getMatter();
+      }
+    }
+
+    activate();
+
+    function getMatter() {
+      Matter.api.get($stateParams.id).then(function(data) {
+        $scope.matter = data;
+      }).catch(function(err){
+        Notify.error('Error!', 'Unable to load matter');
+      });
+    }
 
     /* Matter Templates
      * ======================*/

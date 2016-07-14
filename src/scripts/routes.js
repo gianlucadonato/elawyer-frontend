@@ -73,7 +73,7 @@
         templateUrl: 'views/demos/profile-connections.html'
       })
       //------------------------------
-      // DOCUMENTS
+      // MATTERS
       //------------------------------
       .state ('page', {
         abstract: true,
@@ -104,7 +104,7 @@
         url: '/matters/create',
         title: 'Create Matter',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-edit.html'),
+        templateUrl: helper.pagesPath('matter-create.html'),
         controller: 'MatterCreateCtrl'
       })
       .state('page.matter-details', {
@@ -117,20 +117,16 @@
           stripe: StripeCheckoutProvider.load
         }
       })
-      .state('page.matter-template', {
-        url: '/matters/templates/:id',
-        title: 'Matter Template',
-        requireLogin: true,
-        controller: 'MatterCreateCtrl'
-      })
       .state('page.matter-edit', {
         url: '/matters/:id/edit',
         title: 'Edit Matter',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterCreateCtrl'
+        controller: 'MatterNewCtrl'
       })
-
+      //------------------------------
+      // DOCUMENTS
+      //------------------------------
       .state('page.documents', {
         url: '/documents',
         title: 'Documents',
