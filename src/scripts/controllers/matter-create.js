@@ -53,7 +53,9 @@
             if(!newValue.id) // Prevent double saving
               preventSave = true;
             $scope.matter = data;
-            $scope.isSaving = false;
+            $timeout(function() { // Only for design effect
+              $scope.isSaving = false;
+            }, 1000);
           }).catch(function(err){
             console.log('Unable to save matter', err);
           });
@@ -80,7 +82,11 @@
 
     $scope.addTemplate= function(item) {
       var index = $scope.templates.indexOf(item);
-      $scope.matter = angular.copy($scope.templates[index]);
+      var template = angular.copy($scope.templates[index]);
+      delete template.id;
+      delete template.is_template;
+      preventSave = true;
+      $scope.matter = template;
       Notify.success('OK!','Template imported successfully!');
       self.addTemplateModal.dismiss();
     };
@@ -159,7 +165,10 @@
 
     $scope.addService= function(item) {
       var index = $scope.services.indexOf(item);
-      $scope.matter.items.push($scope.services[index]);
+      var service = angular.copy($scope.services[index]);
+      delete service.id;
+      delete service.is_starred;
+      $scope.matter.items.push(service);
       Notify.success('OK!','Service imported successfully!');
       self.addServiceModal.dismiss();
     };
