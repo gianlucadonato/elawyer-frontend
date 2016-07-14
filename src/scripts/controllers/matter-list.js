@@ -42,7 +42,7 @@
         total: $scope.totalItems,
         getData: function($defer, params) {
           Matter.api.index({
-            is_draft: true,
+            is_draft: false,
             page: params.page() - 1,
             per_page: params.count()
           }).then(function(data){

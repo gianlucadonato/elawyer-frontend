@@ -84,7 +84,6 @@
 
     // Sticky Summary
     $(window).scroll(function(){
-      console.log($(this).scrollTop());
       if ($(this).scrollTop() > 230) {
         $("#summary-box").addClass("fixed-top");
       } else {
