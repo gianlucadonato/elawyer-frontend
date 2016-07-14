@@ -1,101 +1,162 @@
-<div class="container">
+<div class="container matter matter-create">
   <div class="block-header">
-    <h2><a ui-sref="page.matter-list"><i class="zmdi zmdi-arrow-left"></i> Back ?</a></h2>
+    <h2>New Matter</h2>
   </div>
 
-  <div ng-include="'views/partials/matter-edit-header.html'"></div>
-
   <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header ch-alt m-b-20">
 
-    <div class="col-sm-8">
-      <div ng-include="'views/partials/edit-matter-form.html'"></div>
-    </div>
-
-    <div class="col-sm-4">
-
-      <div id="todo-lists" class="card">
-        <div class="ng-scope">
-          <div class="ch-alt m-b-20 card-header">
-            <h2>Servizi <br/><small>Scegli un servizio dal tuo bucket di servizi predefiniti</small></h2>
-          </div>
-
-          <div>
-            <div class="listview">
-              <a class="lv-item ng-scope" href="" ng-repeat="w in services">
-                <div class="media" ng-click="openService(w, $index)">
-                  <div class="pull-left">
-                    <button ng-click="getFromBucket(w, $event)" class="btn bgm-cyan waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
-                  </div>
-                  <div class="media-body">
-                    <div class="lv-title ng-binding">{{w.title}}</div>
-                    <small class="lv-small ng-binding">{{w.description}}</small>
-                  </div>
-                </div>
-              </a>
-
-              <div class="pagination-centered">
-                <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
-                  <li ng-hide="page == 0" class="ng-scope">
-                    <a ng-click="page = page - 1">
-                      <i class="zmdi zmdi-chevron-left"></i>
-                    </a>
-                  </li>
-                  <li ng-hide="services.length !== per_page">
-                    <a ng-click="page = page + 1">
-                      <i class="zmdi zmdi-chevron-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="clearfix"></div>
+          <form>
+            <div class="form-group">
+              <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="matter.title">
             </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Description" ng-model="matter.description">
+            </div>
+            <div class="form-group">
+              <select class="form-control" ng-model="matter.area_of_interest">
+                <option value="" disabled selected>Select Area</option>
+                <option value="1">Area 1</option>
+                <option value="2">Area 2</option>
+                <option value="3">Area 3</option>
+              </select>
+            </div>
+          </form>
+
+          <ul class="actions">
+            <li tooltip-placement="bottom" uib-tooltip="Save as Template">
+              <a href="" ng-click="saveAsTemplate(matter)"><i class="fa fa-floppy-o"></i></a>
+            </li>
+            <li tooltip-placement="bottom" uib-tooltip="Import from Template">
+              <a href="" ng-click="importTemplate()"><i class="zmdi zmdi-download"></i></a>
+            </li>
+            <li class="dropdown" uib-dropdown>
+              <a href="" uib-dropdown-toggle>
+                <i class="zmdi zmdi-more-vert"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li>
+                  <a href="">Refresh</a>
+                </li>
+                <li>
+                  <a href="">Other</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importService()"
+            tooltip-placement="bottom" uib-tooltip="Import Service">
+            <i class="zmdi zmdi-plus"></i>
+          </button>
+          <button class="btn bgm-blue btn-float waves-effect"
+            tooltip-placement="bottom" uib-tooltip="Send to Client">
+            <i class="zmdi zmdi-mail-send"></i>
+          </button>
+        </div>
+
+
+
+        <div class="card-body card-padding">
+          <div ui-tree>
+            <table ui-tree-nodes="" ng-model="matter.items" class="table table-bordered services">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Services</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- SERVICES -->
+                <tr ng-repeat="item in matter.items" ui-tree-node>
+                  <td ui-tree-handle width="3%">{{$index + 1}}</td>
+                  <td width="75%">
+                    <form>
+                      <div class="form-group">
+                        <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="item.title">
+                      </div>
+                      <div class="form-group">
+                        <textarea rows="2" class="form-control" placeholder="Description" ng-model="item.description"></textarea>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" value="" ng-model="item.is_mandatory">
+                          <i class="input-helper"></i>
+                        </label>
+                        <span>Servizio Obbligatorio</span>
+                      </div>
+                    </form>
+                    <!-- SUB-SERVICES -->
+                    <table ui-tree-nodes="" ng-model="item.items" class="table table-bordered sub-services" width="100%">
+                      <tbody>
+                        <tr ng-repeat="subItem in item.items" ui-tree-node>
+                          <td ui-tree-handle width="5%">{{ $parent.$parent.$index + 1 }}.{{$index + 1}}</td>
+                          <td width="95%" class="sub-service-item">
+                            <form>
+                              <div class="form-group">
+                                <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="subItem.title">
+                              </div>
+                              <div class="form-group">
+                                <textarea rows="2" class="form-control" placeholder="Description" ng-model="subItem.description"></textarea>
+                              </div>
+                            </form>
+                            <div class="btn-remove">
+                              <a href="" ng-click="editor.removeItem(item.items, $index)"><i class="zmdi zmdi-close"></i></a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td width="8%">
+                    <form>
+                      <div class="input-group amount">
+                        <span class="input-group-addon"><i class="fa fa-eur"></i></span>
+                        <input type="text" class="form-control" placeholder="0" ng-model="item.price">
+                      </div>
+                    </form>
+                  </td>
+                  <td width="14%" class="text-right">
+                    <ul class="actions">
+                      <li>
+                        <a href="" ng-click="editor.addItem(item.items)"
+                          tooltip-placement="bottom" uib-tooltip="Add Sub-Service">
+                          <i class="zmdi zmdi-plus"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="" ng-click="saveService(item)"
+                          tooltip-placement="bottom" uib-tooltip="Save Service">
+                          <i class="zmdi" ng-class="{'zmdi-star starred': item.is_starred, 'zmdi-star-outline': !item.is_starred}"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="" ng-click="editor.removeItem(matter.items, $index)"
+                          tooltip-placement="bottom" uib-tooltip="Remove Service">
+                         <i class="zmdi zmdi-delete"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
 
-      <div id="todo-lists" class="card">
-        <div class="ng-scope">
-          <div class="ch-alt m-b-20 card-header">
-            <h2>Modelli <br/><small>Scegli un modello dal tuo bucket di templates</small></h2>
+        <div class="card-footer card-padding card-actions">
+          <div tooltip-placement="bottom" uib-tooltip="Save in Draft" class="save-as-draft">
+            <span ng-if="isSaving">Saving...</span>
+            <span ng-if="!isSaving">Saved</span>
+            <a href="" ng-class="{'is-saving': isSaving}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
-
-          <div>
-            <div class="listview">
-
-              <a class="lv-item ng-scope" href="" ng-repeat="w in drafts">
-                <div class="media" ng-click="openModel(w, $index)">
-                  <div class="pull-left">
-                    <button ng-click="getMFromBucket(w, $event)" class="btn bgm-cyan waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
-                  </div>
-                  <div class="media-body">
-                    <div class="lv-title ng-binding">{{w.title}}</div>
-                    <small class="lv-small ng-binding">{{w.description}}</small>
-                  </div>
-                </div>
-              </a>
-
-              <div class="pagination-centered">
-                <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
-                  <li ng-hide="u_page == 0" class="ng-scope">
-                    <a ng-click="u_page = u_page - 1">
-                      <i class="zmdi zmdi-chevron-left"></i>
-                    </a>
-                  </li>
-                  <li ng-hide="serv.length !== u_per_page">
-                    <a ng-click="u_page = u_page + 1">
-                      <i class="zmdi zmdi-chevron-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="clearfix"></div>
-            </div>
-          </div>
+          <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Add Service</button>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div>

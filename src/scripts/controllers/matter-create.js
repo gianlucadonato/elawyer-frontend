@@ -1,286 +1,184 @@
-App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout, Service, $uibModal, Matter, $stateParams, $interval) {
+(function() {
+  'use strict';
 
-  $scope.areas = [];
+  /**=========================================================
+  * File: matter-create.js
+  * Create New Matter
+  =========================================================*/
 
-  //expose editor functions
-  $scope.editor = Matter.editor;
+  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $uibModal, Matter, Service, Notify) {
 
-  $scope.areas = []
-
-
-   var Saving = function(bool) {
-    if (!bool) {
-      $scope.saved = false;
-    } else {
-      $scope.saved = true;
-    }
-   }
-
-
-  if (!$stateParams.id) {
+    var self = this;
     $scope.matter = Matter.template();
+    $scope.editor = Matter.editor();
+    $scope.templates = [];
+    $scope.services = [];
+    $scope.isLoading = false;
 
-    $timeout(function() {
-      startWatching();
-    },500);
+    $scope.currentTmplPage = 0;
+    $scope.totalTmplItems = 0;
+    $scope.currentSrvPage = 0;
+    $scope.totalSrvItems = 0;
+    $scope.perPage = 5;
 
-    $scope.draftable = true;
-  } else {
-     Matter.api.get($stateParams.id).then(function (res) {
-      $scope.matter = res;
-
-      if (!res.items)
-        $scope.matter.items = [];
-
-      // if (!$scope.matter.items)
-      //   $scope.matter.items = new Array();
-
-      $timeout(function() {
-        startWatching();
-      },500);
-     }, function(err) {
-
-     })
-  }
-
-
-  var interval;
-
-
-  //autosave as draft
-  function startWatching() {
-    //watch matter, autosave and recompute toal
-    $scope.$watch('matter', function(oldval, newval) {
-      $scope.totale = 0;
-      for(var i in $scope.matter.items) {
-        $scope.totale+= parseFloat($scope.matter.items[i].price) || 0;
+    function activate() {
+      if($stateParams.id) {
+        // Edit Page
+        getMatter();
       }
-
-      if (!angular.equals(oldval, newval)) {
-
-        Saving(false);
-
-        $interval.cancel(interval);
-        interval = null;
-
-        interval = $interval(function() {
-
-          if (!$scope.unsaved)
-              $scope.matter.is_draft = true;
-          else
-            $scope.matter.is_draft = false;
-
-
-          Matter.editor.save($scope.matter, function(res) {
-
-             Saving(true);
-
-            if (res && res.id) {
-              console.log(res)
-              $scope.matter.id = res.id;
-            }
-
-          });
-          $interval.cancel(interval);
-          interval = null;
-        }, 1000);
-      }
-    }, true);
-  }
-
-
-
-  $scope.save = function(matter) {
-    console.log(matter)
-
-      console.log(matter)
-
-      if (matter.title && matter.description && matter.area && !(!matter.items || matter.items.length == 0)) {
-
-        if (!matter.customer_id) {
-            swal("Errore", "Devi associare la pratica ad un cliente prima di poterla salvare", "error");
-          } else {
-              $scope.unsaved = true;
-              matter.is_draft = false;
-              Matter.editor.save(matter, function(res) {
-                $scope.matter.id = res.id;
-                 Saving(true);
-              })
-            }
-        } else {
-          if (!matter.items || matter.items.length == 0)
-            swal("Errore", "Stai inviando una pratica vuota. Inserisci almeno un servizio", "error");
-          else
-            swal("Errore", "Inserisci un Titolo, una descrizione e una categoria a questa pratica prima di inviarla al cliente", "error");
-        }
-
-
-
-
-  }
-
-
-  $scope.saveAsModel = function(matter) {
-    if (matter.id) {
-       delete matter.id;
-       delete matter.customer_id;
-    }
-    matter.is_model = true;
-    matter.is_draft = false;
-
-    Matter.editor.save(matter, function(res) {
-
-      $scope.undraftable = true;
-      $scope.drafts.push(res);
-
-      $timeout(function() {
-        $scope.undraftable = false;
-      }, 5000);
-
-
-    });
-  }
-
-
-  $scope.$watch('matter.area', function() {
-    if ($scope.matter && $scope.matter.area == '__area_create') {
-      $scope.createMode = true;
-      $scope.matter.area = '';
-    }
-  })
-
-  // $scope.treeOptions = {
-  //   dragStart: function(ev) {},
-  // };
-
-
-  $scope.services = [];
-  $scope.drafts = [];
-  $scope.page = 0;
-  $scope.per_page = 5;
-  $scope.u_page = 0;
-  $scope.u_per_page = 5;
-
-  $scope.getFromBucket = function(item, $event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    var item = angular.copy(item);
-    $scope.matter.items.push(item);
-     swal("Servizio aggiunto correttamente", "success");
-  }
-
-  $scope.getMFromBucket = function(item, $event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    var item = angular.copy(item);
-
-    if (!$scope.matter.title)
-      $scope.matter.title = item.title;
-
-    if (!$scope.matter.description)
-      $scope.matter.description = item.description;
-
-    if (!$scope.matter.area)
-      $scope.matter.area = item.area;
-
-
-    for (var i in item.items) {
-      $scope.matter.items.push(item.items[i]);
     }
 
-    swal("Modello importato correttamente", "success");
-  }
+    activate();
 
-  $scope.getExistingServices = function(a) {
-    Service.api.get({page: $scope.page, per_page: $scope.per_page}).then(function(res) {
-      a(res)
-    }, function() {});
-  }
+    function getMatter() {
+      Matter.api.get($stateParams.id).then(function(data) {
+        $scope.matter = data;
+      }).catch(function(err){
+        Notify.error('Error!', 'Unable to load matter');
+      });
+    }
 
-  $scope.getExistingDrafts = function(a) {
-    Matter.api.index({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model: true}).then(function(res) {
-      a(res)
-    }, function() {});
-  }
-
-  //Always trigger once when initialized
-  $scope.$watch('[u_page,u_per_page]', function () {
-    $scope.getExistingDrafts(function(a) {
-      $scope.drafts = a;
-    });
-  }, true);
-
-  $scope.services = [];
-  $scope.$watch('[page,per_page]', function () {
-    $scope.getExistingServices(function(a) {
-      $scope.services = a;
-    });
-  }, true);
-
-
-  $scope.saveService = function(i) {
-    Matter.editor.saveService(i, function(res) {
-      $scope.services.push(res);
-    })
-  }
-
-  $scope.openModel = function(w, index) {
-      var modalInstance = $uibModal.open({
+    /* Matter Templates
+     * ======================*/
+    $scope.importTemplate = function() {
+      fetchTemplates();
+      // Open Modal
+      self.addTemplateModal = $uibModal.open({
         animation: false,
-        templateUrl: 'views/partials/modal-edit-template.html',
-        controller: 'editModelCtrl',
-        size: "100%",
-        resolve: {
-          matter: function () {
-            return w;
-          },
-          models: function () {
-            return $scope.drafts;
-          },
-          services: function() {
-            return $scope.services;
-          },
-          areas: function() {
-            return $scope.areas;
-          },
-          index: function() {
-            return index;
+        size: '',
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'views/modals/importMatterTemplate.html',
+        scope: $scope
+      });
+    };
+
+    $scope.addTemplate= function(item) {
+      var index = $scope.templates.indexOf(item);
+      $scope.matter = angular.copy($scope.templates[index]);
+      Notify.success('OK!','Template imported successfully!');
+      self.addTemplateModal.dismiss();
+    };
+
+    $scope.saveAsTemplate = function(matter) {
+      matter.is_template = true;
+      if(matter.id) {
+        // Update Matter
+        Matter.api.update(matter).then(function(data){
+          Notify.success('OK!','Saved Successfully!');
+        }).catch(function(err){
+          try {
+            var msg = '';
+            for(var key in err.data.data.errors) {
+              msg += key + ' is required! ';
+            }
+            Notify.error('Error on saving', msg);
+          } catch(err) {
+            Notify.error('Error!', 'Something went wrong :(');
           }
+        });
+      } else {
+        // Create New Matter
+        Matter.api.create(matter).then(function(data){
+          Notify.success('OK!','Saved Successfully!');
+        }).catch(function(err){
+          try {
+            var msg = '';
+            for(var key in err.data.data.errors) {
+              msg += key + ' is required! ';
+            }
+            Notify.error('Error on saving', msg);
+          } catch(err) {
+            Notify.error('Error!', 'Something went wrong :(');
+          }
+        });
+      }
+    };
+
+    function fetchTemplates() {
+      $scope.isLoading = true;
+      Matter.api.index({
+        page: $scope.currentTmplPage,
+        per_page: $scope.perPage,
+        is_template: true
+      })
+      .then(function(data){
+        $scope.templates = data.matters;
+        $scope.totalTmplItems = data.total_items;
+        $scope.isLoading = false;
+      })
+      .catch(function(err){
+        $scope.isLoading = false;
+      });
+    }
+
+    $scope.nextTemplate = function(page) {
+      $scope.currentTmplPage = page-1;
+      fetchTemplates();
+    };
+
+    /* Matter Services
+     * ======================*/
+    $scope.importService = function() {
+      fetchServices();
+      // Open Modal
+      self.addServiceModal = $uibModal.open({
+        animation: false,
+        size: '',
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'views/modals/importMatterService.html',
+        scope: $scope
+      });
+    };
+
+    $scope.addService= function(item) {
+      var index = $scope.services.indexOf(item);
+      $scope.matter.items.push($scope.services[index]);
+      Notify.success('OK!','Service imported successfully!');
+      self.addServiceModal.dismiss();
+    };
+
+    $scope.saveService = function(service) {
+      Service.api.create(service).then(function(data){
+        var index = $scope.matter.items.indexOf(service);
+        $scope.matter.items[index].is_starred = true;
+        Notify.success('OK!','Saved Successfully!');
+      }).catch(function(err){
+        try {
+          var msg = '';
+          for(var key in err.data.data.errors) {
+            msg += key + ' is required! ';
+          }
+          Notify.error('Error on saving', msg);
+        } catch(err) {
+          Notify.error('Error!', 'Something went wrong :(');
         }
       });
-  }
+    };
 
-
-  $scope.openService = function(service, index) {
-      var modalInstance = $uibModal.open({
-        animation: false,
-        templateUrl: 'views/pages/edit-service.html',
-        controller: 'editServiceCtrl',
-        size: "80%",
-        resolve: {
-          service: function () {
-            return service;
-          },
-          serv: function() {
-            return $scope.serv;
-          },
-          index: function() {
-            return index;
-          }
-        }
+    function fetchServices() {
+      $scope.isLoading = true;
+      Service.api.index({
+        page: $scope.currentSrvPage,
+        per_page: $scope.perPage,
+        is_starred: true
+      })
+      .then(function(data){
+        $scope.services = data.services;
+        $scope.totalSrvItems = data.total_items;
+        $scope.isLoading = false;
+      })
+      .catch(function(err){
+        $scope.isLoading = false;
       });
+    }
 
-      //get a result when model
-      // modalInstance.result.then(function (selectedItem) {
-      //   $scope.selected = selectedItem;
-      //   console.log('confirmed')
-      // }, function () {
-      //   console.log('closed')
-      // });
-  }
+    $scope.nextService = function(page) {
+      $scope.currentSrvPage = page-1;
+      fetchServices();
+    };
 
-  $scope.openDraft = function(draft, index) {
-      return true;
-  }
+  });
 
-});
+})();
