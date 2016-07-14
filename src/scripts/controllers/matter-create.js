@@ -6,14 +6,17 @@
   * Create New Matter
   =========================================================*/
 
-  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $uibModal, Matter, Service, Notify) {
+  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, Notify) {
 
     var self = this;
+    var timeout = null;
+    var preventSave = false;
     $scope.matter = Matter.template();
     $scope.editor = Matter.editor();
     $scope.templates = [];
     $scope.services = [];
     $scope.isLoading = false;
+    $scope.isSaving = false;
 
     $scope.currentTmplPage = 0;
     $scope.totalTmplItems = 0;
@@ -22,8 +25,7 @@
     $scope.perPage = 5;
 
     function activate() {
-      if($stateParams.id) {
-        // Edit Page
+      if($stateParams.id) { // Edit Page
         getMatter();
       }
     }
@@ -32,11 +34,34 @@
 
     function getMatter() {
       Matter.api.get($stateParams.id).then(function(data) {
+        preventSave = true;
         $scope.matter = data;
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
       });
     }
+
+    // Autosave
+    $scope.$watch('matter', function(newValue, oldValue) {
+      if(!angular.equals(oldValue, newValue) && !preventSave) {
+        if (timeout) {
+          $timeout.cancel(timeout); // debounce 1sec.
+        }
+        timeout = $timeout(function() {
+          $scope.isSaving = true;
+          Matter.api.save(newValue).then(function(data) {
+            if(!newValue.id) // Prevent double saving
+              preventSave = true;
+            $scope.matter = data;
+            $scope.isSaving = false;
+          }).catch(function(err){
+            console.log('Unable to save matter', err);
+          });
+        }, 1000);
+      } else {
+        preventSave = false;
+      }
+    }, true);
 
     /* Matter Templates
      * ======================*/

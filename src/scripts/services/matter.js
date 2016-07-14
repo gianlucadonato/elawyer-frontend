@@ -75,6 +75,10 @@
       return deferred.promise;
     };
 
+    api.save = function(obj) {
+      return obj.id ? api.update(obj) : api.create(obj);
+    };
+
     api.delete = function(obj) {
       var deferred = $q.defer();
       $http

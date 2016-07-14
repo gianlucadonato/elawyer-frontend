@@ -41,7 +41,6 @@
       }, {
         total: $scope.totalItems,
         getData: function($defer, params) {
-          console.log('here');
           Matter.api.index({
             is_draft: true,
             page: params.page() - 1,
