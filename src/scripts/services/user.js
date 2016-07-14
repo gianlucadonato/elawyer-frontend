@@ -9,10 +9,12 @@
   App.factory('User', function ($rootScope, $q, $http, API) {
     var api = {};
 
-    api.list = function() {
+    api.list = function(query) {
       var deferred = $q.defer();
       $http
-        .get(API.host + '/api/users')
+        .get(API.host + '/api/users', {
+          params: query
+        })
         .then(function(res){
           deferred.resolve(res.data);
         })

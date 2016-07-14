@@ -2,44 +2,44 @@
   'use strict';
 
   /**=========================================================
-  * File: customer-list.js
-  * Customer List Controller
+  * File: lawyer-list.js
+  * Lawyer List Controller
   =========================================================*/
 
-  App.controller('CustomerListCtrl', function($rootScope, $scope, $state, $uibModal, User, Notify) {
+  App.controller('LawyerListCtrl', function($rootScope, $scope, $state, $uibModal, User, Notify) {
 
     var self = this;
 
     function activate() {
-      getUserList();
+      getLawyerList();
     }
 
     activate();
 
-    function getUserList() {
+    function getLawyerList() {
       User
-        .list({role: 1})
+        .list({role: 10})
         .then(function(res){
-          $scope.customers = res.users;
+          $scope.lawyers = res.users;
         })
         .catch(function(err){
           Notify.error('Error!','Unable to fetch user');
         });
     }
 
-    $scope.openNewCustomerModal = function() {
-      self.newCustomerModal = $uibModal.open({
+    $scope.openNewLawyerModal = function() {
+      self.newLawyerModal = $uibModal.open({
         animation: false,
         size: '',
         backdrop: true,
         keyboard: true,
         templateUrl: 'views/modals/newCustomer.html',
         resolve: {
-          customers: function () {
-            return $scope.customers;
+          lawyers: function () {
+            return $scope.lawyers;
           }
         },
-        controller: function($scope, $uibModalInstance, customers){
+        controller: function($scope, $uibModalInstance, lawyers){
           $scope.createUser = function(data) {
             if(data.birthday) {
               // Transform data in ms
@@ -50,7 +50,7 @@
               .create(data)
               .then(function(user){
                 $uibModalInstance.dismiss();
-                customers.push(data);
+                lawyers.push(data);
                 Notify.success('OK!','User created successfully!');
               })
               .catch(function(err){
@@ -61,10 +61,10 @@
       });
     };
 
-    $scope.deleteCustomer = function(user) {
+    $scope.deleteLawyer = function(user) {
       swal({
         title: "Are you sure?",
-        text: "L'utente verrà eliminato permanentemente.",
+        text: "Questo avvocato verrà eliminato permanentemente.",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F44336",
@@ -75,8 +75,8 @@
       }, function(isConfirm){
         if (isConfirm) {
           User.delete(user).then(function(data){
-            var index = $scope.customers.indexOf(user);
-            $scope.customers.splice(index, 1);
+            var index = $scope.lawyers.indexOf(user);
+            $scope.lawyers.splice(index, 1);
             Notify.success('OK!', "Selected user deleted successfully!");
           }).catch(function(err){
             Notify.error('Error!', "Unable to delete selected user");

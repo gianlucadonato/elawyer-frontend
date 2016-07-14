@@ -1,0 +1,46 @@
+<div class="container mt-25">
+
+  <div class="card">
+    <div class="card-header card-header-flex">
+      <h2>LAWYERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <a href="" class="btn btn-success">
+        <i class="zmdi zmdi-account-add"></i> New Lawyer
+      </a>
+    </div>
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th permission permission-only="['ADMIN']">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="c in lawyers">
+            <td><a ui-sref="profile.details({id: c.id})">{{c.first_name}} {{c.last_name}}</a></td>
+            <td>{{c.email}}</td>
+            <td permission permission-only="['ADMIN']">
+              <ul class="actions">
+                <li>
+                  <a href=""
+                    tooltip-placement="bottom" uib-tooltip="Edit">
+                    <i class="zmdi zmdi-edit"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="" ng-click="deleteLawyer(c)"
+                    tooltip-placement="bottom" uib-tooltip="Delete">
+                   <i class="zmdi zmdi-delete"></i>
+                  </a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

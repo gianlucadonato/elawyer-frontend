@@ -91,14 +91,24 @@
         title: 'Matter Draft',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-draft.html'),
-        controller: 'MatterDraftCtrl'
+        controller: 'MatterDraftCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
       })
       .state('page.matter-create', {
         url: '/matters/create',
         title: 'Create Matter',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-create.html'),
-        controller: 'MatterCreateCtrl'
+        controller: 'MatterCreateCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
       })
       .state('page.matter-details', {
         url: '/matters/:id',
@@ -115,7 +125,12 @@
         title: 'Edit Matter',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterCreateCtrl'
+        controller: 'MatterCreateCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
       })
       //------------------------------
       // DOCUMENTS
@@ -132,11 +147,23 @@
       // ADMIN PAGES
       //------------------------------
       .state('page.customer-list', {
-        url: '/customers',
+        url: '/users/customers',
         title: 'Customer List',
         requireLogin: true,
         templateUrl: helper.pagesPath('customer-list.html'),
         controller: 'CustomerListCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
+      })
+      .state('page.lawyer-list', {
+        url: '/users/lawyers',
+        title: 'Lawyer List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('lawyer-list.html'),
+        controller: 'LawyerListCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']

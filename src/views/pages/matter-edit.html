@@ -36,6 +36,7 @@
                   <tr>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Priority</th>
                     <th>Area</th>
                     <th>Status</th>
                   </tr>
@@ -50,6 +51,11 @@
                     <td>
                       <div class="form-group">
                         <textarea rows="2" class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <input type="number" class="form-control" placeholder="0/100" ng-model="matter.priority">
                       </div>
                     </td>
                     <td>

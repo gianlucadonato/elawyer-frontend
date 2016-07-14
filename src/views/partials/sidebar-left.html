@@ -32,10 +32,13 @@
       <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
     </li> -->
 
-    <li data-ui-sref-active="active" permission permission-only="['LAWYER', 'ADMIN']">
-      <a data-ui-sref="page.customer-list" data-ng-click="mactrl.sidebarStat($event)">
-        <i class="zmdi zmdi-accounts"></i> Customers
-      </a>
+    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('users') }"
+      permission permission-only="['LAWYER', 'ADMIN']">
+      <a href="" toggle-submenu><i class="zmdi zmdi-accounts"></i> Users</a>
+      <ul>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.customer-list" data-ng-click="mactrl.sidebarStat($event)">Customers</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.lawyer-list" data-ng-click="mactrl.sidebarStat($event)">Lawyers</a></li>
+      </ul>
     </li>
 
     <li data-ui-sref-active="active" permission permission-only="'CUSTOMER'">
