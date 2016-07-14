@@ -6,7 +6,7 @@
   * MatterList Controller
   =========================================================*/
 
-  App.controller('MatterListCtrl', function($scope, $state, Matter) {
+  App.controller('MatterListCtrl', function($scope, Matter, Notify) {
 
     $scope.matters = [];
     $scope.isLoading = false;
@@ -40,20 +40,26 @@
       getMatters();
     };
 
-    $scope.doSomething = function() {
+    $scope.deleteMatter = function(m) {
       swal({
-        title: "Sei sicuro ?",
-        text: "La lettera di incarico selezionata è già stata inviata a ... Il cliente potrà vedere le tue modifiche.",
+        title: "Are you sure?",
+        text: "La lettera di incarico verrà eliminata permanentemente.",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F44336",
-        confirmButtonText: "Si, modifica",
-        cancelButtonText: "No",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
         closeOnConfirm: true,
         closeOnCancel: true
       }, function(isConfirm){
         if (isConfirm) {
-          $state.go('page.matter-edit');
+          Matter.api.delete(m).then(function(data){
+            var index = $scope.matters.indexOf(m);
+            $scope.matters.splice(index, 1);
+            Notify.success('OK!', "Selected item deleted successfully!");
+          }).catch(function(err){
+            Notify.error('Error!', "Unable to delete selected item");
+          });
         } else {
           return false;
         }

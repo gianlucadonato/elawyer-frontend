@@ -6,7 +6,7 @@
   * MatterDraft Controller
   =========================================================*/
 
-  App.controller('MatterDraftCtrl', function($scope, $state, Matter) {
+  App.controller('MatterDraftCtrl', function($scope, Matter, Notify) {
 
     $scope.drafts = [];
     $scope.isLoading = false;
@@ -38,6 +38,32 @@
     $scope.nextMatter = function(page) {
       $scope.currentPage = page-1;
       getDrafts();
+    };
+
+    $scope.deleteMatter = function(m) {
+      swal({
+        title: "Are you sure?",
+        text: "La lettera di incarico verrà eliminata permanentemente.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F44336",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function(isConfirm){
+        if (isConfirm) {
+          Matter.api.delete(m).then(function(data){
+            var index = $scope.drafts.indexOf(m);
+            $scope.drafts.splice(index, 1);
+            Notify.success('OK!', "Selected item deleted successfully!");
+          }).catch(function(err){
+            Notify.error('Error!', "Unable to delete selected item");
+          });
+        } else {
+          return false;
+        }
+      });
     };
 
   });

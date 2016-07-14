@@ -14,12 +14,29 @@
           <tr>
             <th>Name</th>
             <th>Email</th>
+            <th permission permission-only="['ADMIN']">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="c in customers">
             <td><a ui-sref="profile.details({id: c.id})">{{c.first_name}} {{c.last_name}}</a></td>
             <td>{{c.email}}</td>
+            <td permission permission-only="['ADMIN']">
+              <ul class="actions">
+                <li>
+                  <a href=""
+                    tooltip-placement="bottom" uib-tooltip="Edit">
+                    <i class="zmdi zmdi-edit"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="" ng-click="deleteCustomer(c)"
+                    tooltip-placement="bottom" uib-tooltip="Delete">
+                   <i class="zmdi zmdi-delete"></i>
+                  </a>
+                </li>
+              </ul>
+            </td>
           </tr>
         </tbody>
       </table>

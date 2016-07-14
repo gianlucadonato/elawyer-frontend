@@ -45,7 +45,20 @@
               </td>
               <td>{{m.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
               <td permission permission-only="['LAWYER', 'ADMIN']">
-                <a ui-sref="page.matter-edit(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
+                <ul class="actions">
+                  <li>
+                    <a ui-sref="page.matter-edit(m)"
+                      tooltip-placement="bottom" uib-tooltip="Edit">
+                      <i class="zmdi zmdi-edit"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="" ng-click="deleteMatter(m)"
+                      tooltip-placement="bottom" uib-tooltip="Delete">
+                     <i class="zmdi zmdi-delete"></i>
+                    </a>
+                  </li>
+                </ul>
               </td>
             </tr>
           </tbody>

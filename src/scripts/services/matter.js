@@ -75,6 +75,19 @@
       return deferred.promise;
     };
 
+    api.delete = function(obj) {
+      var deferred = $q.defer();
+      $http
+        .delete(API.host + '/api/matters/' + obj.id)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     /* EDITOR */
     editor.addItem = function(items) {
       items.push(Service.template());

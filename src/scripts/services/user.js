@@ -61,6 +61,19 @@
       return deferred.promise;
     };
 
+    api.delete = function(user) {
+      var deferred = $q.defer();
+      $http
+        .delete(API.host + '/api/users/' + user.id)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     return api;
   });
 

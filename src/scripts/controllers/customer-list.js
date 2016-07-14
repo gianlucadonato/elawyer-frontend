@@ -61,6 +61,32 @@
       });
     };
 
+    $scope.deleteCustomer = function(user) {
+      swal({
+        title: "Are you sure?",
+        text: "L'utente verrà eliminato permanentemente.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F44336",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function(isConfirm){
+        if (isConfirm) {
+          User.delete(user).then(function(data){
+            var index = $scope.customers.indexOf(user);
+            $scope.customers.splice(index, 1);
+            Notify.success('OK!', "Selected user deleted successfully!");
+          }).catch(function(err){
+            Notify.error('Error!', "Unable to delete selected user");
+          });
+        } else {
+          return false;
+        }
+      });
+    };
+
   });
 
 })();
