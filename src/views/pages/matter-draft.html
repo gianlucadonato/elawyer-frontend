@@ -12,7 +12,8 @@
       </h2>
     </div>
 
-    <div class="card-body">
+    <!-- LAWYER ONLY -->
+    <div class="card-body" permission permission-only="['LAWYER']">
       <div class="table-responsive" ng-if="drafts.length && !isLoading">
         <table ng-table="mattersTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in drafts">
@@ -27,18 +28,59 @@
               <div class="flag flag-pending" ng-if="m.status == 'pending'">Pending</div>
               <div class="flag flag-closed" ng-if="m.status == 'closed'">Closed</div>
             </td>
-            <td data-title="'Customer'" sortable="'customer.first_name'"
-              permission permission-only="['LAWYER', 'ADMIN']">
+            <td data-title="'Customer'" sortable="'customer.first_name'">
               <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
             </td>
-            <td data-title="'Lawyer'" sortable="'owner.first_name'"
-              permission permission-only="['CUSTOMER', 'ADMIN']">
+            <td data-title="'Open Date'" sortable="'created_at'">
+              {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
+            </td>
+            <td data-title="'Actions'">
+              <ul class="actions">
+                <li>
+                  <a ui-sref="page.matter-edit(m)"
+                    tooltip-placement="bottom" uib-tooltip="Edit">
+                    <i class="zmdi zmdi-edit"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="" ng-click="deleteMatter(m)"
+                    tooltip-placement="bottom" uib-tooltip="Delete">
+                   <i class="zmdi zmdi-delete"></i>
+                  </a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADMIN ONLY -->
+    <div class="card-body" permission permission-only="['ADMIN']">
+      <div class="table-responsive" ng-if="drafts.length && !isLoading">
+        <table ng-table="mattersTable" class="table table-striped table-vmiddle">
+          <tr ng-repeat="m in drafts">
+            <td data-title="'Title'" sortable="'title'">
+              <a ui-sref="page.matter-details(m)">{{ m.title }}</a>
+            </td>
+            <td data-title="'Area'" sortable="'area_of_interest'">
+              {{ m.area_of_interest }}
+            </td>
+            <td data-title="'Status'" sortable="'status'">
+              <div class="flag flag-success" ng-if="m.status == 'open'">Open</div>
+              <div class="flag flag-pending" ng-if="m.status == 'pending'">Pending</div>
+              <div class="flag flag-closed" ng-if="m.status == 'closed'">Closed</div>
+            </td>
+            <td data-title="'Customer'" sortable="'customer.first_name'">
+              <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+            </td>
+            <td data-title="'Lawyer'" sortable="'owner.first_name'">
               <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
             </td>
             <td data-title="'Open Date'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
-            <td data-title="'Actions'" permission permission-only="['LAWYER', 'ADMIN']">
+            <td data-title="'Actions'">
               <ul class="actions">
                 <li>
                   <a ui-sref="page.matter-edit(m)"
