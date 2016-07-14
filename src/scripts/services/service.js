@@ -2,34 +2,28 @@
   'use strict';
 
   /**=========================================================
-  * File: user.js
-  * User Service
+  * File: service.js
+  * Matter Service
   =========================================================*/
 
-
-  function computeParams(obj) {
-    var a = "?";
-    for (var i in obj) {
-      a += i + "=" + obj[i] + "&";     
-    }
-    return a;
-  }
-
   App.factory('Service', function ($rootScope, $q, $http, API) {
-    var api = {};
 
+    var api = {};
     var template = {
       title: '',
       description: '',
       price: 0,
-      mandatory: false,
+      is_mandatory: false,
       items: []
-    }
+    };
 
-    api.post = function(user) {
+    /* API */
+    api.index = function(params) {
       var deferred = $q.defer();
       $http
-        .post(API.host + '/api/services', user)
+        .get(API.host + '/api/services', {
+          params: params
+        })
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -39,13 +33,23 @@
       return deferred.promise;
     };
 
-    api.get = function(params) {
+    api.create = function(obj) {
       var deferred = $q.defer();
-
-      var p = computeParams(params);
-
       $http
-        .get(API.host + '/api/services' + p)
+        .post(API.host + '/api/services', obj)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+    api.update = function(obj) {
+      var deferred = $q.defer();
+      $http
+        .put(API.host + '/api/services/' + obj.id, obj)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -68,23 +72,11 @@
       return deferred.promise;
     };
 
-    api.update = function(a) {
-
-      var r = angular.extend({}, a);
-
-      var deferred = $q.defer();
-      $http
-        .put(API.host + '/api/services/' + a.id, r)
-        .then(function(res){
-          deferred.resolve(res.data);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
+    return {
+      api: api,
+      template: function() {return angular.copy(template);}
     };
 
-    return {api: api, template: function() {return angular.copy(template)}};
   });
 
 })();

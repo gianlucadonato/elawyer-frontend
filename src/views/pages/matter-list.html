@@ -3,66 +3,68 @@
   <div class="card">
     <div class="card-header">
       <h2>
-        <button ui-sref="page.matter-create" class="btn btn-primary btn-icon-text waves-effect pull-right">
+        <button ui-sref="page.matter-new"
+          class="btn btn-primary btn-icon-text waves-effect pull-right"
+          permission permission-only="['LAWYER', 'ADMIN']">
           <i class="zmdi zmdi-plus"></i> New
         </button>
         MATTERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
       </h2>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Practice Area</th>
-            <th>Status</th>
-            <th permission permission-only="['LAWYER', 'ADMIN']">Customer</th>
-            <th permission permission-only="['CUSTOMER', 'ADMIN']">Lawyer</th>
-            <th>Open Date</th>
-            <th permission permission-only="['LAWYER', 'ADMIN']">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="m in matterList">
-            <td>
-              <a ui-sref="page.matter-details({id: m.id})" >{{m.title}}</a>
-            </td>
-            <td>{{m.area}}</td>
-            <td>
-              <div class="flag flag-success" ng-if="m.status == 'success'">{{m.status}}</div>
-              <div class="flag flag-pending" ng-if="m.status == 'pending'">Pending</div>
-              <div class="flag flag-closed" ng-if="m.status == 'closed'">Closed</div>
-            </td>
-            <td permission permission-only="['LAWYER', 'ADMIN']">
-              <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
-            </td>
-            <td permission permission-only="['CUSTOMER', 'ADMIN']">
-              <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
-            </td>
-            <td>{{m.open_date | date}}</td>
-            <td permission permission-only="['LAWYER', 'ADMIN']">
-              <a ng-click="open(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-body">
+      <div class="table-responsive" ng-if="matters.length && !isLoading">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Customer</th>
+              <th permission permission-only="['CUSTOMER', 'ADMIN']">Lawyer</th>
+              <th>Open Date</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="m in matters">
+              <td>
+                <a ui-sref="page.matter-details({id: m.id})" >{{m.title}}</a>
+              </td>
+              <td>{{m.area_of_interest}}</td>
+              <td>
+                <div class="flag flag-success" ng-if="m.status == 'success'">{{m.status}}</div>
+                <div class="flag flag-pending" ng-if="m.status == 'pending'">Pending</div>
+                <div class="flag flag-closed" ng-if="m.status == 'closed'">Closed</div>
+              </td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+              </td>
+              <td permission permission-only="['CUSTOMER', 'ADMIN']">
+                <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
+              </td>
+              <td>{{m.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <a ng-click="open(m)"><i class="zmdi zmdi-edit"></i> Edit</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-
-  <div class="pagination-centered" style="margin-top: -25px">
-    <ul class="pagination ng-isolate-scope ng-valid" total-items="totalItems">
-      <li ng-hide="page == 0" class="ng-scope">
-        <a ng-click="page = page - 1">
-          <i class="zmdi zmdi-chevron-left"></i>
-        </a>
-      </li>
-      <li ng-hide="matterList.length !== per_page">
-        <a ng-click="page = page + 1">
-          <i class="zmdi zmdi-chevron-right"></i>
-        </a>
-      </li>
-    </ul>
+    <div class="alert alert-danger" ng-if="matters.length == 0 && !isLoading">
+      Matters Empty! Create a New matter.
+    </div>
+    <div class="isLoading" ng-if="isLoading">
+      <div class="loader">
+        <div class="loader-inner ball-pulse-sync">
+          <div ng-repeat="i in [1,2,3]"></div>
+        </div>
+      </div>
+    </div>
+    <div class="pagination-wrp" ng-class="{'hide': totalItems <= perPage }">
+      <uib-pagination total-items="totalItems" items-per-page="perPage" ng-model="currentPage" ng-change="nextMatter(currentPage)"></uib-pagination>
+    </div>
   </div>
 
 </div>

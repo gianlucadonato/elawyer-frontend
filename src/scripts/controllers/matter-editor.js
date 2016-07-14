@@ -5,11 +5,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
   //expose editor functions
   $scope.editor = Matter.editor;
 
-   Matter.api.areas().then(function (res) {
-    $scope.areas = res;
-   }, function(err,res) {
-    swal("Errore!","C'e stato un errore nel caricare le aree predefinite. Ci scusiamo per il disagio", "warning");
-   })
+  $scope.areas = []
 
 
    var Saving = function(bool) {
@@ -27,7 +23,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
     $timeout(function() {
       startWatching();
     },500);
-    
+
     $scope.draftable = true;
   } else {
      Matter.api.get($stateParams.id).then(function (res) {
@@ -43,7 +39,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
         startWatching();
       },500);
      }, function(err) {
-       
+
      })
   }
 
@@ -66,15 +62,15 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
 
         $interval.cancel(interval);
         interval = null;
-        
+
         interval = $interval(function() {
 
-          if (!$scope.unsaved) 
+          if (!$scope.unsaved)
               $scope.matter.is_draft = true;
-          else 
+          else
             $scope.matter.is_draft = false;
 
-          
+
           Matter.editor.save($scope.matter, function(res) {
 
              Saving(true);
@@ -83,7 +79,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
               console.log(res)
               $scope.matter.id = res.id;
             }
-              
+
           });
           $interval.cancel(interval);
           interval = null;
@@ -93,7 +89,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
   }
 
 
-  
+
   $scope.save = function(matter) {
     console.log(matter)
 
@@ -118,9 +114,9 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
             swal("Errore", "Inserisci un Titolo, una descrizione e una categoria a questa pratica prima di inviarla al cliente", "error");
         }
 
-      
 
-    
+
+
   }
 
 
@@ -128,7 +124,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
     if (matter.id) {
        delete matter.id;
        delete matter.customer_id;
-    }     
+    }
     matter.is_model = true;
     matter.is_draft = false;
 
@@ -160,9 +156,9 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
 
   $scope.services = [];
   $scope.drafts = [];
-  $scope.page = 0; 
-  $scope.per_page = 5; 
-  $scope.u_page = 0; 
+  $scope.page = 0;
+  $scope.per_page = 5;
+  $scope.u_page = 0;
   $scope.u_per_page = 5;
 
   $scope.getFromBucket = function(item, $event) {
@@ -221,7 +217,7 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
     });
   }, true);
 
-  
+
   $scope.saveService = function(i) {
     Matter.editor.saveService(i, function(res) {
       $scope.services.push(res);
@@ -249,8 +245,8 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
           },
           index: function() {
             return index;
-          } 
-        }  
+          }
+        }
       });
   }
 
@@ -270,11 +266,11 @@ App.controller('MatterCreateCtrl', function($rootScope, $scope, $state, $timeout
           },
           index: function() {
             return index;
-          } 
-        }  
+          }
+        }
       });
 
-      //get a result when model 
+      //get a result when model
       // modalInstance.result.then(function (selectedItem) {
       //   $scope.selected = selectedItem;
       //   console.log('confirmed')

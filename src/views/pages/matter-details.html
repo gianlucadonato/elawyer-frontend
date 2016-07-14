@@ -1,249 +1,242 @@
-<div class="container">
-  <div class="block-header">
-    <h2><a ui-sref="page.matter-list"><i class="zmdi zmdi-arrow-left"></i> Back</a></h2>
-  </div>
-
-  <div class="card">
+<div class="container matter matter-details">
+  <div class="card m-t-25">
     <div class="card-header">
-      <h2>
-        {{matter.title}}
-        <small>{{matter.description}}</small>
-      </h2>
+      <h2>Matter Details</h2>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Practice Area</th>
-            <th>Status</th>
-            <th>Open Date</th>
-            <th>Open Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{matter.title}}</td>
-            <td>{{matter.area}}</td>
-            <td>
-              <div class="flag flag-success" ng-if="matter.status == 'success'">Open</div>
-              <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
-              <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
-            </td>
-            <td>{{matter.open_date | date}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th>Open Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{matter.title}}</td>
+              <td>{{matter.area_of_interest}}</td>
+              <td>
+                <div class="flag flag-success" ng-if="matter.status == 'success'">Open</div>
+                <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
+                <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
+              </td>
+              <td>{{matter.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <div ng-class="{'row': !confirm}">
-
-
-    <div ng-class="{'col-sm-8': !confirm}" id="lettera">
-        <div class="card">
-
-          <div class="card-header">
-
-            <div ng-include="'views/partials/logo.html'"></div>
-
-            <h3>Lettera di incarico</h3>
-            <hr/>
-            Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’“Incarico”).<br/><br/>
-
-            Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.<br/><br/>
-
+  <div class="row" ng-if="!showNext">
+    <div class="col-sm-8">
+      <div class="card m-t-25">
+        <div class="card-header">
+          <div ng-include="'views/partials/letterhead.html'"></div>
+        </div>
+        <div class="card-body card-padding">
+          <h3>Lettera di incarico</h3>
+          <hr/>
+          <p>
+            Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’Incarico).<br/><br/>
+            Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.
             <h4>Oggetto dell’Incarico</h4>
-            L'incarico avrà per oggetto le seguenti attività:<br/><br/>
+            L'incarico avrà per oggetto le seguenti attività:
+          </p>
 
-
-            <div class="service" ng-repeat="i in matter.items" ng-show="!confirm">
-              <h4>{{$index + 1}}. {{i.title}} <small style="float:right">€ {{i.price}}</small></h4>
-                <div class="checkbox m-b-15">
-                  <label ng-if="!i.mandatory">
-                    <input type="checkbox" value="" ng-model="i.selected" ng-value="i.selected">
-                    <i class="input-helper"></i>
-                    <span ng-if="i.selected">Servizio Attivato</span>
-                    <span ng-if="!i.selected">Servizio Disattivato</span>
-                  </label>
-                  <label ng-if="i.mandatory">
-                    <input type="checkbox" value="" checked disabled>
-                    <i class="input-helper"></i>
-                    Servizio Obbligatorio
-                  </label>
-                </div>
-              <p>{{i.description}}</p>
-              <div class="sub-services">
-                <div class="sub-service-item" ng-repeat="a in i.items">
-                  <h2>{{$index + 1}}. {{a.title}}</h2>
-                  <br/>
-                  <p>{{a.description}}</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="service" ng-repeat="i in matter.items" ng-show="confirm" ng-if="i.selected || i.mandatory">
-              <h3>{{$index + 1}}. {{i.title}} <small style="float:right">€ {{i.price}}</small></h3>
-              <p>{{i.description}}</p>
-              <div class="sub-services">
-                <div class="sub-service-item" ng-repeat="a in i.items">
-                  <h2>{{$index + 1}}. {{a.title}}</h2>
-                  <br/>
-                  <p>{{a.description}}</p>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="button-group right" style="float:right;">
-                <button ng-show="!confirm" class="btn btn-success waves-effect" ng-click="next()">Continua</button>
-                <button ng-show="confirm" class="btn btn-info waves-effect" ng-click="download()">Scarica</button>
-                <button ng-show="confirm" class="btn btn-warning waves-effect" ng-click="previous()">Indietro</button>
-            </div>
-            <br/><br/>
-
-          </div>
-        </div>
-    </div>
-
-
-
-    <div class="col-sm-4 card" ng-show="!confirm">
-      <div id="wrap">
-        <br/>
-        <h2>Sommario</h2>
-        <br/>
-        <p>Seleziona solo i servizi desiderati</p>
-
-        <!-- <ul class="actions actions-alt">
-            <li class="dropdown" uib-dropdown>
-                <a uib-dropdown-toggle>
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="">Refresh</a>
-                    </li>
-                    <li>
-                        <a href="">Manage Widgets</a>
-                    </li>
-                    <li>
-                        <a href="">Widgets Settings</a>
-
-                    </li>
-                </ul>
-            </li>
-            </ul> -->
-
-
-          <div class="" ng-repeat="w in matter.items">
-            <div class="checkbox m-b-15">
-              <label ng-if="!w.mandatory">
-                <input type="checkbox" value="" ng-model="w.selected" ng-value="w.selected">
-                <i class="input-helper"></i>
-                {{w.title}} <strong>€ {{w.price | prettyNumber}}</strong>
-              </label>
-              <label ng-if="w.mandatory">
-                <input type="checkbox" value="" checked disabled>
-                <i class="input-helper"></i>
-                {{w.title}} <strong>€ {{w.price | prettyNumber}}</strong>
-              </label>
-            </div>
-          </div>
-
-          <hr/>
-          <strong>Netto da Versare: </strong> {{totale | prettyNumber}}
-          <hr/>
-        </div>
-      </div>
-    </div>
-
-    <div class="card col-sm-12" ng-if="confirm" style="padding: 0">
-      <div class="card-header">
-          <div ng-include="'views/partials/logo.html'"></div>
-          <h2>Nota pro forma <small>Riepilogo dei servizi</small></h2>
-      </div>
-
-      <div class="table-responsive">
-          <table class="table table-striped">
+          <div ui-tree>
+            <table ui-tree-nodes="" ng-model="matter.items" class="table table-bordered services">
               <thead>
-                  <tr>
-                      <th>Servizio</th>
-                      <th>Importo</th>
-                  </tr>
+                <tr>
+                  <th></th>
+                  <th>Services</th>
+                  <th>Price</th>
+                </tr>
               </thead>
               <tbody>
-                  <tr ng-repeat="i in matter.items" ng-if="i.selected || i.mandatory">
-                      <td>{{i.title}}</td>
-                      <td>€ {{i.price | prettyNumber}}</td>
-                  </tr>
-                  <tr>
-                      <th>&nbsp;</th>
-                      <th>&nbsp;</th>
-                  </tr>
-                  <tr>
-                      <th>Imponibile Prestazioni</th>
-                      <th>€ {{totale | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>Rimborso spese generali (15%)</th>
-                      <th>€ {{(totale | percentage: 15) | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>Totale imponibile</th>
-                      <th>€ {{(totale + (totale | percentage: 15)) | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>Rivalsa parziale contributi previdenziali (4%)</th>
-                      <th>€ {{((totale + (totale | percentage: 15)) | percentage: 4) | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>Totale imponibile</th>
-                      <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4)) | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>Iva (22%)</th>
-                      <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
-                  </tr>
-                  <tr>
-                      <th>&nbsp;</th>
-                      <th>&nbsp;</th>
-                  </tr>
-
-
-                  <tr>
-                      <th><strong><span ng-if="matter.ritenuta">Totale fattura</span><span ng-if="!matter.ritenuta">Netto da Versare</span></strong></th>
-                      <th>€ {{(totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
-                  </tr>
-
-                  <tr ng-if="matter.ritenuta">
-                      <th>Ritenuta d'acconto (-20% Totale Imponibile)</th>
-                      <th>€ {{((totale + (totale | percentage: 15)) | percentage: 20) | prettyNumber}}</th>
-                  </tr>
-
-
-                  <tr ng-if="matter.ritenuta">
-                      <th><strong>Netto da versare</strong></th>
-                      <th>€ {{((totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) + (totale + (totale | percentage: 15) + ((totale + (totale | percentage: 15)) | percentage: 4) | percentage: 22)) - ((totale + (totale | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
-                  </tr>
+                <!-- SERVICES -->
+                <tr ng-repeat="item in matter.items" ui-tree-node>
+                  <td width="5%">
+                    <div class="checkbox">
+                      <label ng-if="!item.is_mandatory">
+                        <input type="checkbox" ng-model="item.is_selected">
+                        <i class="input-helper"></i>
+                      </label>
+                      <label ng-if="item.is_mandatory">
+                        <input type="checkbox" checked disabled>
+                        <i class="input-helper"></i>
+                      </label>
+                    </div>
+                  </td>
+                  <td width="80%">
+                    <ul>
+                      <li>
+                        <h2 class="service-title">{{$index+1}}. {{item.title}}</h2>
+                        <div>{{item.description}}</div>
+                      </li>
+                      <!-- SUB-SERVICES -->
+                      <ol ui-tree-nodes="" ng-model="item.items" ng-if="item.items.length">
+                        <li ng-repeat="subItem in item.items" ui-tree-node>
+                          <h3 class="service-title">{{$parent.$parent.$index+1}}.{{$index+1}}. {{item.title}}</h3>
+                          <div>{{item.description}}</div>
+                        </li>
+                      </ol>
+                    </ul>
+                  </td>
+                  <td width="15%">
+                    <span>€ {{item.price}}</span>
+                  </td>
+                </tr>
               </tbody>
-          </table>
-          <br/>
-          <div class="button-group center">
-              <button class="btn btn-info waves-effect" ng-click="pay()" style="margin-left: auto; margin-right: auto; display: block;">Termina e Paga</button>
+            </table>
           </div>
-          <br/><br/>
+        </div>
+        <div class="card-footer card-padding card-actions">
+          <button class="btn btn-orange btn-icon-text waves-effect" ng-click="next()">
+            <span>Continue </span><i class="zmdi zmdi-arrow-forward"></i>
+          </button>
+        </div>
       </div>
     </div>
 
+    <div class="col-sm-4">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Sommario <small>Seleziona solo i servizi desiderati</small></h2>
+        </div>
+        <div class="card-body card-padding">
+          <table>
+            <tbody>
+              <tr ng-repeat="srv in matter.items">
+                <td width="85%">
+                  <div class="checkbox">
+                    <label ng-if="!srv.is_mandatory">
+                      <input type="checkbox" ng-model="srv.is_selected">
+                      <i class="input-helper"></i>
+                      {{srv.title}}
+                    </label>
+                    <label ng-if="srv.is_mandatory">
+                      <input type="checkbox" checked disabled>
+                      <i class="input-helper"></i>
+                      {{srv.title}}
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  € {{srv.price | prettyNumber}}
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <th width="85%">Netto da Versare:</th>
+                <th>€ {{total | prettyNumber}}</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
 
+  <div class="row matter-summary-card" ng-if="showNext">
+    <div class="col-sm-12">
+      <div id="lettera" class="card m-t-25">
+        <div class="card-header">
+          <div ng-include="'views/partials/letterhead.html'"></div>
+          <ul class="actions">
+            <li>
+              <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                <i class="zmdi zmdi-download"></i>Download PDF
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body card-padding" id="print">
+          <h3>Riepilogo dei servizi</h3>
+          <hr/>
 
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Servizio</th>
+                  <th>Importo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="i in matter.items" ng-if="i.is_selected || i.is_mandatory">
+                  <td>{{i.title}}</td>
+                  <td>€ {{i.price | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                </tr>
+                <tr>
+                  <td>Imponibile Prestazioni</td>
+                  <td>€ {{total | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Rimborso spese generali (15%)</td>
+                  <td>€ {{(total | percentage: 15) | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Totale imponibile</td>
+                  <td>€ {{(total + (total | percentage: 15)) | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Rivalsa parziale contributi previdenziali (4%)</td>
+                  <td>€ {{((total + (total | percentage: 15)) | percentage: 4) | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Totale imponibile</td>
+                  <td>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4)) | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Iva (22%)</td>
+                  <td>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                </tr>
+                <tr>
+                  <th>
+                    <span ng-if="matter.withholding_tax">Totale fattura</span>
+                    <span ng-if="!matter.withholding_tax">Netto da Versare</span>
+                  </th>
+                  <th>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                </tr>
 
+                <tr ng-if="matter.withholding_tax">
+                  <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
+                  <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
+                </tr>
 
-
-
+                <tr ng-if="matter.withholding_tax">
+                  <th>Netto da versare</th>
+                  <th>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer card-padding card-actions">
+          <button class="btn btn-default btn-icon-text waves-effect" ng-click="previous()">
+            <i class="zmdi zmdi-arrow-back"></i>Back
+          </button>
+          <button class="btn btn-success btn-icon-text waves-effect" ng-click="pay()">
+            <i class="zmdi zmdi-check"></i>Confirm & Pay
+          </button>
+        </div>
+    </div>
+  </div>
 </div>

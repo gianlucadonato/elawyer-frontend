@@ -43,6 +43,9 @@
     "bootstrap": "^3.3.6",
     "angular-ui-tree": "~2.16.0",
     "angular-permission": "^3.1.6",
-    "angular-stripe-checkout": "^4.0.1"
+    "angular-stripe-checkout": "^4.0.1",
+    "font-awesome": "^4.6.3",
+    "loaders.css": "^0.1.2",
+    "jspdf": "^1.2.61"
   }
 }

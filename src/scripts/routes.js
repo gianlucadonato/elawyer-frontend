@@ -91,7 +91,14 @@
         title: 'Matter Draft',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-draft.html'),
-        controller: 'MatterListCtrl'
+        controller: 'MatterDraftCtrl'
+      })
+      .state('page.matter-new', {
+        url: '/matters/new',
+        title: 'Create Matter',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-new.html'),
+        controller: 'MatterNewCtrl'
       })
       .state('page.matter-create', {
         url: '/matters/create',

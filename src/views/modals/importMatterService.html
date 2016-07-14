@@ -1,0 +1,33 @@
+<div class="modal-header pb-25">
+  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Import Service</h4>
+</div>
+<div class="modal-body import-matter-template">
+  <div class="listview" ng-if="services.length && !isLoading">
+    <a class="lv-item" href="" ng-click="addService(t)" data-ng-repeat="t in services">
+      <div class="media">
+        <div class="pull-left">
+          <button class="btn bgm-lightblue waves-effect">
+            <i class="zmdi zmdi-download"></i>
+          </button>
+        </div>
+        <div class="media-body">
+          <div class="lv-title">{{ t.title }}</div>
+          <small class="lv-small">{{ t.description }}</small>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="alert alert-danger" ng-if="services.length == 0 && !isLoading">
+    Services Empty!
+  </div>
+  <div class="isLoading" ng-if="isLoading">
+    <div class="loader">
+      <div class="loader-inner ball-pulse-sync">
+        <div ng-repeat="i in [1,2,3]"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination-wrp" ng-class="{'hide': totalSrvItems <= perPage }">
+    <uib-pagination total-items="totalSrvItems" items-per-page="perPage" ng-model="currentSrvPage" ng-change="nextService(currentSrvPage)"></uib-pagination>
+  </div>
+</div>

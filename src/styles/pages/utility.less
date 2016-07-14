@@ -31,7 +31,6 @@
   background-color: #F44336;
 }
 
-
 .logo-box {
   display: inline-block;
   margin-right: 1px;
@@ -46,4 +45,20 @@
 
 .c-white {
   color: #FFF;
+}
+
+.pagination-wrp {
+  display: flex;
+  justify-content: center;
+}
+
+.isLoading {
+  display: flex;
+  justify-content: center;
+  .loader {
+    padding: 25px 0;
+    .loader-inner > div {
+      background: @m-darkorange;
+    }
+  }
 }

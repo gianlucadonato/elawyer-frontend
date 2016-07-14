@@ -8,6 +8,10 @@
   overflow: hidden;
   padding-top: 5px;
 }
+.input-group-addon > .fa {
+  position: relative;
+  top: 2px;
+}
 .bgm-t-blue {
   background-color: transparent;
   color: #2196F3 !important;
@@ -24,6 +28,10 @@
     background-color: #F7F7F7 !important;
   }
 }
+.bgm-darkorange {
+  background-color: @m-darkorange;
+  color: #FFF;
+}
 
 .btn-block {
   height: 35px;
@@ -33,12 +41,32 @@
   background-color: @m-darkorange;
   color: #FFF !important;
 }
-
+.btn-flat.btn-default {
+  box-shadow: none;
+  border: 1px solid #f0f0f0;
+  &:hover {
+    border: 1px solid #f0f0f0;
+  }
+}
 .card-header-flex {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
+
+// Card footer
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-end;
+  button {
+    margin-left: 15px;
+  }
+}
+
+
 /*
  * Following CSS codes are used only for demo purpose thus you can remove them completly whenever you want.
  */

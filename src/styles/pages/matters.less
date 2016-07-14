@@ -1,0 +1,149 @@
+.matter {
+
+  .table-bordered {
+    border-bottom: 1px solid #f0f0f0;
+    border-left: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    .indent {
+      margin-left: 10px;
+    }
+  }
+
+  .table {
+    // Nesting
+    .table {
+      background-color: #FFF !important;
+    }
+  }
+}
+
+.matter-create {
+
+  .card-header {
+    input, select {
+      background: transparent;
+      box-shadow: none;
+      color: #323232;
+      font-size: 14px;
+    }
+    ::placeholder {
+      color: #6C6C6C;
+    }
+    input[name="Title"] {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .form-group {
+    margin: 0;
+    input {
+      height: 25px;
+    }
+  }
+
+  .btn.bgm-darkorange {
+    right: 90px;
+  }
+
+  .card-footer {
+    .save-as-draft {
+      display:block;
+      a {
+        font-size: 20px;
+      }
+      a.is-saving {
+        color: #ADADAD;
+      }
+    }
+  }
+
+  table.services {
+    .form-group {
+      .form-control {
+        font-size: 14px;
+      }
+    }
+    table.sub-services {
+      margin-top: 5px;
+      .sub-service-item {
+        position: relative;
+        &:hover {
+          .btn-remove {
+            display: block;
+          }
+        }
+      }
+      .btn-remove {
+        position: absolute;
+        top: 2px;
+        right: 7px;
+        display: none;
+        a {
+          font-size: 18px;
+          color: @m-darkorange;
+        }
+      }
+    }
+    .checkbox {
+      display: flex;
+    }
+    .amount .input-group-addon {
+      padding-left: 0;
+      min-width: 10px;
+      padding-right: 5px;
+    }
+  }
+
+  .starred {
+    color: #FFEB3B;
+  }
+}
+
+/* =================
+ * MATTER DETAILS
+ * ==================*/
+.matter-details {
+  table.services {
+    ul, ol {
+      list-style: none;
+      margin-bottom: 0px;
+      li {
+        margin-bottom: 10px;
+      }
+    }
+    ul {
+      padding-left: 0;
+    }
+    ol {
+      padding-left: 20px;
+    }
+
+    .service-title {
+      margin: 2px 0;
+      font-weight: 400;
+      line-height: 1;
+    }
+    h2.service-title {
+      font-size: 17px;
+    }
+    h3.service-title {
+      font-size: 16px;
+    }
+  }
+
+  .matter-summary-card {
+    .card-header .actions {
+      top: 25px;
+      right: 25px;
+    }
+  }
+
+  #summary-box.fixed-top {
+    @media screen and (min-width: @screen-sm-min) {
+      position: fixed;
+      top: 50px;
+    }
+  }
+}
+

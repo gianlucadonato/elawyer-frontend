@@ -6,68 +6,59 @@
   * MatterList Controller
   =========================================================*/
 
-  App.controller('MatterListCtrl', function($rootScope, $scope, $state, Matter) {
+  App.controller('MatterListCtrl', function($scope, $state, Matter) {
 
-    $scope.matterList = [];
-    $scope.drafts = [];
+    $scope.matters = [];
+    $scope.isLoading = false;
+    $scope.perPage = 15;
+    $scope.currentPage = 0;
+    $scope.totalItems = 0;
 
-    $scope.page = 0; $scope.per_page = 10;
-    $scope.getExistingMatters = function() {
-        Matter.api.index({page: $scope.page, per_page: $scope.per_page, is_draft: false, is_model:false}).then(function(res) {
-          $scope.matterList = res;
-        }, function() {});
+    function activate() {
+      getMatters();
     }
 
-    $scope.$watch('[page,per_page]', function () {
-        $scope.serv = [];
-        $scope.getExistingMatters();
-    }, true);
+    activate();
 
-    $scope.u_page = 0; $scope.u_per_page = 10;
-    $scope.getExistingDrafts = function() {
-        Matter.api.index({page: $scope.u_page, per_page: $scope.u_per_page, is_draft: true, is_model:false}).then(function(res) {
-          $scope.drafts = res;
-        }, function() {});
+    function getMatters() {
+      $scope.isLoading = true;
+      Matter.api.index({
+        is_draft: false,
+        page: $scope.currentPage,
+        per_page: $scope.perPage
+      }).then(function(data){
+        $scope.matters = data.matters;
+        $scope.totalItems = data.total_items;
+        $scope.isLoading = false;
+      }).catch(function(err){
+        $scope.isLoading = false;
+      });
     }
 
-    $scope.$watch('[u_page,u_per_page]', function () {
-        $scope.drafts = [];
-        $scope.getExistingDrafts();
-    }, true);
+    $scope.nextMatter = function(page) {
+      $scope.currentPage = page-1;
+      getMatters();
+    };
 
-
-    $scope.open = function(el) {
-      if (!el.is_draft) {
-
-        var st = '';
-        if (el.customer) {
-          st += el.customer.first_name + " " + el.customer.last_name;
-        } else if (el.company) {
-          st += el.company.company_name;
+    $scope.doSomething = function() {
+      swal({
+        title: "Sei sicuro ?",
+        text: "La lettera di incarico selezionata è già stata inviata a ... Il cliente potrà vedere le tue modifiche.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F44336",
+        confirmButtonText: "Si, modifica",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function(isConfirm){
+        if (isConfirm) {
+          $state.go('page.matter-edit');
+        } else {
+          return false;
         }
-
-        swal({
-          title: "Sei sicuro ?",
-          text: "La lettera di incarico selezionata è già stata inviata a " + st + ". Il cliente potrà vedere le tue modifiche.",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#F44336",
-          confirmButtonText: "Si, modifica",
-          cancelButtonText: "No",
-          closeOnConfirm: true,
-          closeOnCancel: true
-        }, function(isConfirm){
-          if (isConfirm) {
-            $state.go('page.matter-edit', {id: el.id});
-          } else {
-            return false;
-          }
-        });
-      }
-    }
-
-
-
+      });
+    };
 
   });
 

@@ -28,7 +28,7 @@
               var i = p.find('.form-control').val();
 
               if (p.hasClass('fg-float')) {
-                if (i.length == 0) {
+                if (i.length === 0) {
                   $(this).closest('.fg-line').removeClass('fg-toggled');
                 }
               } else {
