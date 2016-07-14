@@ -1,0 +1,16 @@
+<div class="modal-header pb-23">
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> Send Matter</h4>
+</div>
+<div class="modal-body send-matter-template">
+  <form ng-submit="sendMatterTo(c_email)">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+      <div class="fg-line">
+        <input type="email" name="email" class="form-control input-sm" ng-model="c_email" placeholder="Insert Customer's Email" required>
+      </div>
+    </div>
+    <div class="form-group m-t-10">
+      <button type="submit" class="btn btn-orange btn-block waves-effect">SEND</button>
+    </div>
+  </form>
+</div>

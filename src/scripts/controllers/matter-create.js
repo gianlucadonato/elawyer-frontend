@@ -213,6 +213,44 @@
       fetchServices();
     };
 
+    /* Send Matter to Customer
+     * ======================*/
+    $scope.sendMatterModal = function() {
+      self.sendMatterModal = $uibModal.open({
+        animation: false,
+        size: '',
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'views/modals/sendMatter.html',
+        scope: $scope
+      });
+    };
+
+    $scope.sendMatterTo = function(email) {
+      Matter.api.send({
+        id: $scope.matter.id,
+        email: email
+      }).then(function(data){
+        self.sendMatterModal.dismiss();
+        swal({
+          title: "Sent!",
+          text: "La lettera d'incarico è stata inviata correttamente.",
+          type: "success",
+          showCancelButton: false,
+          confirmButtonText: "OK!",
+          closeOnConfirm: true
+        }, function() {
+          $state.go('page.matter-details', $scope.matter);
+        });
+      }).catch(function(err){
+        var errorMsg = 'Something went wrong :(';
+        if(err.status === 404) {
+          errorMsg = 'There is no user with this email!';
+        }
+        Notify.error('Error!', errorMsg);
+      });
+    };
+
   });
 
 })();
