@@ -115,7 +115,7 @@
         title: 'Edit Matter',
         requireLogin: true,
         templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterNewCtrl'
+        controller: 'MatterCreateCtrl'
       })
       //------------------------------
       // DOCUMENTS
