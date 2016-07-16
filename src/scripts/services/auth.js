@@ -68,6 +68,34 @@
       return deferred.promise;
     };
 
+    auth.change = function(credentials) {
+      var deferred = $q.defer();
+      $http
+        .put(API.host + '/api/auth/change_password', credentials)
+        .then(function(res){
+          deferred.resolve(res);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+
+    auth.forgot = function(credentials) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/auth/reset_password', credentials)
+        .then(function(res){
+          $rootScope.isAuthenticated = false;
+          deferred.resolve(res);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     auth.login = function(credentials) {   
       var deferred = $q.defer();
       $http

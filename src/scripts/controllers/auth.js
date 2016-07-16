@@ -6,7 +6,7 @@
    * Authentication Controller
    * =========================================================*/
 
-  App.controller('AuthenticationCtrl', function($scope, $state, Auth, Notify){
+  App.controller('AuthenticationCtrl', function($scope, $state, Auth, Notify, $stateParams){
 
     /*===============
      * STD AUTH
@@ -34,6 +34,49 @@
             }
             Notify.error('Signup Error', 'Invalid Fields');
           }
+        });
+    };
+
+
+
+    $scope.defaultEmail = $stateParams.email;
+    $scope.change = function(credentials) {
+      // Reset Form
+      $scope.changeForm.$setPristine();
+      $scope.sent = false;
+
+      
+      credentials.token = $stateParams.token;
+      credentials.email = $stateParams.email;
+
+      console.log(credentials)
+     
+      Auth
+        .change(credentials)
+        .then(function(res){
+          Notify.success('Success', 'Password set succesfully. Login to continue');
+          $state.go('auth.login');
+        })
+        .catch(function(err){
+            Notify.error('Error', 'We encountered an error in changin your password. Maybe reset token link is expired');
+        });
+    };
+
+    $scope.forget_password = function(credentials) {
+      // Reset Form
+      $scope.signupForm.$setPristine();
+      $scope.signupForm.email.$error.invalid = false;
+      $scope.signupForm.email.$error.alreadyInUse = false;
+      $scope.sent = false;
+     
+      Auth
+        .forgot(credentials)
+        .then(function(res){
+          Notify.success('Success', 'Reset link sent succesfully');
+          $scope.sent = true;
+        })
+        .catch(function(err){
+            Notify.error('Error', 'We encountered an error in sending a reset link. Maybe you registerd with a different email');
         });
     };
 

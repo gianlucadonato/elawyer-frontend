@@ -149,7 +149,8 @@
 
         <div class="card-footer card-padding card-actions">
           <div tooltip-placement="bottom" uib-tooltip="Save in Draft" class="save-as-draft">
-            <span ng-if="isSaving">Saving...</span>
+            <span ng-if="isSaving && !errorSaving">Saving...</span>
+            <span ng-if="errorSaving">Error in saving this matter. Please insert a title</span>
             <span ng-if="!isSaving">Saved</span>
             <a href="" ng-class="{'is-saving': isSaving}"><i class="zmdi zmdi-check-all"></i></a>
           </div>

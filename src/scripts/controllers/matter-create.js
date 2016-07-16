@@ -49,14 +49,17 @@
         }
         timeout = $timeout(function() {
           $scope.isSaving = true;
+          $scope.errorSaving = false;
           Matter.api.save(newValue).then(function(data) {
             if(!newValue.id) // Prevent double saving
               preventSave = true;
             $scope.matter = data;
             $timeout(function() { // Only for design effect
               $scope.isSaving = false;
+              $scope.errorSaving = false;
             }, 1000);
           }).catch(function(err){
+            $scope.errorSaving = true;
             console.log('Unable to save matter', err);
           });
         }, 1000);
