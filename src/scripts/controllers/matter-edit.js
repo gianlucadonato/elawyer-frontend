@@ -23,6 +23,22 @@
       });
     }
 
+    Matter.api.areas().then(function(data) {
+      $scope.areas = data;
+    }).catch(function(err) {
+      Notify.error('Error!', 'Unable to load areas');
+    });
+
+
+    $scope.$watch('matter', function(newValue, oldValue) {
+      if(!angular.equals(oldValue, newValue) && !preventSave) {
+        if ($scope.matter.area_of_interest == '____manual____') {
+          $scope.matter.area_of_interest = '';
+          $scope.manual = true;
+        }
+      }
+    });
+
 
 
   });

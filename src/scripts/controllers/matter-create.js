@@ -30,6 +30,14 @@
       }
     }
 
+
+
+    Matter.api.areas().then(function(data) {
+      $scope.areas = data;
+    }).catch(function(err) {
+      Notify.error('Error!', 'Unable to load areas');
+    });
+
     activate();
 
     function getMatter() {
@@ -44,6 +52,13 @@
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
       if(!angular.equals(oldValue, newValue) && !preventSave) {
+
+
+        if ($scope.matter.area_of_interest == '____manual____') {
+          $scope.matter.area_of_interest = '';
+          $scope.manual = true;
+        }
+
         if (timeout) {
           $timeout.cancel(timeout); // debounce 1sec.
         }
@@ -53,7 +68,7 @@
           Matter.api.save(newValue).then(function(data) {
             if(!newValue.id) // Prevent double saving
               preventSave = true;
-            $scope.matter = data;
+            $scope.matter.id = data.id;
             $timeout(function() { // Only for design effect
               $scope.isSaving = false;
               $scope.errorSaving = false;

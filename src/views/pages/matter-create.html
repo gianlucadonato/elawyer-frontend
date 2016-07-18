@@ -16,12 +16,12 @@
               <input type="text" class="form-control" placeholder="Description" ng-model="matter.description">
             </div>
             <div class="form-group">
-              <select class="form-control" ng-model="matter.area_of_interest">
-                <option value="" disabled selected>Select Area</option>
-                <option value="1">Area 1</option>
-                <option value="2">Area 2</option>
-                <option value="3">Area 3</option>
+              <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!manual">
+                <option value="default" disabled selected>Select Area</option>
+                <option ng-repeat="i in areas" value="{{i}}">{{i}}</option>
+                <option value="____manual____">Immetti manualmente</option>
               </select>
+              <input ng-show="manual" type="text" class="form-control" placeholder="area of interest" ng-model="matter.area_of_interest">
             </div>
           </form>
 
