@@ -17,6 +17,7 @@
     $scope.services = [];
     $scope.isLoading = false;
     $scope.isSaving = false;
+    $scope.total = 0;
 
     $scope.currentTmplPage = 0;
     $scope.totalTmplItems = 0;
@@ -41,6 +42,13 @@
       });
     }
 
+    function calcTotal() {
+      $scope.total = 0;
+      $scope.matter.items.forEach(function(item){
+        $scope.total += parseInt(item.price);
+      });
+    }
+
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
       if(!angular.equals(oldValue, newValue) && !preventSave) {
@@ -50,10 +58,11 @@
         timeout = $timeout(function() {
           $scope.isSaving = true;
           $scope.errorSaving = false;
+          calcTotal();
           Matter.api.save(newValue).then(function(data) {
             if(!newValue.id) // Prevent double saving
               preventSave = true;
-            $scope.matter = data;
+            $scope.matter.id = data.id;
             $timeout(function() { // Only for design effect
               $scope.isSaving = false;
               $scope.errorSaving = false;
