@@ -43,13 +43,9 @@
     $scope.change = function(credentials) {
       // Reset Form
       $scope.changeForm.$setPristine();
-      $scope.sent = false;
-
-      
+      $scope.sent = false; 
       credentials.token = $stateParams.token;
       credentials.email = $stateParams.email;
-
-      console.log(credentials)
      
       Auth
         .change(credentials)

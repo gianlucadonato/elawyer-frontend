@@ -22,7 +22,7 @@
                 </button>
               </div>
 
-              <div class="pmop-edit">
+              <div class="pmop-edit" ng-if="user.id == me.id">
                 <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
                 <input type="file" ngf-select="pctrl.uploadAvatar($file)" class="upload-avatar-image">
               </div>
@@ -49,4 +49,4 @@
 
 </section>
 
-<footer id="footer" data-ng-include src="'views/partials/footer.html'"></footer>
+<!-- <footer id="footer" data-ng-include src="'views/partials/footer.html'"></footer> -->

@@ -6,10 +6,13 @@
   * Profile Controller
   =========================================================*/
 
-  App.controller('ProfileCtrl', function($rootScope, $scope, $http, $stateParams, User, Auth, Notify, Upload, API) {
+  App.controller('ProfileCtrl', function($rootScope, $scope, $http, $stateParams, User, Auth, Notify, Upload, API, $localStorage) {
 
     $scope.editProfileInfo = false;
     $scope.editBillingInfo = false;
+
+    //check if it's me for editing
+    $scope.me = $localStorage.current_user;
 
     function activate() {
       getUser($stateParams.id);

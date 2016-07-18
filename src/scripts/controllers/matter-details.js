@@ -6,7 +6,7 @@
   * MatterDetails Controller
   =========================================================*/
 
-  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout) {
+  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout) {
 
     $scope.showNext = false;
 
@@ -44,25 +44,120 @@
       $window.scrollTo(0, 0);
     };
 
-    var stripe = StripeCheckout.configure({
-      name: "Custom Example",
-      token: function(token, args) {
-        console.log("Got stripe token: " + token.id);
-      }
-    });
-
-    $scope.pay = function(token, args) {
-      var options = {
-        description: "Ten dollahs!",
-        amount: 1000
-      };
-      stripe.open(options)
-        .then(function(result) {
-          alert("Got Stripe token: " + result[0].id);
-        },function() {
-          alert("Stripe Checkout closed without making a sale :(");
-        });
+    
+    $scope.pay = function() {
+      self.pm = $uibModal.open({
+        animation: false,
+        size: '',
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'views/modals/choosePaymentMethod.html',
+        scope: $scope
+      });
     };
+
+
+    function getComputedDataFromTable() {
+
+      var output = {
+        totalPrice: 0,
+        paidServices: []
+      }
+
+      for (var i = 0; i < $scope.matter.items.length; i++) {
+        if ($scope.matter.items[i].is_selected || $scope.matter.items[i].is_mandatory)
+          output.paidServices.push($scope.matter.items[i]);
+      }
+
+      if ($scope.matter.withholding_tax) {
+        output['totalPrice'] = parseFloat($("#total_withholding_tax").text().replace(/ /g, "").replace(/,/g, "").replace("€", ""));
+      } else {
+        output['totalPrice'] = parseFloat($("#total").text().replace(/ /g, "").replace(/,/g, "").replace("€", ""));
+      }
+
+      return output;
+    }
+
+    
+    $scope.payOffline = function() {
+      var options = {
+        services: getComputedDataFromTable().paidServices,
+        amount: getComputedDataFromTable().totalPrice * 100,
+      };  
+
+      Matter.api.pay($scope.matter.id, options)
+        .then(function(res) {
+          swal({
+            title: "Evidenza ricevuta!",
+            text: "Abbiamo ricevuto un'evidenda di pagamento. Attendi la verifica dei nostri operatori.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.invoice-details', {id: res.id})
+          });
+        }).catch(function(err) {
+          swal({
+            title: "Error!",
+            text: "C'è stato un problema con il pagamento. Assciurati di avere abbastanza fondi.",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {});
+        });
+
+    }
+
+
+    $scope.payOnline = function() {
+      self.pm.dismiss();
+
+      var stripe = StripeCheckout.configure({});
+
+      var options = {
+        services: getComputedDataFromTable().paidServices,
+        amount: getComputedDataFromTable().totalPrice * 100,
+      };      
+
+      stripe.open({amount: options.amount, currency: "EUR", email: $scope.matter.customer.email})
+        .then(function(result) {
+
+          options['token'] = result[0].id;
+
+          Matter.api.pay($scope.matter.id, options)
+            .then(function(res) {
+              swal({
+                title: "Paid!",
+                text: "La lettera d'incarico è stata pagata correttamente.",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonText: "OK!",
+                closeOnConfirm: true
+              }, function() {
+                $state.go('page.invoice-details', {id: res.id})
+              });
+            }).catch(function(err) {
+              swal({
+                title: "Error!",
+                text: "C'è stato un problema con il pagamento. Assciurati di avere abbastanza fondi.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonText: "OK!",
+                closeOnConfirm: true
+              }, function() {});
+            });
+
+        },function(err) {
+          console.log(err)
+      });
+
+
+    }
+
+
+    
 
     $scope.download = function() {
       var doc = new jsPDF();

@@ -88,6 +88,19 @@
       return deferred.promise;
     };
 
+    api.pay = function(id, data) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/matters/'+id+'/pay', data)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     api.save = function(obj) {
       return obj.id ? api.update(obj) : api.create(obj);
     };

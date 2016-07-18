@@ -154,6 +154,23 @@
         templateUrl: helper.pagesPath('documents.html'),
         controller: 'DocumentsCtrl'
       })
+      //------------------------------
+      // INVOICES
+      //------------------------------
+      .state('page.invoices', {
+        url: '/invoices',
+        title: 'Invoices',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('invoices.html'),
+        controller: 'InvoicesListCtrl'
+      })
+      .state('page.invoice-details', {
+        url: '/invoice-details/:id',
+        title: 'Invoice Detail',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('invoice-details.html'),
+        controller: 'InvoiceDetailsCtrl'
+      })
 
       //------------------------------
       // ADMIN PAGES

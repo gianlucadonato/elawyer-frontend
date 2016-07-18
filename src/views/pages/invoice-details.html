@@ -1,0 +1,188 @@
+<div class="container mt-25 matter matter-list">
+
+<div class="card row">
+        <div class="card-header ch-alt text-center">
+            <div ng-include="'views/partials/logo.html'"></div>
+        </div>
+        
+        <div class="card-body card-padding">
+            <div class="row m-b-25">
+                <div class="col-xs-6">
+                    <div class="text-right">
+                        <p class="c-gray">Invoice from</p>
+                        
+                        <h4>{{invoice.owner.first_name}} {{invoice.owner.last_name}} - CRC LEX</h4>  
+                        
+                        <span class="text-muted">
+                            <address>
+                                <strong>Padova</strong><br/>
+                                <strong>Corso del Popolo n. 1 - 35131</strong><br/>
+                                <span>+39 049 8758955 Fax +39 049 8759252</span>
+                                <br/><br/>
+                                <strong>Milano</strong><br/>
+                                <strong>Piazza del Duomo n. 20 - 20123</strong><br/>
+                                <span>+39 02 7222201 Fax + 39 02 861375</span>
+                            </address>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="col-xs-6">
+                    <div class="i-to">
+                        <p class="c-gray">Invoice to</p>
+                        
+                        <h4>{{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
+                        
+                        <span class="text-muted">
+                            <address>
+                                {{invoice.customer.address}}<br>
+                                {{invoice.customer.fiscal_code}}<br>
+                            </address>
+
+                            {{invoice.customer.phone}}<br>
+                            {{invoice.customer.email}}
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="clearfix"></div>
+            
+            <div class="row m-t-25 p-0 m-b-25">
+                <div class="col-xs-3">
+                    <div class="bgm-amber brd-2 p-15">
+                        <div class="c-white m-b-5">Invoice#</div>
+                        <h2 class="m-0 c-white f-300" permission permission-only="['CUSTOMER']">{{invoice.number || 'not legal'}}</h2>
+                        <h2 class="m-0 c-white f-300" permission permission-only="['LAWYER']">
+                            <input ng-keyup="$event.keyCode == 13 && update()" type="text" ng-model="invoice.number" ng-value="invoice.number" class="form-control">
+                        </h2>
+                    </div>
+                </div>
+                
+                <div class="col-xs-3">
+                    <div class="bgm-blue brd-2 p-15">
+                        <div class="c-white m-b-5">Date</div>
+                        <h2 class="m-0 c-white f-300">{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</h2>
+                    </div>
+                </div>
+                
+                <div class="col-xs-3">
+                    <div class="bgm-green brd-2 p-15">
+                        <div class="c-white m-b-5">Services</div>
+                        <h2 class="m-0 c-white f-300">{{invoice.services.length}}</h2>
+                    </div>
+                </div>
+                
+                <div class="col-xs-3">
+                    <div class="bgm-red brd-2 p-15">
+                        <div class="c-white m-b-5">Total</div>
+                        <h2 class="m-0 c-white f-300">€ {{invoice.amount | prettyNumber}}</h2>
+                    </div>
+                    <span ng-if="!invoice.is_confirmed" permission permission-only="['LAWYER']">
+                    The payment has not been processed online. Confirm you received the payment of € {{invoice.amount | prettyNumber}} through an outband channel:<br/><br/>
+                    <button class="btn btn-success btn-icon-text waves-effect" ng-click="confirm()">
+                        <i class="zmdi zmdi-check"></i>I confirm 
+                    </button>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="clearfix"></div>
+            
+            <table class="table i-table m-t-25 m-b-25">
+                <thead class="text-uppercase">
+                    <tr><th class="c-gray">Service DESCRIPTION</th>
+                    <th class="highlight">Price</th>
+                </tr></thead>
+                
+                <tbody>
+                    </tbody><thead>
+                        <tr ng-repeat="i in invoice.services">
+                            <td width="50%">
+                                <h5 class="text-uppercase f-400">{{i.title}}</h5>
+                                <p class="text-muted">{{i.description}}</p>
+                            </td>
+                            
+                            <td class="highlight">€ {{i.price | prettyNumber}}</td>
+                        </tr>
+                        
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+                        <tr>
+                          <td>Imponibile Prestazioni</td>
+                          <td>€ {{total | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <td>Rimborso spese generali (15%)</td>
+                          <td>€ {{(total | percentage: 15) | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <td>Totale imponibile</td>
+                          <td>€ {{(total + (total | percentage: 15)) | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <td>Rivalsa parziale contributi previdenziali (4%)</td>
+                          <td>€ {{((total + (total | percentage: 15)) | percentage: 4) | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <td>Totale imponibile</td>
+                          <td>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4)) | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <td>Iva (22%)</td>
+                          <td>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</td>
+                        </tr>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                          <th>
+                            <span ng-if="matter.withholding_tax">Totale fattura</span>
+                            <span ng-if="!matter.withholding_tax">Netto da Versare</span>
+                          </th>
+                          <th id="total">€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                        </tr>
+
+                        <tr ng-if="matter.withholding_tax">
+                          <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
+                          <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
+                        </tr>
+
+                        <tr ng-if="matter.withholding_tax">
+                          <th>Netto da versare</th>
+                          <th id="total_withholding_tax">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="1"></td>
+                            <td class="highlight">€ {{invoice.amount | prettyNumber}}</td>
+                        </tr>
+                    </thead> 
+                
+            </table>
+            
+            <div class="clearfix"></div>
+            
+            <div class="p-25">
+                <h4 class="c-green f-400">REMARKS</h4>
+                <p class="c-gray">Ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum.</p>
+                
+                <br>
+                
+                <h4 class="c-green f-400">MERCY FOR YOUR BUSINESS</h4>
+                <p class="c-gray">Proin ac iaculis metus. Etiam nisi nulla, fermentum blandit consectetur sed, ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum sit amet.</p>
+            </div>
+        </div>
+        
+        <footer class="m-t-15 p-20">
+            <ul class="list-inline text-center list-unstyled">
+                <li class="m-l-5 m-r-5"><small>support@company.com</small></li>
+                <li class="m-l-5 m-r-5"><small>00971 452 9900</small></li>
+                <li class="m-l-5 m-r-5"><small>www.company.com</small></li>
+            </ul>
+        </footer>
+    </div>
+</div>

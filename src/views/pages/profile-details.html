@@ -1,7 +1,7 @@
 <div class="pmb-block">
   <div class="pmbb-header">
     <h2><i class="zmdi zmdi-account-circle m-r-5"></i> Profile Informations</h2>
-    <ul class="actions" data-ng-if="!editProfileInfo">
+    <ul class="actions" data-ng-if="!editProfileInfo && user.id == me.id">
       <li class="dropdown">
         <a href="" data-ng-click="toggleProfileInfo()">
           <i class="zmdi zmdi-edit"></i>
@@ -108,7 +108,7 @@
 <div class="pmb-block" permission permission-only="['CUSTOMER']">
   <div class="pmbb-header">
     <h2><i class="zmdi zmdi-card m-r-5"></i> Billing Information</h2>
-    <ul class="actions" data-ng-if="!editBillingInfo">
+    <ul class="actions" data-ng-if="!editBillingInfo && user.id == me.id">
       <li class="dropdown">
         <a href="" data-ng-click="toggleBillingInfo()">
           <i class="zmdi zmdi-edit"></i>
@@ -128,7 +128,7 @@
       </dl>
       <dl class="dl-horizontal">
         <dt>Fiscal Code</dt>
-        <dd>{{ user.fiscal_number }}</dd>
+        <dd>{{ user.fiscal_code }}</dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>VAT Number (P.Iva)</dt>
