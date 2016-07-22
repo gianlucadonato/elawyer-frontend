@@ -6,7 +6,7 @@
   * InvoiceDetails Controller
   =========================================================*/
 
-  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, $window, $timeout, $uibModal, StripeCheckout) {
+  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.showNext = false;
 
@@ -33,17 +33,17 @@
       } else {
         output['totalPrice'] = getRaw($("#total"));
       }
-      
+
 
       if ($scope.invoice.matter.deposit > 0) {
         if ($scope.invoice.matter.withholding_tax) {
           output['deposit'] = getRaw($("#total_withholding_tax_acconto"));
           output['balance'] = getRaw($("#total_withholding_tax_saldo"));
-        } else { 
+        } else {
           output['deposit'] = getRaw($("#total_acconto"));
           output['balance'] = getRaw($("#total_saldo"));
         }
-      } 
+      }
 
       return output;
     }
@@ -59,16 +59,39 @@
       });
     };
 
+    $scope.upload = function(file) {
+      var tosend = file.files;
+
+      Uploader.upload(tosend)
+        .then(function(res) {
+          $scope.payOffline();
+        })
+        .catch(function(err) {
+          swal({
+            title: "Error!",
+            text: "C'è stato un problema a caricare l'evidenza del pagamento.",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          });
+        });
+    }
+
     $scope.payOffline = function() {
+      self.pm.dismiss();
+
       var options = {
         services: getComputedDataFromTable().paidServices,
         amount: getComputedDataFromTable().totalPrice * 100,
         deposit: getComputedDataFromTable().deposit * 100,
         balance: getComputedDataFromTable().balance * 100
-      };  
+      };
 
       Invoice.api.pay($scope.invoice.id, options)
         .then(function(res) {
+          console.log(res)
+          $scope.invoice = res;
           swal({
             title: "Evidenza ricevuta!",
             text: "Abbiamo ricevuto un'evidenda di pagamento. Attendi la verifica dei nostri operatori.",
@@ -77,7 +100,6 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $scope.invoice = res;
           });
         }).catch(function(err) {
           swal({
@@ -92,7 +114,7 @@
 
     }
 
-    
+
 
     $scope.payOnline = function() {
       self.pm.dismiss();
@@ -104,7 +126,7 @@
         amount: getComputedDataFromTable().totalPrice * 100,
         deposit: getComputedDataFromTable().deposit * 100,
         balance: getComputedDataFromTable().balance * 100
-      };      
+      };
 
       stripe.open({amount: options.balance, currency: "EUR", email: $scope.invoice.customer.email})
         .then(function(result) {
@@ -185,7 +207,7 @@
         }
     }, true);
 
-    
+
   });
 
 })();

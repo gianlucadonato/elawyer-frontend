@@ -6,7 +6,7 @@
   * MatterDetails Controller
   =========================================================*/
 
-  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout) {
+  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.showNext = false;
 
@@ -44,7 +44,7 @@
       $window.scrollTo(0, 0);
     };
 
-    
+
     $scope.pay = function() {
       self.pm = $uibModal.open({
         animation: false,
@@ -80,29 +80,53 @@
       } else {
         output['totalPrice'] = getRaw($("#total"));
       }
-      
+
 
       if ($scope.matter.deposit > 0) {
         if ($scope.matter.withholding_tax) {
           output['deposit'] = getRaw($("#total_withholding_tax_acconto"));
           output['balance'] = getRaw($("#total_withholding_tax_saldo"));
-        } else { 
+        } else {
           output['deposit'] = getRaw($("#total_acconto"));
           output['balance'] = getRaw($("#total_saldo"));
         }
-      } 
+      }
 
       return output;
     }
 
-    
+
+    $scope.evidence_image = null;
+
+    $scope.upload = function(file) {
+      var tosend = file.files;
+
+      Uploader.upload(tosend)
+        .then(function(res) {
+          $scope.payOffline();
+        })
+        .catch(function(err) {
+          swal({
+            title: "Error!",
+            text: "C'è stato un problema a caricare l'evidenza del pagamento.",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          });
+        });
+    }
+
+
     $scope.payOffline = function() {
+      self.pm.dismiss();
+
       var options = {
         services: getComputedDataFromTable().paidServices,
         amount: getComputedDataFromTable().totalPrice * 100,
         deposit: getComputedDataFromTable().deposit * 100,
         balance: getComputedDataFromTable().balance * 100
-      };  
+      };
 
       Matter.api.pay($scope.matter.id, options)
         .then(function(res) {
@@ -114,7 +138,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.invoice-details', {id: res.id})
+            $state.go('page.invoices');
           });
         }).catch(function(err) {
           swal({
@@ -126,8 +150,7 @@
             closeOnConfirm: true
           }, function() {});
         });
-
-    }
+    };
 
 
     $scope.payOnline = function() {
@@ -140,7 +163,7 @@
         amount: getComputedDataFromTable().totalPrice * 100,
         deposit: getComputedDataFromTable().deposit * 100,
         balance: getComputedDataFromTable().balance * 100
-      };      
+      };
 
       stripe.open({amount: options.deposit ? options.deposit : options.amount, currency: "EUR", email: $scope.matter.customer.email})
         .then(function(result) {
@@ -157,7 +180,7 @@
                 confirmButtonText: "OK!",
                 closeOnConfirm: true
               }, function() {
-                $state.go('page.invoices')
+                $state.go('page.invoices');
               });
             }).catch(function(err) {
               swal({
@@ -171,14 +194,12 @@
             });
 
         },function(err) {
-          console.log(err)
+          console.log(err);
       });
+    };
 
 
-    }
 
-
-    
 
     $scope.download = function() {
       var doc = new jsPDF();
