@@ -11,7 +11,7 @@
           <div class="input-group">
             <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
             <div class="fg-line">
-              <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
+              <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required autofocus>
             </div>
             <div ng-messages="loginForm.email.$error" class="form-errors">
               <div ng-message="invalid">Invalid Email.</div>
@@ -26,13 +26,19 @@
               <div ng-message="invalid">Invalid Password.</div>
             </div>
           </div>
+          <div class="text-right">
+            <a ui-sref="auth.reset_password" class="m-t-5">
+              <i class="fa fa-question-circle-o "></i> Forgot your password?
+            </a>
+          </div>
           <div class="form-group m-t-10">
             <button type="submit" class="btn btn-orange btn-block waves-effect">LOGIN</button>
           </div>
-           <div class="text-left" style="float:left">Not registered? <a ui-sref="auth.signup" class="m-t-5">Signup</a></div>
-           <div class="text-right">Password forgotten? <a ui-sref="auth.forgot_password" class="m-t-5">Reset it</a></div>
         </form>
-
+        <div class="m-t-25 text-center">
+          <span>Don't have an account?</span>
+          <a ui-sref="auth.signup" class="btn bgm-t-orange btn-block waves-effect">SIGNUP</a>
+        </div>
       </div>
     </div>
   </div>
