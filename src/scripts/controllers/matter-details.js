@@ -61,6 +61,8 @@
 
       var output = {
         totalPrice: 0,
+        deposit: 0,
+        balance: 0,
         paidServices: []
       }
 
@@ -69,11 +71,26 @@
           output.paidServices.push($scope.matter.items[i]);
       }
 
-      if ($scope.matter.withholding_tax) {
-        output['totalPrice'] = parseFloat($("#total_withholding_tax").text().replace(/ /g, "").replace(/,/g, "").replace("€", ""));
-      } else {
-        output['totalPrice'] = parseFloat($("#total").text().replace(/ /g, "").replace(/,/g, "").replace("€", ""));
+      function getRaw(el) {
+        return el.text().replace(/ /g, "").replace(/,/g, "").replace("€", "");
       }
+
+      if ($scope.matter.withholding_tax) {
+        output['totalPrice'] = getRaw($("#total_withholding_tax"));
+      } else {
+        output['totalPrice'] = getRaw($("#total"));
+      }
+      
+
+      if ($scope.matter.deposit > 0) {
+        if ($scope.matter.withholding_tax) {
+          output['deposit'] = getRaw($("#total_withholding_tax_acconto"));
+          output['balance'] = getRaw($("#total_withholding_tax_saldo"));
+        } else { 
+          output['deposit'] = getRaw($("#total_acconto"));
+          output['balance'] = getRaw($("#total_saldo"));
+        }
+      } 
 
       return output;
     }
@@ -83,6 +100,8 @@
       var options = {
         services: getComputedDataFromTable().paidServices,
         amount: getComputedDataFromTable().totalPrice * 100,
+        deposit: getComputedDataFromTable().deposit * 100,
+        balance: getComputedDataFromTable().balance * 100
       };  
 
       Matter.api.pay($scope.matter.id, options)
@@ -119,9 +138,11 @@
       var options = {
         services: getComputedDataFromTable().paidServices,
         amount: getComputedDataFromTable().totalPrice * 100,
+        deposit: getComputedDataFromTable().deposit * 100,
+        balance: getComputedDataFromTable().balance * 100
       };      
 
-      stripe.open({amount: options.amount, currency: "EUR", email: $scope.matter.customer.email})
+      stripe.open({amount: options.deposit ? options.deposit : options.amount, currency: "EUR", email: $scope.matter.customer.email})
         .then(function(result) {
 
           options['token'] = result[0].id;
@@ -136,7 +157,7 @@
                 confirmButtonText: "OK!",
                 closeOnConfirm: true
               }, function() {
-                $state.go('page.invoice-details', {id: res.id})
+                $state.go('page.invoices')
               });
             }).catch(function(err) {
               swal({
