@@ -18,6 +18,7 @@ var App = angular.module('eLawyer', [
   'appConstants',
   'FileManagerApp',
   'ui.tree',
+  'angular-jwt',
   'stripe.checkout'
 ]);
 
@@ -63,13 +64,18 @@ App.config(function($httpProvider, StripeCheckoutProvider, ENV) {
 
 // APP RUN
 // -----------------------------------
-App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) {
+App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $templateCache) {
 
   amMoment.changeLocale('it');
 
   RoleStore.defineRole('ADMIN', function () {
     if(Auth.isAuthenticated()) {
-      return Auth.getUser().role === 100;
+      var deferred = $q.defer();
+      Auth.getUser().then(function(user){
+        if (user.role === 100) deferred.resolve(user);
+        else deferred.reject();
+      });
+      return deferred.promise;
     } else {
       return false;
     }
@@ -77,7 +83,12 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
 
   RoleStore.defineRole('LAWYER', function () {
     if(Auth.isAuthenticated()) {
-      return Auth.getUser().role === 10;
+      var deferred = $q.defer();
+      Auth.getUser().then(function(user){
+        if (user.role === 10) deferred.resolve(user);
+        else deferred.reject();
+      });
+      return deferred.promise;
     } else {
       return false;
     }
@@ -85,7 +96,12 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
 
   RoleStore.defineRole('CUSTOMER', function () {
     if(Auth.isAuthenticated()) {
-      return Auth.getUser().role === 1;
+      var deferred = $q.defer();
+      Auth.getUser().then(function(user){
+        if (user.role === 1) deferred.resolve(user);
+        else deferred.reject();
+      });
+      return deferred.promise;
     } else {
       return false;
     }
@@ -99,7 +115,7 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $templateCache) 
     }
     else if(toState.title === 'Login' && Auth.isAuthenticated()) {
       event.preventDefault();
-      $state.go('profile.details', Auth.getUser());
+      $state.go('profile.details', $rootScope.current_user);
     }
   });
 
