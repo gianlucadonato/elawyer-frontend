@@ -1,221 +1,179 @@
-<div class="container mt-25 matter matter-list">
-    <script src="https://checkout.stripe.com/checkout.js"></script>
+<div class="container mt-25 matter matter-list table-invoice">
 
-    <div ng-if="!invoice.paid">
-        <div class="alert ng-isolate-scope alert-danger alert-dismissible" role="alert" type="danger" style="overflow:hidden">
-            <div><span class="ng-binding ng-scope">Questa fattura non è ancora stata pagata <button class="btn btn-success ribtn-icon-text waves-effect" ng-click="pay()" ng-if="current_user.id == invoice.customer.id" style="float:right">Paga</button></span></div>
-        </div>
+  <div ng-if="!invoice.paid">
+    <div class="alert ng-isolate-scope alert-danger alert-dismissible" role="alert" type="danger" style="overflow:hidden">
+      <div><span class="ng-binding ng-scope">Questa fattura non è ancora stata pagata <button class="btn btn-success ribtn-icon-text waves-effect" ng-click="pay()" ng-if="current_user.id == invoice.customer.id" style="float:right">Paga saldo di €
+        <span ng-if="invoice.matter.withholding_tax">{{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</span><span ng-if="!invoice.matter.withholding_tax">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</span></button></span></div>
+    </div>
+  </div>
+
+  <div class="card row">
+    <div class="card-header ch-alt text-center">
+      <div ng-include="'views/partials/letterhead.html'" style="text-align: left"></div>
     </div>
 
-    <div class="card row">
-        <div class="card-header ch-alt text-center">
-            <div ng-include="'views/partials/logo.html'"></div>
+    <div class="card-body card-padding">
+      <div class="row m-b-25">
+        <div class="col-xs-6">
+          <div class="text-left">
+            <p class="c-gray"></p>
+
+            <h4>Avv. {{invoice.owner.first_name}} {{invoice.owner.last_name}}</h4>
+
+            <span class="text-muted">
+              <address>
+                {{invoice.owner.address}}<br/>
+                <strong>C.F.</strong> {{invoice.owner.fiscal_code}}<br/>
+                <strong>P.I.</strong>{{invoice.owner.vat_number}}
+              </address>
+            </span>
+          </div>
         </div>
 
-        <div class="card-body card-padding">
-            <div class="row m-b-25">
-                <div class="col-xs-6">
-                    <div class="text-right">
-                        <p class="c-gray">Invoice from</p>
-                        
-                        <h4>{{invoice.owner.first_name}} {{invoice.owner.last_name}} - CRC LEX</h4>  
-                        
-                        <span class="text-muted">
-                            <address>
-                                <strong>Padova</strong><br/>
-                                <strong>Corso del Popolo n. 1 - 35131</strong><br/>
-                                <span>+39 049 8758955 Fax +39 049 8759252</span>
-                                <br/><br/>
-                                <strong>Milano</strong><br/>
-                                <strong>Piazza del Duomo n. 20 - 20123</strong><br/>
-                                <span>+39 02 7222201 Fax + 39 02 861375</span>
-                            </address>
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6">
-                    <div class="i-to">
-                        <p class="c-gray">Invoice to</p>
-                        
-                        <h4>{{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
-                        
-                        <span class="text-muted">
-                            <address>
-                                {{invoice.customer.address}}<br>
-                                {{invoice.customer.fiscal_code}}<br>
-                            </address>
+        <div class="col-xs-6">
+          <div class="i-to text-right">
+            <p class="c-gray"></p>
 
-                            {{invoice.customer.phone}}<br>
-                            {{invoice.customer.email}}
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="clearfix"></div>
-            
-            <div class="row m-t-25 p-0 m-b-25">
-                <div class="col-xs-3">
-                    <div class="bgm-amber brd-2 p-15">
-                        <div class="c-white m-b-5">Invoice#</div>
-                        <h2 class="m-0 c-white f-300" permission permission-only="['CUSTOMER']">{{invoice.number || 'not legal'}}</h2>
-                        <h2 class="m-0 c-white f-300" permission permission-only="['LAWYER']">
-                            <input ng-keyup="$event.keyCode == 13 && update()" type="text" ng-model="invoice.number" ng-value="invoice.number" class="form-control">
-                        </h2>
-                    </div>
-                </div>
-                
-                <div class="col-xs-3">
-                    <div class="bgm-blue brd-2 p-15">
-                        <div class="c-white m-b-5">Date</div>
-                        <h2 class="m-0 c-white f-300">{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</h2>
-                    </div>
-                </div>
-                
-                <div class="col-xs-3">
-                    <div class="bgm-green brd-2 p-15">
-                        <div class="c-white m-b-5">Tipo</div>
-                        <h2 class="m-0 c-white f-300" ng-if="invoice.is_balance">Saldo</h2>
-                        <h2 class="m-0 c-white f-300" ng-if="invoice.is_deposit">Anticipo</h2>
-                        <h2 class="m-0 c-white f-300" ng-if="!invoice.is_deposit && !invoice.is_balance">Sommario</h2>
-                    </div>
-                </div>
-                
-                <div class="col-xs-3">
-                    <div class="bgm-red brd-2 p-15">
-                        <div class="c-white m-b-5">Total</div>
-                        <h2 class="m-0 c-white f-300">€ {{invoice.amount | prettyNumber}} <span ng-if="invoice.is_deposit || invoice.is_balance">/
-                            <span ng-if="!invoice.matter.withholding_tax">{{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</span>
-                            <span ng-if="invoice.matter.withholding_tax">{{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</span>
-                        </span></h2>
-                    </div>
-                    <span ng-if="!invoice.is_confirmed" permission permission-only="['LAWYER']">
-                    The payment has not been processed online. Confirm you received the payment of € {{invoice.amount | prettyNumber}} through an outband channel:<br/><br/>
-                    <button class="btn btn-success btn-icon-text waves-effect" ng-click="confirm()">
-                        <i class="zmdi zmdi-check"></i>I confirm 
-                    </button>
-                    </span>
-                </div>
-            </div>
-            
-            <div class="clearfix"></div>
-            
-            <table class="table i-table m-t-25 m-b-25">
-                <thead class="text-uppercase">
-                    <tr><th class="c-gray">Service DESCRIPTION</th>
-                    <th class="highlight">Price</th>
-                </tr></thead>
-                
-                <tbody>
-                    </tbody><thead>
-                        <tr ng-repeat="i in invoice.services">
-                            <td width="50%">
-                                <h5 class="text-uppercase f-400">{{i.title}}</h5>
-                                <p class="text-muted">{{i.description}}</p>
-                            </td>
-                            
-                            <td class="highlight">€ {{i.price | prettyNumber}}</td>
-                        </tr>
-                        
-                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <h4>Spett.le {{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
 
-                        <tr>
-                          <td>Imponibile Prestazioni</td>
-                          <td>€ {{total | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <td>Rimborso spese generali (15%)</td>
-                          <td>€ {{(total | percentage: 15) | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <td>Totale imponibile</td>
-                          <td>€ {{(total + (total | percentage: 15)) | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <td>Rivalsa parziale contributi previdenziali (4%)</td>
-                          <td>€ {{((total + (total | percentage: 15)) | percentage: 4) | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <td>Totale imponibile</td>
-                          <td>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4)) | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <td>Iva (22%)</td>
-                          <td>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</td>
-                        </tr>
-                        <tr>
-                          <th>&nbsp;</th>
-                          <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                          <th>
-                            <span ng-if="invoice.matter.withholding_tax">Totale fattura</span>
-                            <span ng-if="!invoice.matter.withholding_tax">Netto da Versare</span>
-                          </th>
-                          <th id="total" ng-model="all">€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.deposit > 0 && !invoice.matter.withholding_tax">
-                          <th>Acconto</th>
-                          <th id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: invoice.matter.deposit) | prettyNumber}}</th>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.deposit > 0 && !invoice.matter.withholding_tax">
-                          <th>Saldo</th>
-                          <th id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</th>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.withholding_tax">
-                          <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
-                          <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.withholding_tax">
-                          <th>Netto da versare</th>
-                          <th id="total_withholding_tax" ng-model="all">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.deposit > 0 && invoice.matter.withholding_tax && invoice.is_deposit">
-                          <th>Acconto</th>
-                          <th id="total_withholding_tax_acconto">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: invoice.matter.deposit) | prettyNumber}}</th>
-                        </tr>
-
-                        <tr ng-if="invoice.matter.deposit > 0 && invoice.matter.withholding_tax && invoice.is_balance">
-                          <th>Saldo</th>
-                          <th id="total_withholding_tax_saldo">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>Pagato</td>
-                            <td class="highlight" ng-if="invoice.paid">€ {{invoice.amount | prettyNumber}}</td>
-                            <td class="highlight" ng-if="!invoice.paid"><div class="flag flag-closed">Non hai ancora pagato</div></td>
-                        </tr>
-                    </thead> 
-                
-            </table>
-            
-            <div class="clearfix"></div>
-            
-            <div class="p-25">
-                <h4 class="c-green f-400">REMARKS</h4>
-                <p class="c-gray">Ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum.</p>
-                
-                <br>
-                
-                <h4 class="c-green f-400">MERCY FOR YOUR BUSINESS</h4>
-                <p class="c-gray">Proin ac iaculis metus. Etiam nisi nulla, fermentum blandit consectetur sed, ornare non tortor. Nam quis ipsum vitae dolor porttitor interdum. Curabitur faucibus erat vel ante fermentum lacinia. Integer porttitor laoreet suscipit. Sed cursus cursus massa ut pellentesque. Phasellus vehicula dictum arcu, eu interdum massa bibendum sit amet.</p>
-            </div>
+            <span class="text-muted">
+              <address>
+                {{invoice.customer.address}}<br>
+                <strong>C.F.</strong> {{invoice.customer.fiscal_code}}<br>
+                <strong>P.I.</strong> {{invoice.customer.vat_number}}<br>
+              </address>
+            </span>
+          </div>
         </div>
-        
-        <footer class="m-t-15 p-20">
-            <ul class="list-inline text-center list-unstyled">
-                <li class="m-l-5 m-r-5"><small>support@company.com</small></li>
-                <li class="m-l-5 m-r-5"><small>00971 452 9900</small></li>
-                <li class="m-l-5 m-r-5"><small>www.company.com</small></li>
-            </ul>
-        </footer>
+
+        <div class="col-xs-12">
+          <div>
+            <h4 class="m-0 f-300" permission permission-only="['CUSTOMER']" ng-if="invoice.number">Fattura n° {{invoice.number}}</h4>
+            <h4 class="m-0 f-300" permission permission-only="['CUSTOMER']" ng-if="!invoice.number">Questa fattura non ha ancora validità legale. Perfavore aspetta che il mittente ne inserisca il numero</h4>
+            <h4 class="m-0 f-300" permission permission-only="['LAWYER']">
+              Fattura n°&nbsp;<input ng-keyup="$event.keyCode == 13 && update()" type="text" ng-model="invoice.number" ng-value="invoice.number" class="form-control" placeholder="inserisci numero fattura e premi invio" style="display:inline; max-width: 50%">
+            </h4><br/>
+            <h4 class="m-0 f-300"><strong>{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</strong></h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <table class="table  m-t-25 m-b-25">
+        <thead class="text-uppercase">
+          <tr>
+            <th class="crc-table-head">Descrizione</th>
+            <th class="highlight crc-table-head">Importo</th>
+          </tr>
+        </thead>
+
+        <thead>
+          <tr ng-repeat="i in invoice.services">
+            <td width="80%" style="text-align: left !important">
+              <h5 class="text-uppercase f-400">{{i.title}}</h5>
+              <p class="text-muted">{{i.description}}</p>
+            </td>
+
+            <td>€ {{i.price | prettyNumber}}</td>
+          </tr>
+
+          <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+          <tr>
+            <td><strong>Imponibile Prestazioni</strong></td>
+            <td><strong>€ {{total | prettyNumber}}</strong></td>
+          </tr>
+          <tr>
+            <td>Rimborso spese generali (15%)</td>
+            <td>€ {{(total | percentage: 15) | prettyNumber}}</td>
+          </tr>
+          <tr>
+            <td><strong>Totale imponibile</strong></td>
+            <td><strong>€ {{(total + (total | percentage: 15)) | prettyNumber}}</strong></td>
+          </tr>
+          <tr>
+            <td>Rivalsa parziale contributi previdenziali (4%)</td>
+            <td>€ {{((total + (total | percentage: 15)) | percentage: 4) | prettyNumber}}</td>
+          </tr>
+          <tr>
+            <td><strong>Totale imponibile</strong></td>
+            <td><strong>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4)) | prettyNumber}}</strong></td>
+          </tr>
+          <tr>
+            <td>Iva (22%)</td>
+            <td>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>
+              <span ng-if="invoice.matter.withholding_tax"><strong>Totale fattura</strong></span>
+              <span ng-if="!invoice.matter.withholding_tax"><strong>Netto da Versare</strong></span>
+            </td>
+            <td id="total" ng-model="all"><strong>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</strong></td>
+          </tr>
+
+          <tr ng-if="invoice.matter.deposit > 0 && !invoice.matter.withholding_tax">
+            <td>Acconto</td>
+            <td id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: invoice.matter.deposit) | prettyNumber}}</td>
+          </tr>
+
+          <tr ng-if="invoice.matter.deposit > 0 && !invoice.matter.withholding_tax">
+            <td>Saldo</td>
+            <td id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</td>
+          </tr>
+
+          <tr ng-if="invoice.matter.withholding_tax">
+            <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
+            <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
+          </tr>
+
+          <tr ng-if="invoice.matter.withholding_tax">
+            <td>Netto da versare</td>
+            <td id="total_withholding_tax" ng-model="all">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</td>
+          </tr>
+
+          <tr ng-if="invoice.matter.deposit > 0 && invoice.matter.withholding_tax && invoice.is_deposit">
+            <td>Acconto</td>
+            <td id="total_withholding_tax_acconto">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: invoice.matter.deposit) | prettyNumber}}</td>
+          </tr>
+
+          <tr ng-if="invoice.matter.deposit > 0 && invoice.matter.withholding_tax && invoice.is_balance">
+            <td>Saldo</td>
+            <td id="total_withholding_tax_saldo">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: (100 - invoice.matter.deposit)) | prettyNumber}}</td>
+          </tr>
+
+
+          <tr>
+            <td>Pagato</td>
+            <td class="highlight" ng-if="invoice.paid">€ {{invoice.amount | prettyNumber}}</td>
+            <td class="highlight" ng-if="!invoice.paid"><div class="flag flag-closed">Non hai ancora pagato</div></td>
+          </tr>
+        </thead>
+      </table>
+
+      <div class="clearfix"></div>
+
+      <div class="p-25">
+        <h4 class="c-green f-400">Modalità di pagamento in caso di Bonifico Bancario</h4>
+        <p class="c-gray">
+          <strong>CheBanca!</strong> - Viale Luigi Bodio, 37, 20158 - Milano (MI)<br/>
+          <strong>Iban</strong> IT 84 O 03058 01604 100571277268<br/>
+          <strong>BIC/SWIFT</strong> MICSITM1XXX<br/>
+          <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
+        </p>
+      </div>
     </div>
+
+    <footer class="m-t-15 p-20">
+      <ul class="list-inline text-center list-unstyled">
+        <li class="m-l-5 m-r-5"><small>Via Mazzini n. 10 - 20123 Milano, Italia</small></li>
+        <li class="m-l-5 m-r-5"><small>Phone +39 049 8758955 - Fax +39 049 8759252</small></li>
+        <li class="m-l-5 m-r-5"><small>info@crclex.com</small></li>
+      </ul>
+    </footer>
+  </div>
 </div>

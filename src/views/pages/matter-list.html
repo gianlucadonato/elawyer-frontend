@@ -41,7 +41,7 @@
               <div ng-if="!m.balance_invoice_id.paid && !m.invoice_id" class="flag flag-closed">Not paid</div>
             </td>
 
-            
+
             <td data-title="'Open Date'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
@@ -82,7 +82,7 @@
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
             <td data-title="'Actions'">
-              <ul class="actions">
+              <ul class="actions" ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
                 <li>
                   <a ui-sref="page.matter-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Edit">
@@ -127,7 +127,7 @@
             <td data-title="'Open Date'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
-            <td data-title="'Actions'">
+            <td data-title="'Actions'" ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
               <ul class="actions">
                 <li>
                   <a ui-sref="page.matter-edit(m)"

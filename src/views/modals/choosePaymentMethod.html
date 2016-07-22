@@ -1,28 +1,28 @@
 <div class="modal-header">
-    <h4 class="modal-title">Choose a Payment Method</h4>
+    <h4 class="modal-title" ng-show="!bonificando">Choose a Payment Method</h4>
 </div>
 <div class="modal-body">
-    <p>Choose a payment method</p>
-    <div ng-show="!root">
-	    <button class="btn btn-success btn-icon-text waves-effect" ng-click="payOnline()"><i class="zmdi zmdi-money"></i> Pay online</button>
-	    <button class="btn btn-info btn-icon-text waves-effect" ng-click="payOffline()"><i class="zmdi zmdi-card"></i> Bank Transfer</button>
+    <div ng-show="!bonificando">
+      <p>Scegli un metodo di pagamento</p>
+	    <button class="btn btn-success btn-icon-text waves-effect" ng-click="payOnline()"><i class="zmdi zmdi-money"></i> Paga online</button>
+	    <button class="btn btn-info btn-icon-text waves-effect" ng-click="bonificando = true"><i class="zmdi zmdi-card"></i> Effetua un bonifico</button>
 	  </div>
 
+    <div ng-show="bonificando">
+      <h2>Effettua un bonifico</h2>
+      <p>Effettua un bonifico tramite la tua banca a questi estremi:</p>
+      <strong>CheBanca!</strong> - Viale Luigi Bodio, 37, 20158 - Milano (MI)<br/>
+      <strong>Iban</strong> IT 84 O 03058 01604 100571277268<br/>
+      <strong>BIC/SWIFT</strong> MICSITM1XXX<br/>
+      <br/><br/>
+      <button class="btn btn-icon-text waves-effect" ng-click="bonificando = false"><i class="zmdi zmdi-arrow-back"></i>  Indietro</button>
+      <button class="btn btn-info btn-icon-text waves-effect" uploadfile><i class="zmdi zmdi-upload"></i> Carica Evidenza di pagamento</button>
+      <input id="upload" type="file" onchange="angular.element(this).scope().upload(this)" style="display: none;">
+    </div>
 
-
-	  <!-- <div class="fileinput fileinput-new" data-provides="fileinput">
-        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="line-height: 150px;"></div>
-        <div>
-            <span class="btn btn-info btn-file waves-effect">
-                <span class="fileinput-new">Select image</span>
-                <span class="fileinput-exists">Change</span>
-                <input type="hidden" value="" name="..."><input type="file" name="">
-            </span>
-            <a href="#" class="btn btn-danger fileinput-exists waves-effect" data-dismiss="fileinput">Remove</a>
-        </div>
-    </div> -->
+    <!--payOffline() -->
 
 </div>
 <div class="modal-footer">
-    
+
 </div>
