@@ -43,13 +43,13 @@
 
     <li data-ui-sref-active="active" permission permission-only="'CUSTOMER'">
       <a data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">
-        <i class="zmdi zmdi-case"></i> Matters
+        <i class="zmdi zmdi-case"></i> Generatore lettere di incarico
       </a>
     </li>
 
     <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('matters') }"
       permission permission-only="['LAWYER', 'ADMIN']">
-      <a href="" toggle-submenu><i class="zmdi zmdi-case"></i> Matters</a>
+      <a href="" toggle-submenu><i class="zmdi zmdi-case"></i> Generatore lettere di incarico</a>
       <ul>
         <li><a data-ui-sref-active="active" data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">Sent</a></li>
         <li><a data-ui-sref-active="active" data-ui-sref="page.matter-draft" data-ng-click="mactrl.sidebarStat($event)">Draft</a></li>
@@ -57,12 +57,21 @@
     </li>
 
     <li data-ui-sref-active="active">
+      <a data-ui-sref="page.documents" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment"></i> Documents</a>
+    </li>
+
+    <li data-ui-sref-active="active">
       <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Invoices</a>
     </li>
 
     <li data-ui-sref-active="active">
-      <a data-ui-sref="page.documents" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment"></i> Documents</a>
+      <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Vademecum</a>
     </li>
+
+    <li data-ui-sref-active="active">
+      <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Modelli</a>
+    </li>
+
 
     <!-- <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('headers') }">
       <a href="" toggle-submenu><i class="zmdi zmdi-view-compact"></i> Headers</a>
