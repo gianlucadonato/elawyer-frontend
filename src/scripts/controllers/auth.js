@@ -79,23 +79,21 @@
         });
     };
 
-
-    $scope.defaultEmail = $stateParams.email;
-    $scope.change = function(credentials) {
-      // Reset Form
-      $scope.changeForm.$setPristine();
-      $scope.sent = false;
-      credentials.token = $stateParams.token;
-      credentials.email = $stateParams.email;
-
+    $scope.change_password = function(form) {
+      var data = {
+        password: form.password,
+        token: $stateParams.t,
+        email: $stateParams.e
+      };
       Auth
-        .change(credentials)
+        .change_password(data)
         .then(function(res){
-          Notify.success('Success', 'Password set succesfully. Login to continue');
-          $state.go('auth.login');
+          Auth.setToken(res.data.token);
+          $state.go('profile.details', {id: res.data.owner_id});
+          Notify.success('Success', 'Password changed successfully!');
         })
         .catch(function(err){
-            Notify.error('Error', 'We encountered an error in changin your password. Maybe reset token link is expired');
+          Notify.error('Error', 'We encountered an error in changing your password. Maybe reset token link is expired');
         });
     };
 
