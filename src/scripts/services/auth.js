@@ -39,7 +39,7 @@
 
     // Check user auth status
     auth.isAuthenticated = function() {
-      if(auth.getUser() && auth.getToken()) {
+      if(auth.getToken()) {
         $rootScope.isAuthenticated = true;
         $rootScope.$broadcast('isAuthenticated');
         return true;
@@ -57,10 +57,9 @@
       $http
         .post(API.host + '/api/auth/sign_up', credentials)
         .then(function(res){
-          auth.setUser(res.data.user);
           auth.setToken(res.data.token);
           $rootScope.isAuthenticated = true;
-          deferred.resolve(res);
+          deferred.resolve(res.data);
         })
         .catch(function(err){
           deferred.reject(err);
@@ -68,43 +67,14 @@
       return deferred.promise;
     };
 
-    auth.change = function(credentials) {
-      var deferred = $q.defer();
-      $http
-        .put(API.host + '/api/auth/change_password', credentials)
-        .then(function(res){
-          deferred.resolve(res);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
-    };
-
-
-    auth.forgot = function(credentials) {
-      var deferred = $q.defer();
-      $http
-        .post(API.host + '/api/auth/reset_password', credentials)
-        .then(function(res){
-          $rootScope.isAuthenticated = false;
-          deferred.resolve(res);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
-    };
-
-    auth.login = function(credentials) {   
+    auth.login = function(credentials) {
       var deferred = $q.defer();
       $http
         .post(API.host + '/api/auth/sign_in', credentials)
         .then(function(res){
-          auth.setUser(res.data.user);
           auth.setToken(res.data.token);
           $rootScope.isAuthenticated = true;
-          deferred.resolve(res.data.user);
+          deferred.resolve(res.data);
         })
         .catch(function(err){
           deferred.reject(err);
@@ -119,6 +89,34 @@
       $rootScope.isAuthenticated = false;
       $rootScope.$broadcast('isNotAuthenticated');
       deferred.resolve(true);
+      return deferred.promise;
+    };
+
+    auth.change_password = function(data) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/auth/change_password', data)
+        .then(function(res){
+          deferred.resolve(res);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+
+    auth.reset_password = function(data) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/auth/reset_password', data)
+        .then(function(res){
+          $rootScope.isAuthenticated = false;
+          deferred.resolve(res);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
       return deferred.promise;
     };
 

@@ -6,7 +6,7 @@
    * Authentication Controller
    * =========================================================*/
 
-  App.controller('AuthenticationCtrl', function($scope, $state, Auth, Notify, $stateParams){
+  App.controller('AuthenticationCtrl', function($scope, $state, $timeout, Auth, User, Notify, $stateParams){
 
     /*===============
      * STD AUTH
@@ -21,7 +21,12 @@
       Auth
         .signup(credentials)
         .then(function(res){
-          $state.go('profile.details', {id: res.data.user.id});
+          User.get({id: res.owner_id}).then(function(user){
+            Auth.setUser(user);
+            $state.go('profile.details', {id: user.id});
+          }).catch(function(e){
+            Notify.error('Error!', 'Unable to retrieve user info');
+          });
         })
         .catch(function(err){
           if(err.status === 409) { // Email already in use
@@ -37,45 +42,6 @@
         });
     };
 
-
-
-    $scope.defaultEmail = $stateParams.email;
-    $scope.change = function(credentials) {
-      // Reset Form
-      $scope.changeForm.$setPristine();
-      $scope.sent = false; 
-      credentials.token = $stateParams.token;
-      credentials.email = $stateParams.email;
-     
-      Auth
-        .change(credentials)
-        .then(function(res){
-          Notify.success('Success', 'Password set succesfully. Login to continue');
-          $state.go('auth.login');
-        })
-        .catch(function(err){
-            Notify.error('Error', 'We encountered an error in changin your password. Maybe reset token link is expired');
-        });
-    };
-
-    $scope.forget_password = function(credentials) {
-      // Reset Form
-      $scope.signupForm.$setPristine();
-      $scope.signupForm.email.$error.invalid = false;
-      $scope.signupForm.email.$error.alreadyInUse = false;
-      $scope.sent = false;
-     
-      Auth
-        .forgot(credentials)
-        .then(function(res){
-          Notify.success('Success', 'Reset link sent succesfully');
-          $scope.sent = true;
-        })
-        .catch(function(err){
-            Notify.error('Error', 'We encountered an error in sending a reset link. Maybe you registerd with a different email');
-        });
-    };
-
     $scope.login = function(credentials) {
       // Reset Form
       $scope.loginForm.$setPristine();
@@ -85,8 +51,13 @@
 
       Auth
         .login(credentials)
-        .then(function(user){
-          $state.go('profile.details', {id: user.id});
+        .then(function(res){
+          User.get({id: res.owner_id}).then(function(user){
+            Auth.setUser(user);
+            $state.go('profile.details', {id: user.id});
+          }).catch(function(e){
+            Notify.error('Error!', 'Unable to retrieve user info');
+          });
         })
         .catch(function(err){
           if(err.status === 404) // Invalid Email
@@ -105,6 +76,43 @@
         .logout()
         .then(function(res){
           $state.go('auth.login');
+        });
+    };
+
+
+    $scope.defaultEmail = $stateParams.email;
+    $scope.change = function(credentials) {
+      // Reset Form
+      $scope.changeForm.$setPristine();
+      $scope.sent = false;
+      credentials.token = $stateParams.token;
+      credentials.email = $stateParams.email;
+
+      Auth
+        .change(credentials)
+        .then(function(res){
+          Notify.success('Success', 'Password set succesfully. Login to continue');
+          $state.go('auth.login');
+        })
+        .catch(function(err){
+            Notify.error('Error', 'We encountered an error in changin your password. Maybe reset token link is expired');
+        });
+    };
+
+    $scope.reset_password = function(data) {
+      $scope.isSending = true;
+      Auth
+        .reset_password(data)
+        .then(function(res){
+          $timeout(function(){
+            Notify.success('Success', 'If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.');
+            $scope.isSending = false;
+            $state.go('auth.login');
+          }, 1000);
+        })
+        .catch(function(err){
+          $scope.isSending = false;
+          Notify.error('Error', 'Unable to complete the operation.');
         });
     };
 

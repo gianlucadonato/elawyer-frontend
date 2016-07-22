@@ -15,7 +15,6 @@
     //
     // Application Routes
     // -----------------------------------
-
     $stateProvider
       // .state('home', {
       //   url: '/',
@@ -30,18 +29,6 @@
         abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
-      .state('auth.forgot_password', {
-        url: '/passwordforgot',
-        title: 'Forgot password',
-        templateUrl: helper.pagesPath('forgot.html'),
-        controller: 'AuthenticationCtrl'
-      })
-      .state('auth.change_password', {
-        url: '/change_password/:token/:email',
-        title: 'Change password',
-        templateUrl: helper.pagesPath('change.html'),
-        controller: 'AuthenticationCtrl'
-      })
       .state('auth.login', {
         url: '/',
         title: 'Login',
@@ -52,6 +39,18 @@
         url: '/signup',
         title: 'Signup',
         templateUrl: helper.pagesPath('signup.html'),
+        controller: 'AuthenticationCtrl'
+      })
+      .state('auth.reset_password', {
+        url: '/reset_password',
+        title: 'Reset password',
+        templateUrl: helper.pagesPath('reset-password.html'),
+        controller: 'AuthenticationCtrl'
+      })
+      .state('auth.change_password', {
+        url: '/change_password',
+        title: 'Change password',
+        templateUrl: helper.pagesPath('change-password.html'),
         controller: 'AuthenticationCtrl'
       })
       //------------------------------
