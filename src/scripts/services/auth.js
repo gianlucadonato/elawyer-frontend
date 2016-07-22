@@ -6,14 +6,26 @@
    * Authentication Service
    =========================================================*/
 
-  App.factory('Auth', function ($rootScope, $q, $http, $localStorage, API) {
+  App.factory('Auth', function ($rootScope, $q, $http, $localStorage, jwtHelper, User, API) {
     var auth = {};
 
     /* =======================================
      * Getter & Setters
      * =======================================*/
     auth.getUser = function() {
-      return $localStorage.current_user;
+      var deferred = $q.defer();
+      if($localStorage.current_user) {
+        auth.setUser($localStorage.current_user);
+        deferred.resolve($localStorage.current_user);
+      } else {
+        var jwtToken = auth.getToken();
+        var payload = jwtHelper.decodeToken(jwtToken);
+        User.get({id: payload.owner_id}).then(function(data){
+          auth.setUser(data);
+          deferred.resolve(data);
+        });
+      }
+      return deferred.promise;
     };
 
     auth.setUser = function(user) {
@@ -39,7 +51,8 @@
 
     // Check user auth status
     auth.isAuthenticated = function() {
-      if(auth.getToken()) {
+      var jwtToken = auth.getToken();
+      if(jwtToken && !jwtHelper.isTokenExpired(jwtToken)) {
         $rootScope.isAuthenticated = true;
         $rootScope.$broadcast('isAuthenticated');
         return true;

@@ -6,7 +6,7 @@
   * Application Controller
   =========================================================*/
 
-  App.controller('AppCtrl', function($rootScope, $scope, $state, $timeout, Auth) {
+  App.controller('AppCtrl', function($rootScope, $scope, $state, $timeout, jwtHelper, User, Auth) {
 
     var self = this;
 
@@ -23,7 +23,6 @@
 
     // Events
     $rootScope.$on('isAuthenticated', function(){
-      $rootScope.current_user = Auth.getUser();
       self.layoutType = 1;
     });
 
