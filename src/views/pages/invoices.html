@@ -15,7 +15,16 @@
             <td data-title="'Title'" sortable="'title'">
               <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
             </td>
-            <td data-title="'Payment'" sortable="'status'">
+            <td data-title="'Paid'" sortable="'m.paid'">
+              <div class="flag flag-pending" ng-if="!m.paid">Not Paid</div>
+              <div class="flag flag-success" ng-if="m.paid">Paid</div>
+            </td>
+            <td data-title="'Type'">
+              <div ng-if="m.is_deposit">Deposit</div>
+              <div ng-if="m.is_balance">Balance</div>
+              <div ng-if="!m.is_balance && !m.is_deposit">Summary</div>
+            </td>
+            <td data-title="'Payment'" sortable="'m.is_confirmed'">
               <div class="flag flag-success" ng-if="m.is_confirmed">Confirmed</div>
               <div class="flag flag-closed" ng-if="!m.is_confirmed">Not Confirmed</div>
             </td>
@@ -42,7 +51,16 @@
             <td data-title="'Title'" sortable="'title'">
               <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
             </td>
-            <td data-title="'Payment'" sortable="'status'">
+            <td data-title="'Paid'" sortable="'m.paid'">
+              <div class="flag flag-pending" ng-if="!m.paid">Not Paid</div>
+              <div class="flag flag-success" ng-if="m.paid">Paid</div>
+            </td>
+            <td data-title="'Type'">
+              <div ng-if="m.is_deposit">Deposit</div>
+              <div ng-if="m.is_balance">Balance</div>
+              <div ng-if="!m.is_balance && !m.is_deposit">Summary</div>
+            </td>
+            <td data-title="'Payment'" sortable="'m.is_confirmed'">
               <div class="flag flag-success" ng-if="m.is_confirmed">Confirmed</div>
               <div class="flag flag-closed" ng-if="!m.is_confirmed">Not Confirmed</div>
             </td>

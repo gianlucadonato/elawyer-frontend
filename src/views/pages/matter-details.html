@@ -180,7 +180,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="i in matter.items" ng-if="i.is_selected || i.is_mandatory" class="outputService">
+                <tr ng-repeat="i in matter.items" class="outputService">
                   <td>{{i.title}}</td>
                   <td>€ {{i.price | prettyNumber}}</td>
                 </tr>
@@ -224,6 +224,16 @@
                   <th id="total">€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
                 </tr>
 
+                <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
+                  <th>Acconto</th>
+                  <th id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: matter.deposit) | prettyNumber}}</th>
+                </tr>
+
+                <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
+                  <th>Saldo</th>
+                  <th id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
+                </tr>
+
                 <tr ng-if="matter.withholding_tax">
                   <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
                   <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
@@ -232,6 +242,16 @@
                 <tr ng-if="matter.withholding_tax">
                   <th>Netto da versare</th>
                   <th id="total_withholding_tax">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
+                </tr>
+
+                <tr ng-if="matter.deposit > 0 && matter.withholding_tax">
+                  <th>Acconto</th>
+                  <th id="total_withholding_tax_acconto">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: matter.deposit) | prettyNumber}}</th>
+                </tr>
+
+                <tr ng-if="matter.deposit > 0 && matter.withholding_tax">
+                  <th>Saldo</th>
+                  <th id="total_withholding_tax_saldo">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
                 </tr>
               </tbody>
             </table>
@@ -242,7 +262,7 @@
             <i class="zmdi zmdi-arrow-back"></i>Back
           </button>
           <button class="btn btn-success btn-icon-text waves-effect" ng-click="pay()" ng-if="current_user.id == matter.customer.id && !matter.invoice_id">
-            <i class="zmdi zmdi-check"></i>Confirm & Pay
+            <i class="zmdi zmdi-check"></i>Confirm & Pay <span ng-if="matter.deposit">deposit</span>
           </button>
         </div>
     </div>

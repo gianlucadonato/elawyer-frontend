@@ -31,8 +31,6 @@
       }
     }
 
-
-
     Matter.api.areas().then(function(data) {
       $scope.areas = data;
     }).catch(function(err) {
@@ -45,6 +43,7 @@
       Matter.api.get($stateParams.id).then(function(data) {
         preventSave = true;
         $scope.matter = data;
+        calcTotal();
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
       });
@@ -59,8 +58,12 @@
 
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
+
+      $scope.matter.deposit = parseFloat($scope.matter.deposit);
+
       if(!angular.equals(oldValue, newValue) && !preventSave) {
 
+        $scope.isntSaved = true;
 
         if ($scope.matter.area_of_interest == '____manual____') {
           $scope.matter.area_of_interest = '';
@@ -70,8 +73,10 @@
         if (timeout) {
           $timeout.cancel(timeout); // debounce 1sec.
         }
+
         timeout = $timeout(function() {
           $scope.isSaving = true;
+          $scope.isntSaved = false;
           $scope.errorSaving = false;
           calcTotal();
           Matter.api.save(newValue).then(function(data) {
@@ -83,6 +88,7 @@
               $scope.errorSaving = false;
             }, 1000);
           }).catch(function(err){
+            $scope.isntSaved = false;
             $scope.errorSaving = true;
             console.log('Unable to save matter', err);
           });
