@@ -37,6 +37,21 @@
       return deferred.promise;
     };
 
+    api.search = function(query) {
+      var deferred = $q.defer();
+      $http
+        .get(API.host + '/api/users/search', {
+          params: query
+        })
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     api.create = function(user) {
       var deferred = $q.defer();
       $http

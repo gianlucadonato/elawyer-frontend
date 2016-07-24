@@ -46,6 +46,7 @@
               var bd = data.birthday.split('/');
               data.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
             }
+            data.role = 10;
             User
               .create(data)
               .then(function(user){

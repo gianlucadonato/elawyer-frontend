@@ -14,9 +14,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="i in matter.items" class="outputService">
-                  <td>{{i.title}}</td>
-                  <td>€ {{i.price | prettyNumber}}</td>
+                <tr ng-repeat="matter in matter.items" class="outputService">
+                  <td>{{matter.title}}</td>
+                  <td>€ {{matter.price | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <th>&nbsp;</th>

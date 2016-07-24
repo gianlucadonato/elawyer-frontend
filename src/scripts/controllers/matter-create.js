@@ -6,7 +6,7 @@
   * Create New Matter
   =========================================================*/
 
-  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, Notify) {
+  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, User, Notify) {
 
     var self = this;
     var timeout = null;
@@ -24,6 +24,8 @@
     $scope.currentSrvPage = 0;
     $scope.totalSrvItems = 0;
     $scope.perPage = 5;
+
+    $scope.results = []; // Users
 
     function activate() {
       if($stateParams.id) { // Edit Page
@@ -62,9 +64,9 @@
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
 
-      $scope.matter.deposit = parseFloat($scope.matter.deposit);
-
       if(!angular.equals(newValue, oldValue) && !preventSave) {
+
+        calcTotal();
 
         if(newValue.title) {
           if (timeout) {
@@ -73,7 +75,6 @@
           timeout = $timeout(function() {
             $scope.isSaving = true;
             $scope.errorSaving = false;
-            calcTotal();
             Matter.api.save(newValue).then(function(data) {
               if(!newValue.id) // Prevent double saving
                 preventSave = true;
@@ -117,15 +118,37 @@
     };
 
     $scope.addTemplate= function(item) {
+      if($scope.matter.id) {
+        swal({
+          title: "Attenzione!",
+          text: "Importando un nuovo template verrà sovrascritto quanto scritto fin'ora.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#F44336",
+          confirmButtonText: "Importa",
+          cancelButtonText: "Annulla",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        }, function(isConfirm){
+          if (isConfirm) addTemplate(item);
+          else return false;
+        });
+      } else {
+        addTemplate(item);
+      }
+    };
+
+    function addTemplate(item) {
       var index = $scope.templates.indexOf(item);
       var template = angular.copy($scope.templates[index]);
       delete template.id;
       delete template.is_template;
       preventSave = true;
       $scope.matter = template;
+      calcTotal();
       Notify.success('OK!','Template imported successfully!');
       self.addTemplateModal.dismiss();
-    };
+    }
 
     $scope.saveAsTemplate = function(matter) {
       matter.is_template = true;
@@ -262,29 +285,46 @@
       });
     };
 
-    $scope.sendMatterTo = function(email) {
-      Matter.api.send({
-        id: $scope.matter.id,
-        email: email
-      }).then(function(data){
-        self.sendMatterModal.dismiss();
-        swal({
-          title: "Sent!",
-          text: "La lettera d'incarico è stata inviata correttamente.",
-          type: "success",
-          showCancelButton: false,
-          confirmButtonText: "OK!",
-          closeOnConfirm: true
-        }, function() {
-          $state.go('page.matter-details', $scope.matter);
+    $scope.searchUser = function(query) {
+      return User.search({
+        q: query
+      }).then(function(results){
+        return results.map(function(user){
+          return {
+            id: user.id,
+            name: user.first_name + ' ' + user.last_name,
+            email: user.email
+          };
         });
-      }).catch(function(err){
-        var errorMsg = 'Something went wrong :(';
-        if(err.status === 404) {
-          errorMsg = 'There is no user with this email!';
-        }
-        Notify.error('Error!', errorMsg);
       });
+    };
+
+    $scope.sendMatterTo = function(user) {
+      if($scope.matter.id)
+        Matter.api.send({
+          id: $scope.matter.id,
+          email: user.email
+        }).then(function(data){
+          self.sendMatterModal.dismiss();
+          swal({
+            title: "Sent!",
+            text: "La lettera d'incarico è stata inviata correttamente.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', $scope.matter);
+          });
+        }).catch(function(err){
+          var errorMsg = 'Something went wrong :(';
+          if(err.status === 404) {
+            errorMsg = 'There is no user with this email!';
+          }
+          Notify.error('Error!', errorMsg);
+        });
+      else
+        Notify.error('Error!', 'Inserire il titolo!');
     };
 
   });

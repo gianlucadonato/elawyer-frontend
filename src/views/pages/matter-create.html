@@ -181,8 +181,30 @@
     </div>
   </div>
 
+  <!-- PAYMENT SETTINGS -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Impostazioni di pagamento</h2>
+        </div>
+        <div class="card-body card-padding">
 
-  <div ng-include="'views/partials/payment-settings.html'"></div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-value="matter.withholding_tax" ng-model="matter.withholding_tax">
+              <i class="input-helper"></i>
+            </label>
+            <span>Ritenuta d'acconto</span>
+          </div>
+
+          <p class="f-500 c-black m-b-5">Percentuale acconto</p>
+          <input type="number" name="Title" class="form-control" placeholder="20" max="100" min="0" ng-model="matter.deposit" ng-value="matter.deposit">
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div ng-include="'views/partials/summary-table.html'"></div>
 </div>
