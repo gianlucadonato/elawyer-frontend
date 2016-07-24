@@ -29,13 +29,8 @@
       if($stateParams.id) { // Edit Page
         getMatter();
       }
+      getAreaOfInterest();
     }
-
-    Matter.api.areas().then(function(data) {
-      $scope.areas = data;
-    }).catch(function(err) {
-      Notify.error('Error!', 'Unable to load areas');
-    });
 
     activate();
 
@@ -46,6 +41,14 @@
         calcTotal();
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
+      });
+    }
+
+    function getAreaOfInterest() {
+      Matter.api.areas().then(function(data) {
+        $scope.areas = data;
+      }).catch(function(err) {
+        Notify.error('Error!', 'Unable to load areas');
       });
     }
 
@@ -61,38 +64,38 @@
 
       $scope.matter.deposit = parseFloat($scope.matter.deposit);
 
-      if(!angular.equals(oldValue, newValue) && !preventSave) {
+      if(!angular.equals(newValue, oldValue) && !preventSave) {
 
-        $scope.isntSaved = true;
+        if(newValue.title) {
+          if (timeout) {
+            $timeout.cancel(timeout); // debounce 1sec.
+          }
+          timeout = $timeout(function() {
+            $scope.isSaving = true;
+            $scope.errorSaving = false;
+            calcTotal();
+            Matter.api.save(newValue).then(function(data) {
+              if(!newValue.id) // Prevent double saving
+                preventSave = true;
+              $scope.matter.id = data.id;
+              $timeout(function() { // Only for design effect
+                $scope.isSaving = false;
+                $scope.errorSaving = false;
+              }, 1000);
+            }).catch(function(err){
+              $scope.errorSaving = true;
+              console.log('Unable to save matter', err);
+            });
+          }, 1000);
+        } else {
+          $scope.errorSaving = true;
+        }
 
-        if ($scope.matter.area_of_interest == '____manual____') {
+        if ($scope.matter.area_of_interest === '__manual__') {
           $scope.matter.area_of_interest = '';
-          $scope.manual = true;
+          $scope.insertArea = true;
         }
 
-        if (timeout) {
-          $timeout.cancel(timeout); // debounce 1sec.
-        }
-
-        timeout = $timeout(function() {
-          $scope.isSaving = true;
-          $scope.isntSaved = false;
-          $scope.errorSaving = false;
-          calcTotal();
-          Matter.api.save(newValue).then(function(data) {
-            if(!newValue.id) // Prevent double saving
-              preventSave = true;
-            $scope.matter.id = data.id;
-            $timeout(function() { // Only for design effect
-              $scope.isSaving = false;
-              $scope.errorSaving = false;
-            }, 1000);
-          }).catch(function(err){
-            $scope.isntSaved = false;
-            $scope.errorSaving = true;
-            console.log('Unable to save matter', err);
-          });
-        }, 1000);
       } else {
         preventSave = false;
       }
