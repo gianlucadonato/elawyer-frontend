@@ -14,11 +14,11 @@
     <ul class="main-menu">
       <li>
         <a data-ui-sref="profile.details({id: current_user.id})" data-ng-click="mactrl.sidebarStat($event)">
-          <i class="zmdi zmdi-account"></i> View Profile
+          <i class="zmdi zmdi-account"></i> Profilo
         </a>
       </li>
       <li>
-        <a href=""><i class="zmdi zmdi-settings"></i> Settings</a>
+        <a href=""><i class="zmdi zmdi-settings"></i> Impostazioni</a>
       </li>
       <li ng-controller="AuthenticationCtrl">
         <a href="" ng-click="logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
@@ -34,10 +34,10 @@
 
     <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('users') }"
       permission permission-only="['LAWYER', 'ADMIN']">
-      <a href="" toggle-submenu><i class="zmdi zmdi-accounts"></i> Users</a>
+      <a href="" toggle-submenu><i class="zmdi zmdi-accounts"></i> Utenti</a>
       <ul>
-        <li><a data-ui-sref-active="active" data-ui-sref="page.customer-list" data-ng-click="mactrl.sidebarStat($event)">Customers</a></li>
-        <li><a data-ui-sref-active="active" data-ui-sref="page.lawyer-list" data-ng-click="mactrl.sidebarStat($event)">Lawyers</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.customer-list" data-ng-click="mactrl.sidebarStat($event)">Clienti</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.lawyer-list" data-ng-click="mactrl.sidebarStat($event)">Avvocati</a></li>
       </ul>
     </li>
 
@@ -51,17 +51,17 @@
       permission permission-only="['LAWYER', 'ADMIN']">
       <a href="" toggle-submenu><i class="zmdi zmdi-case"></i> Lettere di incarico</a>
       <ul>
-        <li><a data-ui-sref-active="active" data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">Sent</a></li>
-        <li><a data-ui-sref-active="active" data-ui-sref="page.matter-draft" data-ng-click="mactrl.sidebarStat($event)">Draft</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">Spedite</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.matter-draft" data-ng-click="mactrl.sidebarStat($event)">Bozze</a></li>
       </ul>
     </li>
 
     <li data-ui-sref-active="active">
-      <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Invoices</a>
+      <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Ricevute</a>
     </li>
 
     <li data-ui-sref-active="active">
-      <a data-ui-sref="page.documents" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment"></i> Documents</a>
+      <a data-ui-sref="page.documents" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment"></i> Documenti</a>
     </li>
 
     <!-- <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('headers') }">
