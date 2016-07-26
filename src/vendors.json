@@ -52,5 +52,7 @@
   "src/bower_components/bootswatch/paper/bootstrap.min.css",
   "src/bower_components/font-awesome/css/font-awesome.min.css",
   "src/bower_components/loaders.css/loaders.min.css",
-  "src/bower_components/jspdf/dist/jspdf.min.js"
+  "src/bower_components/jspdf/dist/jspdf.min.js",
+  "src/bower_components/chosen/chosen.jquery.js",
+  "src/bower_components/chosen/chosen.css"
 ]

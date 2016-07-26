@@ -48,7 +48,7 @@
         controller: 'AuthenticationCtrl'
       })
       .state('auth.change_password', {
-        url: '/change_password',
+        url: '/change_password?t&e',
         title: 'Change password',
         templateUrl: helper.pagesPath('change-password.html'),
         controller: 'AuthenticationCtrl'

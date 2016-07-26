@@ -1,6 +1,6 @@
 <div class="container matter matter-edit">
   <div class="block-header flex">
-    <h2>Edit Matter:</h2>
+    <h2>MODIFICA LETTERA DI INCARICO:</h2>
     <a ui-sref="page.matter-details(matter)">{{matter.title}}</a>
     <ul class="actions">
       <li tooltip-placement="bottom" uib-tooltip="Save as Template">
@@ -50,7 +50,7 @@
                     </td>
                     <td>
                       <div class="form-group">
-                        <textarea rows="2" class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
                       </div>
                     </td>
                     <td>
@@ -60,12 +60,12 @@
                     </td>
                     <td>
                       <div class="form-group">
-                        <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!manual">
-                          <option value="default" disabled selected>Select Area</option>
-                          <option ng-repeat="i in areas" value="{{i}}">{{i}}</option>
-                          <option value="____manual____">Immetti manualmente</option>
+                        <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!insertArea">
+                          <option value="" disabled selected>Select Area</option>
+                          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
+                          <option value="__manual__">Immetti manualmente</option>
                         </select>
-                        <input ng-show="manual" type="text" class="form-control" placeholder="area of interest" ng-model="matter.area_of_interest">
+                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Insert Area" ng-model="matter.area_of_interest">
                       </div>
                     </td>
                     <td>
@@ -117,7 +117,7 @@
                         <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="item.title">
                       </div>
                       <div class="form-group">
-                        <textarea rows="2" class="form-control" placeholder="Description" ng-model="item.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Description" ng-model="item.description"></textarea>
                       </div>
                       <div class="checkbox">
                         <label>
@@ -138,7 +138,7 @@
                                 <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="subItem.title">
                               </div>
                               <div class="form-group">
-                                <textarea rows="2" class="form-control" placeholder="Description" ng-model="subItem.description"></textarea>
+                                <textarea auto-size class="form-control" placeholder="Description" ng-model="subItem.description"></textarea>
                               </div>
                             </form>
                             <div class="btn-remove">
@@ -187,11 +187,10 @@
 
         <div class="card-footer card-padding card-actions">
           <div tooltip-placement="bottom" uib-tooltip="Save in Draft" class="save-as-draft">
-            <span ng-if="isSaving && !errorSaving">Saving...</span>
-            <span ng-if="errorSaving">Error in saving this matter. Please insert a title</span>
-            <span ng-if="!isSaving && !isntSaved">Saved</span>
-            <span ng-if="isntSaved && !errorSaving && !isSaving">Not saved.</span>
-            <a href="" ng-class="{'is-saving': isSaving && !isntSaved}"><i class="zmdi zmdi-check-all"></i></a>
+            <span ng-if="isSaving">Saving...</span>
+            <span ng-if="errorSaving">Error in saving. Please insert a title</span>
+            <span ng-if="!isSaving && !errorSaving">Saved</span>
+            <a href="" ng-class="{'is-saving': (isSaving || errorSaving)}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
           <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Add Service</button>
         </div>
@@ -200,7 +199,30 @@
     </div>
   </div>
 
-  <div ng-include="'views/partials/payment-settings.html'"></div>
+  <!-- PAYMENT SETTINGS -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Impostazioni di pagamento</h2>
+        </div>
+        <div class="card-body card-padding">
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-value="matter.withholding_tax" ng-model="matter.withholding_tax">
+              <i class="input-helper"></i>
+            </label>
+            <span>Ritenuta d'acconto</span>
+          </div>
+
+          <p class="f-500 c-black m-b-5">Percentuale acconto</p>
+          <input type="number" name="Title" class="form-control" placeholder="20" max="100" min="0" ng-model="matter.deposit" ng-value="matter.deposit">
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div ng-include="'views/partials/summary-table.html'"></div>
 </div>

@@ -6,7 +6,7 @@
   * Create New Matter
   =========================================================*/
 
-  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, Notify) {
+  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, User, Notify) {
 
     var self = this;
     var timeout = null;
@@ -25,17 +25,14 @@
     $scope.totalSrvItems = 0;
     $scope.perPage = 5;
 
+    $scope.results = []; // Users
+
     function activate() {
       if($stateParams.id) { // Edit Page
         getMatter();
       }
+      getAreaOfInterest();
     }
-
-    Matter.api.areas().then(function(data) {
-      $scope.areas = data;
-    }).catch(function(err) {
-      Notify.error('Error!', 'Unable to load areas');
-    });
 
     activate();
 
@@ -53,6 +50,14 @@
       return input/100 * percentage;
     }
 
+
+    function getAreaOfInterest() {
+      Matter.api.areas().then(function(data) {
+        $scope.areas = data;
+      }).catch(function(err) {
+        Notify.error('Error!', 'Unable to load areas');
+      });
+    }
 
     function calcTotal() {
       $scope.total = 0;
@@ -74,40 +79,39 @@
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
 
-      $scope.matter.deposit = parseFloat($scope.matter.deposit);
+      if(!angular.equals(newValue, oldValue) && !preventSave) {
 
-      if(!angular.equals(oldValue, newValue) && !preventSave) {
+        calcTotal();
 
-        $scope.isntSaved = true;
+        if(newValue.title) {
+          if (timeout) {
+            $timeout.cancel(timeout); // debounce 1sec.
+          }
+          timeout = $timeout(function() {
+            $scope.isSaving = true;
+            $scope.errorSaving = false;
+            Matter.api.save(newValue).then(function(data) {
+              if(!newValue.id) // Prevent double saving
+                preventSave = true;
+              $scope.matter.id = data.id;
+              $timeout(function() { // Only for design effect
+                $scope.isSaving = false;
+                $scope.errorSaving = false;
+              }, 1000);
+            }).catch(function(err){
+              $scope.errorSaving = true;
+              console.log('Unable to save matter', err);
+            });
+          }, 1000);
+        } else {
+          $scope.errorSaving = true;
+        }
 
-        if ($scope.matter.area_of_interest == '____manual____') {
+        if ($scope.matter.area_of_interest === '__manual__') {
           $scope.matter.area_of_interest = '';
-          $scope.manual = true;
+          $scope.insertArea = true;
         }
 
-        if (timeout) {
-          $timeout.cancel(timeout); // debounce 1sec.
-        }
-
-        timeout = $timeout(function() {
-          $scope.isSaving = true;
-          $scope.isntSaved = false;
-          $scope.errorSaving = false;
-          calcTotal();
-          Matter.api.save(newValue).then(function(data) {
-            if(!newValue.id) // Prevent double saving
-              preventSave = true;
-            $scope.matter.id = data.id;
-            $timeout(function() { // Only for design effect
-              $scope.isSaving = false;
-              $scope.errorSaving = false;
-            }, 1000);
-          }).catch(function(err){
-            $scope.isntSaved = false;
-            $scope.errorSaving = true;
-            console.log('Unable to save matter', err);
-          });
-        }, 1000);
       } else {
         preventSave = false;
       }
@@ -129,15 +133,37 @@
     };
 
     $scope.addTemplate= function(item) {
+      if($scope.matter.id) {
+        swal({
+          title: "Attenzione!",
+          text: "Importando un nuovo template verrà sovrascritto quanto scritto fin'ora.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#F44336",
+          confirmButtonText: "Importa",
+          cancelButtonText: "Annulla",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        }, function(isConfirm){
+          if (isConfirm) addTemplate(item);
+          else return false;
+        });
+      } else {
+        addTemplate(item);
+      }
+    };
+
+    function addTemplate(item) {
       var index = $scope.templates.indexOf(item);
       var template = angular.copy($scope.templates[index]);
       delete template.id;
       delete template.is_template;
       preventSave = true;
       $scope.matter = template;
+      calcTotal();
       Notify.success('OK!','Template imported successfully!');
       self.addTemplateModal.dismiss();
-    };
+    }
 
     $scope.saveAsTemplate = function(matter) {
       matter.is_template = true;
@@ -274,29 +300,46 @@
       });
     };
 
-    $scope.sendMatterTo = function(email) {
-      Matter.api.send({
-        id: $scope.matter.id,
-        email: email
-      }).then(function(data){
-        self.sendMatterModal.dismiss();
-        swal({
-          title: "Sent!",
-          text: "La lettera d'incarico è stata inviata correttamente.",
-          type: "success",
-          showCancelButton: false,
-          confirmButtonText: "OK!",
-          closeOnConfirm: true
-        }, function() {
-          $state.go('page.matter-details', $scope.matter);
+    $scope.searchUser = function(query) {
+      return User.search({
+        q: query
+      }).then(function(results){
+        return results.map(function(user){
+          return {
+            id: user.id,
+            name: user.first_name + ' ' + user.last_name,
+            email: user.email
+          };
         });
-      }).catch(function(err){
-        var errorMsg = 'Something went wrong :(';
-        if(err.status === 404) {
-          errorMsg = 'There is no user with this email!';
-        }
-        Notify.error('Error!', errorMsg);
       });
+    };
+
+    $scope.sendMatterTo = function(user) {
+      if($scope.matter.id)
+        Matter.api.send({
+          id: $scope.matter.id,
+          email: user.email
+        }).then(function(data){
+          self.sendMatterModal.dismiss();
+          swal({
+            title: "Sent!",
+            text: "La lettera d'incarico è stata inviata correttamente.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', $scope.matter);
+          });
+        }).catch(function(err){
+          var errorMsg = 'Something went wrong :(';
+          if(err.status === 404) {
+            errorMsg = 'There is no user with this email!';
+          }
+          Notify.error('Error!', errorMsg);
+        });
+      else
+        Notify.error('Error!', 'Inserire il titolo!');
     };
 
   });

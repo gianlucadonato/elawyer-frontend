@@ -1,51 +1,71 @@
 <div class="container matter matter-create">
   <div class="block-header">
-    <h2>New Matter</h2>
+    <h2>Nuova Lettera di incarico</h2>
+    <ul class="actions">
+      <li tooltip-placement="bottom" uib-tooltip="Save as Template">
+        <a href="" ng-click="saveAsTemplate(matter)"><i class="fa fa-floppy-o"></i></a>
+      </li>
+      <li tooltip-placement="bottom" uib-tooltip="Import from Template">
+        <a href="" ng-click="importTemplate()"><i class="zmdi zmdi-download"></i></a>
+      </li>
+      <li class="dropdown" uib-dropdown>
+        <a href="" uib-dropdown-toggle>
+          <i class="zmdi zmdi-more-vert"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a href="">Refresh</a>
+          </li>
+          <li>
+            <a href="">Other</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
 
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header ch-alt m-b-20">
-
           <form>
-            <div class="form-group">
-              <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="matter.title">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Description" ng-model="matter.description">
-            </div>
-            <div class="form-group">
-              <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!manual">
-                <option value="default" disabled selected>Select Area</option>
-                <option ng-repeat="i in areas" value="{{i}}">{{i}}</option>
-                <option value="____manual____">Immetti manualmente</option>
-              </select>
-              <input ng-show="manual" type="text" class="form-control" placeholder="area of interest" ng-model="matter.area_of_interest">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Area</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="matter.title">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <textarea auto-size class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!insertArea">
+                          <option value="" disabled selected>Select Area</option>
+                          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
+                          <option value="__manual__">Immetti manualmente</option>
+                        </select>
+                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Insert Area" ng-model="matter.area_of_interest">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </form>
 
-          <ul class="actions">
-            <li tooltip-placement="bottom" uib-tooltip="Save as Template">
-              <a href="" ng-click="saveAsTemplate(matter)"><i class="fa fa-floppy-o"></i></a>
-            </li>
-            <li tooltip-placement="bottom" uib-tooltip="Import from Template">
-              <a href="" ng-click="importTemplate()"><i class="zmdi zmdi-download"></i></a>
-            </li>
-            <li class="dropdown" uib-dropdown>
-              <a href="" uib-dropdown-toggle>
-                <i class="zmdi zmdi-more-vert"></i>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-right">
-                <li>
-                  <a href="">Refresh</a>
-                </li>
-                <li>
-                  <a href="">Other</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
           <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importService()"
             tooltip-placement="bottom" uib-tooltip="Import Service">
             <i class="zmdi zmdi-plus"></i>
@@ -79,7 +99,7 @@
                         <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="item.title">
                       </div>
                       <div class="form-group">
-                        <textarea rows="2" class="form-control" placeholder="Description" ng-model="item.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Description" ng-model="item.description"></textarea>
                       </div>
                       <div class="checkbox">
                         <label>
@@ -100,7 +120,7 @@
                                 <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="subItem.title">
                               </div>
                               <div class="form-group">
-                                <textarea rows="2" class="form-control" placeholder="Description" ng-model="subItem.description"></textarea>
+                                <textarea auto-size class="form-control" placeholder="Description" ng-model="subItem.description"></textarea>
                               </div>
                             </form>
                             <div class="btn-remove">
@@ -149,11 +169,10 @@
 
         <div class="card-footer card-padding card-actions">
           <div tooltip-placement="bottom" uib-tooltip="Save in Draft" class="save-as-draft">
-            <span ng-if="isSaving && !errorSaving">Saving...</span>
-            <span ng-if="errorSaving">Error in saving this matter. Please insert a title</span>
-            <span ng-if="!isSaving && !isntSaved">Saved</span>
-            <span ng-if="isntSaved && !errorSaving && !isSaving">Not saved.</span>
-            <a href="" ng-class="{'is-saving': isSaving}"><i class="zmdi zmdi-check-all"></i></a>
+            <span ng-if="isSaving">Saving...</span>
+            <span ng-if="errorSaving">Error in saving. Please insert a title</span>
+            <span ng-if="!isSaving && !errorSaving">Saved</span>
+            <a href="" ng-class="{'is-saving': (isSaving || errorSaving)}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
           <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Add Service</button>
         </div>
@@ -162,8 +181,30 @@
     </div>
   </div>
 
+  <!-- PAYMENT SETTINGS -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Impostazioni di pagamento</h2>
+        </div>
+        <div class="card-body card-padding">
 
-  <div ng-include="'views/partials/payment-settings.html'"></div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-value="matter.withholding_tax" ng-model="matter.withholding_tax">
+              <i class="input-helper"></i>
+            </label>
+            <span>Ritenuta d'acconto</span>
+          </div>
+
+          <p class="f-500 c-black m-b-5">Percentuale acconto</p>
+          <input type="number" name="Title" class="form-control" placeholder="20" max="100" min="0" ng-model="matter.deposit" ng-value="matter.deposit">
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div ng-include="'views/partials/summary-table.html'"></div>
 </div>
