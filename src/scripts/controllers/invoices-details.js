@@ -6,7 +6,7 @@
   * InvoiceDetails Controller
   =========================================================*/
 
-  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, Matter, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.showNext = false;
 
@@ -16,37 +16,12 @@
 
     activate();
 
-    function getComputedDataFromTable() {
 
-    var output = {
-        totalPrice: 0,
-        deposit: 0,
-        balance: 0
-      }
-
-      function getRaw(el) {
-        return el.text().replace(/ /g, "").replace(/,/g, "").replace("€", "");
-      }
-
-      if ($scope.invoice.matter.withholding_tax) {
-        output['totalPrice'] = getRaw($("#total_withholding_tax"));
-      } else {
-        output['totalPrice'] = getRaw($("#total"));
-      }
-
-
-      if ($scope.invoice.matter.deposit > 0) {
-        if ($scope.invoice.matter.withholding_tax) {
-          output['deposit'] = getRaw($("#total_withholding_tax_acconto"));
-          output['balance'] = getRaw($("#total_withholding_tax_saldo"));
-        } else {
-          output['deposit'] = getRaw($("#total_acconto"));
-          output['balance'] = getRaw($("#total_saldo"));
-        }
-      }
-
-      return output;
+    function calcTotal() {
+      $scope.total = $scope.total || 0;
+      $scope.invoice.payment_settings = Matter.editor().getPrice(parseFloat($scope.invoice.amount));
     }
+
 
     $scope.pay = function() {
       self.pm = $uibModal.open({
@@ -82,16 +57,13 @@
       self.pm.dismiss();
 
       var options = {
-        services: getComputedDataFromTable().paidServices,
-        amount: getComputedDataFromTable().totalPrice * 100,
-        deposit: getComputedDataFromTable().deposit * 100,
-        balance: getComputedDataFromTable().balance * 100
+        paying: ($scope.invoice.payment_settings.total - ($scope.invoice.matter.withholding_tax ? $scope.invoice.payment_settings.withholding_tax : 0)) * 100
       };
 
       Invoice.api.pay($scope.invoice.id, options)
         .then(function(res) {
-          console.log(res)
           $scope.invoice = res;
+          calcTotal();
           swal({
             title: "Evidenza ricevuta!",
             text: "Abbiamo ricevuto un'evidenda di pagamento. Attendi la verifica dei nostri operatori.",
@@ -122,19 +94,20 @@
       var stripe = StripeCheckout.configure({});
 
       var options = {
-        services: getComputedDataFromTable().paidServices,
-        amount: getComputedDataFromTable().totalPrice * 100,
-        deposit: getComputedDataFromTable().deposit * 100,
-        balance: getComputedDataFromTable().balance * 100
+        paying: ($scope.invoice.payment_settings.total - ($scope.invoice.matter.withholding_tax ? $scope.invoice.payment_settings.withholding_tax : 0)) * 100
       };
 
-      stripe.open({amount: options.balance, currency: "EUR", email: $scope.invoice.customer.email})
+      stripe.open({amount: options.paying, currency: "EUR", email: $scope.invoice.customer.email})
         .then(function(result) {
 
           options['token'] = result[0].id;
 
           Invoice.api.pay($scope.invoice.id, options)
             .then(function(res) {
+
+              $scope.invoice = res;
+              calcTotal();
+
               swal({
                 title: "Paid!",
                 text: "La lettera d'incarico è stata pagata correttamente.",
@@ -143,7 +116,7 @@
                 confirmButtonText: "OK!",
                 closeOnConfirm: true
               }, function() {
-                $scope.invoice = res;
+
               });
             }).catch(function(err) {
               swal({
@@ -164,6 +137,7 @@
     function getInvoice() {
       Invoice.api.get($stateParams.id).then(function(data) {
         $scope.invoice = data;
+        calcTotal();
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load invoice');
       });

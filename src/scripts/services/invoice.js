@@ -16,6 +16,11 @@
       area_of_interest: '',
       withholding_tax: false,
       is_draft: true,
+      services_total: 0,
+      expenses_refund: 0,
+      social_taxes: 0,
+      vat: 0,
+      withholding_tax: 0,
       is_template: false,
       items: [Service.template()]
     };
@@ -69,7 +74,7 @@
         .put(API.host + '/api/invoices/' + obj.id, obj)
         .then(function(res){
           deferred.resolve(res.data);
-        })   
+        })
         .catch(function(err){
           deferred.reject(err);
         });

@@ -49,11 +49,26 @@
       });
     }
 
+    function percentage(input, percentage) {
+      return input/100 * percentage;
+    }
+
+
     function calcTotal() {
       $scope.total = 0;
+
       $scope.matter.items.forEach(function(item){
         $scope.total += parseInt(item.price);
       });
+
+      if ($scope.matter.deposit > 0) {
+        $scope.matter.payment_settings = [Matter.editor().getPrice(percentage($scope.total, $scope.matter.deposit)), Matter.editor().getPrice(percentage($scope.total, 100 - $scope.matter.deposit))];
+        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
+      }
+      else {
+        $scope.matter.payment_settings = [];
+        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
+      }
     }
 
     // Autosave
