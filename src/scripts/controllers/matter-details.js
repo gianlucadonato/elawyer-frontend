@@ -9,6 +9,7 @@
   App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.showNext = false;
+    $scope.showMode = true;
 
     function activate() {
       getMatter();
@@ -24,13 +25,36 @@
       });
     }
 
+    function percentage(input, percentage) {
+      return input/100 * percentage;
+    }
+
+    function calcTotal() {
+
+      $scope.total =  0;
+
+      $scope.matter.items.forEach(function(item){
+        if (item.is_mandatory || item.is_selected)
+          $scope.total += parseInt(item.price);
+      });
+
+      if ($scope.matter.deposit > 0) {
+        $scope.matter.payment_settings = [Matter.editor().getPrice(percentage($scope.total, $scope.matter.deposit)), Matter.editor().getPrice(percentage($scope.total, 100 - $scope.matter.deposit))];
+        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
+      }
+      else {
+        $scope.matter.payment_settings = [];
+        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
+      }
+
+    }
+
+
+
     $scope.$watch('matter.items', function() {
-      $scope.total = 0;
-      if($scope.matter)
-        for(var i in $scope.matter.items) {
-          if ($scope.matter.items[i].is_mandatory || $scope.matter.items[i].is_selected)
-            $scope.total += parseFloat($scope.matter.items[i].price);
-        }
+      if($scope.matter) {
+        calcTotal();
+      }
     }, true);
 
 
@@ -45,7 +69,13 @@
     };
 
 
-    $scope.pay = function() {
+    $scope.pay = function(total) {
+
+      if (total)
+        $scope.payTotal = true;
+      else
+        $scope.payTotal = false;
+
       self.pm = $uibModal.open({
         animation: false,
         size: '',
@@ -60,36 +90,12 @@
     function getComputedDataFromTable() {
 
       var output = {
-        totalPrice: 0,
-        deposit: 0,
-        balance: 0,
         paidServices: []
       }
 
       for (var i = 0; i < $scope.matter.items.length; i++) {
         if ($scope.matter.items[i].is_selected || $scope.matter.items[i].is_mandatory)
           output.paidServices.push($scope.matter.items[i]);
-      }
-
-      function getRaw(el) {
-        return el.text().replace(/ /g, "").replace(/,/g, "").replace("€", "");
-      }
-
-      if ($scope.matter.withholding_tax) {
-        output['totalPrice'] = getRaw($("#total_withholding_tax"));
-      } else {
-        output['totalPrice'] = getRaw($("#total"));
-      }
-
-
-      if ($scope.matter.deposit > 0) {
-        if ($scope.matter.withholding_tax) {
-          output['deposit'] = getRaw($("#total_withholding_tax_acconto"));
-          output['balance'] = getRaw($("#total_withholding_tax_saldo"));
-        } else {
-          output['deposit'] = getRaw($("#total_acconto"));
-          output['balance'] = getRaw($("#total_saldo"));
-        }
       }
 
       return output;
@@ -121,12 +127,22 @@
     $scope.payOffline = function() {
       self.pm.dismiss();
 
-      var options = {
-        services: getComputedDataFromTable().paidServices,
-        amount: getComputedDataFromTable().totalPrice * 100,
-        deposit: getComputedDataFromTable().deposit * 100,
-        balance: getComputedDataFromTable().balance * 100
-      };
+      if (!$scope.payTotal)
+        var options = {
+          services: getComputedDataFromTable().paidServices,
+          amount: $scope.matter.general_invoice[0].services_total * 100,
+          deposit: $scope.matter.payment_settings[0].services_total * 100,
+          balance: $scope.matter.payment_settings[1].services_total * 100,
+          paying: ($scope.matter.payment_settings[0].total - ($scope.matter.withholding_tax ? $scope.matter.payment_settings[0].withholding_tax : 0)) * 100
+        };
+      else
+        var options = {
+          services: getComputedDataFromTable().paidServices,
+          amount: $scope.matter.general_invoice[0].services_total * 100,
+          paying: ($scope.matter.general_invoice[0].total - ($scope.matter.withholding_tax ? $scope.matter.general_invoice[0].withholding_tax : 0)) * 100,
+          deposit: 0,
+          balance: 0
+        };
 
       Matter.api.pay($scope.matter.id, options)
         .then(function(res) {
@@ -158,14 +174,24 @@
 
       var stripe = StripeCheckout.configure({});
 
-      var options = {
-        services: getComputedDataFromTable().paidServices,
-        amount: getComputedDataFromTable().totalPrice * 100,
-        deposit: getComputedDataFromTable().deposit * 100,
-        balance: getComputedDataFromTable().balance * 100
-      };
+      if (!$scope.payTotal)
+        var options = {
+          services: getComputedDataFromTable().paidServices,
+          amount: $scope.matter.general_invoice[0].services_total * 100,
+          deposit: $scope.matter.payment_settings[0].services_total * 100,
+          balance: $scope.matter.payment_settings[1].services_total * 100,
+          paying: ($scope.matter.payment_settings[0].total - ($scope.matter.withholding_tax ? $scope.matter.payment_settings[0].withholding_tax : 0)) * 100
+        };
+      else
+        var options = {
+          services: getComputedDataFromTable().paidServices,
+          amount: $scope.matter.general_invoice[0].services_total * 100,
+          paying: ($scope.matter.general_invoice[0].total - ($scope.matter.withholding_tax ? $scope.matter.general_invoice[0].withholding_tax : 0)) * 100,
+          deposit: 0,
+          balance: 0
+        };
 
-      stripe.open({amount: options.deposit ? options.deposit : options.amount, currency: "EUR", email: $scope.matter.customer.email})
+      stripe.open({amount: options.paying, currency: "EUR", email: $scope.matter.customer.email})
         .then(function(result) {
 
           options['token'] = result[0].id;

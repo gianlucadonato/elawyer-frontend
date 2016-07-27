@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row" ng-repeat="r in matter.general_invoice">
     <div class="col-sm-12">
       <div id="summary-box" class="card m-t-25">
         <div class="card-header ch-alt">
-          <h2>Summary</h2>
+          <h2>Fattura generale</h2>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -14,9 +14,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="matter in matter.items" class="outputService">
-                  <td>{{matter.title}}</td>
-                  <td>€ {{matter.price | prettyNumber}}</td>
+                <tr ng-repeat="i in matter.items" class="outputService" ng-if="!showMode">
+                  <td>{{i.title}}</td>
+                  <td>€ {{i.price | prettyNumber}}</td>
+                </tr>
+                <tr ng-repeat="i in matter.items" class="outputService" ng-if="showMode && (i.is_selected || i.is_mandatory)">
+                  <td>{{i.title}}</td>
+                  <td>€ {{i.price | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <th>&nbsp;</th>
@@ -24,27 +28,27 @@
                 </tr>
                 <tr>
                   <td>Imponibile Prestazioni</td>
-                  <td>€ {{total | prettyNumber}}</td>
+                  <td>€ {{r.services_total | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <td>Rimborso spese generali (15%)</td>
-                  <td>€ {{(total | percentage: 15) | prettyNumber}}</td>
+                  <td>€ {{r.expenses_refund | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <td>Totale imponibile</td>
-                  <td>€ {{(total + (total | percentage: 15)) | prettyNumber}}</td>
+                  <td>€ {{r.services_total + r.expenses_refund | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <td>Rivalsa parziale contributi previdenziali (4%)</td>
-                  <td>€ {{((total + (total | percentage: 15)) | percentage: 4) | prettyNumber}}</td>
+                  <td>€ {{r.social_taxes | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <td>Totale imponibile</td>
-                  <td>€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4)) | prettyNumber}}</td>
+                  <td>€ {{r.services_total + r.expenses_refund + r.social_taxes | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <td>Iva (22%)</td>
-                  <td>€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</td>
+                  <td>€ {{r.vat | prettyNumber}}</td>
                 </tr>
                 <tr>
                   <th>&nbsp;</th>
@@ -55,10 +59,10 @@
                     <span ng-if="matter.withholding_tax">Totale fattura</span>
                     <span ng-if="!matter.withholding_tax">Netto da Versare</span>
                   </th>
-                  <th id="total">€ {{(total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | prettyNumber}}</th>
+                  <th id="total">€ {{r.services_total + r.expenses_refund + r.social_taxes + r.vat | prettyNumber}}</th>
                 </tr>
 
-                <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
+                <!-- <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
                   <th>Acconto</th>
                   <th id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: matter.deposit) | prettyNumber}}</th>
                 </tr>
@@ -66,26 +70,16 @@
                 <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
                   <th>Saldo</th>
                   <th id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
-                </tr>
+                </tr> -->
 
                 <tr ng-if="matter.withholding_tax">
                   <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
-                  <td>€ {{((total + (total | percentage: 15)) | percentage: 20) | prettyNumber}}</td>
+                  <td>€ {{r.withholding_tax | prettyNumber}}</td>
                 </tr>
 
                 <tr ng-if="matter.withholding_tax">
                   <th>Netto da versare</th>
-                  <th id="total_withholding_tax">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | prettyNumber}}</th>
-                </tr>
-
-                <tr ng-if="matter.deposit > 0 && matter.withholding_tax">
-                  <th>Acconto</th>
-                  <th id="total_withholding_tax_acconto">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: matter.deposit) | prettyNumber}}</th>
-                </tr>
-
-                <tr ng-if="matter.deposit > 0 && matter.withholding_tax">
-                  <th>Saldo</th>
-                  <th id="total_withholding_tax_saldo">€ {{(((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) - ((total + (total | percentage: 15)) | percentage: 20)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
+                  <th id="total_withholding_tax">€ {{r.services_total + r.expenses_refund + r.social_taxes + r.vat - r.withholding_tax | prettyNumber}}</th>
                 </tr>
               </tbody>
             </table>
@@ -93,4 +87,100 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
+
+<div class="row" ng-repeat="r in matter.payment_settings">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2 ng-if="$index == 0">Acconto</h2>
+          <h2 ng-if="$index == 1">Saldo</h2>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Servizio</th>
+                  <th>Importo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="i in matter.items" class="outputService" ng-if="!showMode">
+                  <td>{{i.title}}</td>
+                  <td>€ {{i.price | prettyNumber}}</td>
+                </tr>
+                <tr ng-repeat="i in matter.items" class="outputService" ng-if="showMode && (i.is_selected || i.is_mandatory)">
+                  <td>{{i.title}}</td>
+                  <td>€ {{i.price | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                </tr>
+                <tr>
+                  <td>Imponibile Prestazioni
+                    <span ng-if="$index == 0">(Acconto)</span>
+                    <span ng-if="$index == 1">(Saldo)</span>
+                  </td>
+                  <td>€ {{r.services_total | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Rimborso spese generali (15%)</td>
+                  <td>€ {{r.expenses_refund | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Totale imponibile</td>
+                  <td>€ {{r.services_total + r.expenses_refund | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Rivalsa parziale contributi previdenziali (4%)</td>
+                  <td>€ {{r.social_taxes | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Totale imponibile</td>
+                  <td>€ {{r.services_total + r.expenses_refund + r.social_taxes | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <td>Iva (22%)</td>
+                  <td>€ {{r.vat | prettyNumber}}</td>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                </tr>
+                <tr>
+                  <th>
+                    <span ng-if="matter.withholding_tax">Totale fattura</span>
+                    <span ng-if="!matter.withholding_tax">Netto da Versare</span>
+                  </th>
+                  <th id="total">€ {{r.services_total + r.expenses_refund + r.social_taxes + r.vat | prettyNumber}}</th>
+                </tr>
+
+                <!-- <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
+                  <th>Acconto</th>
+                  <th id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: matter.deposit) | prettyNumber}}</th>
+                </tr>
+
+                <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
+                  <th>Saldo</th>
+                  <th id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
+                </tr> -->
+
+                <tr ng-if="matter.withholding_tax">
+                  <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
+                  <td>€ {{r.withholding_tax | prettyNumber}}</td>
+                </tr>
+
+                <tr ng-if="matter.withholding_tax">
+                  <th>Netto da versare</th>
+                  <th id="total_withholding_tax">€ {{r.services_total + r.expenses_refund + r.social_taxes + r.vat - r.withholding_tax | prettyNumber}}</th>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

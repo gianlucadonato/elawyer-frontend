@@ -141,6 +141,32 @@
       items.splice(index, 1);
     };
 
+    function percentage(input, percentage) {
+      return input/100 * percentage;
+    }
+
+    editor.getPrice = function(sum) {
+
+        var total = sum;
+
+        var expenses_refund_percentage = 15;
+        var vat_precentage = 22;
+        var social_taxes_percentage = 4;
+
+        var expenses_refund = percentage(total, expenses_refund_percentage);
+        var social_taxes = percentage(total + expenses_refund, social_taxes_percentage);
+        var vat = percentage(total + expenses_refund + social_taxes, vat_precentage);
+
+        return {
+          services_total: total,
+          expenses_refund: expenses_refund,
+          social_taxes: percentage(total + expenses_refund, 4),
+          vat: vat,
+          withholding_tax: percentage(total + expenses_refund + social_taxes + vat, 20),
+          total: total + expenses_refund + percentage(total + expenses_refund, 4) + vat
+        };
+    }
+
     return {
       api: api,
       editor: function() {return editor;},
