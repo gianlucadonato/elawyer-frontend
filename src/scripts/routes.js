@@ -160,7 +160,7 @@
         url: '/invoices',
         title: 'Invoices',
         requireLogin: true,
-        templateUrl: helper.pagesPath('invoices.html'),
+        templateUrl: helper.pagesPath('invoice-list.html'),
         controller: 'InvoicesListCtrl'
       })
       .state('page.invoice-details', {

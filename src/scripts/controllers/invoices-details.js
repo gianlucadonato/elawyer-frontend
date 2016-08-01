@@ -155,7 +155,7 @@
 
     $scope.update = function() {
       Invoice.api.update($scope.invoice).then(function(data) {
-        $scope.invoice = data;
+        $scope.invoice.id = data.id;
         Notify.success('Success!', 'Invoice edited succesfully');
       }).catch(function(err){
         Notify.error('Error!', 'Unable to update invoice');

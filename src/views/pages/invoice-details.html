@@ -1,4 +1,4 @@
-<div class="container m-t-25 invoices">
+<div class="container m-t-25 invoices invoice-details">
 
   <div ng-if="!invoice.paid" class="alert alert-danger top-alert" role="alert">
     <span>Questa fattura non è ancora stata pagata</span>
@@ -9,7 +9,7 @@
     </button>
   </div>
 
-  <div ng-if="!invoice.is_confirmed" class="alert alert-info top-alert" role="alert"
+  <div ng-if="!invoice.is_confirmed && invoice.paid" class="alert alert-info top-alert" role="alert"
       permission permission-only="['LAWYER']">
     <span>Questa fattura è stata pagata tramite bonifico. Conferma la ricezione del denaro</span>
     <button class="btn btn-success waves-effect" ng-click="confirm()">
