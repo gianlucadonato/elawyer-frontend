@@ -25,8 +25,8 @@
       });
     }
 
-    function percentage(input, percentage) {
-      return input/100 * percentage;
+    function percentage(input, percent) {
+      return input/100 * percent;
     }
 
     function calcTotal() {
@@ -49,8 +49,6 @@
 
     }
 
-
-
     $scope.$watch('matter.items', function() {
       if($scope.matter) {
         calcTotal();
@@ -71,10 +69,7 @@
 
     $scope.pay = function(total) {
 
-      if (total)
-        $scope.payTotal = true;
-      else
-        $scope.payTotal = false;
+      $scope.payTotal = total ? true : false;
 
       self.pm = $uibModal.open({
         animation: false,
@@ -91,7 +86,7 @@
 
       var output = {
         paidServices: []
-      }
+      };
 
       for (var i = 0; i < $scope.matter.items.length; i++) {
         if ($scope.matter.items[i].is_selected || $scope.matter.items[i].is_mandatory)
@@ -121,7 +116,7 @@
             closeOnConfirm: true
           });
         });
-    }
+    };
 
 
     $scope.payOffline = function() {
@@ -173,77 +168,56 @@
       self.pm.dismiss();
 
       var stripe = StripeCheckout.configure({});
+      var options = {
+        services: getComputedDataFromTable().paidServices,
+        amount: $scope.matter.general_invoice[0].services_total * 100,
+        paying: ($scope.matter.general_invoice[0].total - ($scope.matter.withholding_tax ? $scope.matter.general_invoice[0].withholding_tax : 0)) * 100,
+        deposit: 0,
+        balance: 0
+      };
 
       if (!$scope.payTotal)
-        var options = {
+        options = {
           services: getComputedDataFromTable().paidServices,
           amount: $scope.matter.general_invoice[0].services_total * 100,
           deposit: $scope.matter.payment_settings[0].services_total * 100,
           balance: $scope.matter.payment_settings[1].services_total * 100,
           paying: ($scope.matter.payment_settings[0].total - ($scope.matter.withholding_tax ? $scope.matter.payment_settings[0].withholding_tax : 0)) * 100
         };
-      else
-        var options = {
-          services: getComputedDataFromTable().paidServices,
-          amount: $scope.matter.general_invoice[0].services_total * 100,
-          paying: ($scope.matter.general_invoice[0].total - ($scope.matter.withholding_tax ? $scope.matter.general_invoice[0].withholding_tax : 0)) * 100,
-          deposit: 0,
-          balance: 0
-        };
 
-      stripe.open({amount: options.paying, currency: "EUR", email: $scope.matter.customer.email})
-        .then(function(result) {
-
-          options['token'] = result[0].id;
-
-          Matter.api.pay($scope.matter.id, options)
-            .then(function(res) {
-              swal({
-                title: "Paid!",
-                text: "La lettera d'incarico è stata pagata correttamente.",
-                type: "success",
-                showCancelButton: false,
-                confirmButtonText: "OK!",
-                closeOnConfirm: true
-              }, function() {
-                $state.go('page.invoices');
-              });
-            }).catch(function(err) {
-              swal({
-                title: "Error!",
-                text: "C'è stato un problema con il pagamento. Assciurati di avere abbastanza fondi.",
-                type: "error",
-                showCancelButton: false,
-                confirmButtonText: "OK!",
-                closeOnConfirm: true
-              }, function() {});
-            });
-
-        },function(err) {
-          console.log(err);
+      stripe.open({
+        amount: options.paying,
+        currency: "EUR",
+        email: $scope.matter.customer.email
+      })
+      .then(function(result) {
+        options.token = result[0].id;
+        Matter.api.pay($scope.matter.id, options).then(function(res) {
+          swal({
+            title: "Paid!",
+            text: "La lettera d'incarico è stata pagata correttamente.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.invoices');
+          });
+        }).catch(function(err) {
+          swal({
+            title: "Error!",
+            text: "C'è stato un problema con il pagamento. Assciurati di avere abbastanza fondi.",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          });
+        });
+      })
+      .catch(function(err){
+        console.log(err);
       });
     };
-
-
-
-
-    $scope.download = function() {
-      var doc = new jsPDF();
-      // We'll make our own renderer to skip this editor
-      var specialElementHandlers = {
-        '#editor': function(element, renderer){
-          return true;
-        }
-      };
-      // All units are in the set measurement for the document
-      // This can be changed to "pt" (points), "mm" (Default), "cm", "in"
-      doc.fromHTML($('#print').get(0), 15, 15, {
-        'width': 500,
-        // 'elementHandlers': specialElementHandlers
-      });
-      doc.output("dataurlnewwindow");
-    };
-
 
     // Sticky Summary
     $(window).scroll(function(){

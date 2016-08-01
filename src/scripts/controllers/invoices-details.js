@@ -9,6 +9,7 @@
   App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, Matter, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.showNext = false;
+    $scope.total = 0;
 
     function activate() {
       getInvoice();
@@ -16,12 +17,10 @@
 
     activate();
 
-
     function calcTotal() {
       $scope.total = $scope.total || 0;
       $scope.invoice.payment_settings = Matter.editor().getPrice(parseFloat($scope.invoice.amount));
     }
-
 
     $scope.pay = function() {
       self.pm = $uibModal.open({
@@ -31,6 +30,18 @@
         keyboard: true,
         templateUrl: 'views/modals/choosePaymentMethod.html',
         scope: $scope
+      });
+    };
+
+    // Download PDF
+    $scope.download = function() {
+      var newWin = $window.open('', '_blank');
+      Invoice.api.download($scope.invoice.id).then(function(data){
+        var file = new Blob([data], { type: 'application/pdf' });
+        var fileURL = URL.createObjectURL(file);
+        newWin.location = fileURL;
+      }).catch(function(err){
+        console.log('Unable to download pdf', err);
       });
     };
 
@@ -51,7 +62,7 @@
             closeOnConfirm: true
           });
         });
-    }
+    };
 
     $scope.payOffline = function() {
       self.pm.dismiss();
@@ -83,8 +94,7 @@
             closeOnConfirm: true
           }, function() {});
         });
-
-    }
+    };
 
 
 
@@ -130,9 +140,9 @@
             });
 
         },function(err) {
-          console.log(err)
+          console.log(err);
       });
-    }
+    };
 
     function getInvoice() {
       Invoice.api.get($stateParams.id).then(function(data) {

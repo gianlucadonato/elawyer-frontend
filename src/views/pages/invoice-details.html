@@ -1,171 +1,173 @@
-<div class="container mt-25 matter matter-list table-invoice">
+<div class="container m-t-25 invoices">
 
-  <div ng-if="!invoice.paid">
-    <div class="alert ng-isolate-scope alert-danger alert-dismissible" role="alert" type="danger" style="overflow:hidden">
-      <div><span class="ng-binding ng-scope">Questa fattura non è ancora stata pagata <button class="btn btn-success ribtn-icon-text waves-effect" ng-click="pay()" ng-if="current_user.id == invoice.customer.id" style="float:right">Paga saldo di €
-        <span ng-if="invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</span>
-        <span ng-if="!invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</span></button></span></div>
-    </div>
+  <div ng-if="!invoice.paid" class="alert alert-danger top-alert" role="alert">
+    <span>Questa fattura non è ancora stata pagata</span>
+    <button class="btn btn-success waves-effect" ng-click="pay()" ng-if="current_user.id == invoice.customer.id">
+      Paga saldo di €
+      <span ng-if="invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</span>
+      <span ng-if="!invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</span>
+    </button>
   </div>
 
-
-  <div ng-if="!invoice.is_confirmed" permission permission-only="['LAWYER']">
-    <div class="alert ng-isolate-scope alert-danger alert-dismissible" role="alert" type="danger" style="overflow:hidden">
-      <div><span class="ng-binding ng-scope">Questa fattura è stata pagata tramite bonifico. Conferma la ricezione del denaro<button class="btn btn-success ribtn-icon-text waves-effect" ng-click="confirm()" style="float:right">Ho ricevuto €
-        <span ng-if="invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</span>
-        <span ng-if="!invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</span></button></span></div>
-    </div>
+  <div ng-if="!invoice.is_confirmed" class="alert alert-info top-alert" role="alert"
+      permission permission-only="['LAWYER']">
+    <span>Questa fattura è stata pagata tramite bonifico. Conferma la ricezione del denaro</span>
+    <button class="btn btn-success waves-effect" ng-click="confirm()">
+      Ho Ricevuto €
+      <span ng-if="invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</span>
+      <span ng-if="!invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</span>
+    </button>
   </div>
 
-  <div class="card row">
-    <div class="card-header ch-alt text-center">
-      <div ng-include="'views/partials/letterhead.html'" style="text-align: left"></div>
-    </div>
+  <div ng-if="!invoice.number" class="alert alert-danger" permission permission-only="['CUSTOMER', 'ADMIN']">
+    Questa fattura non ha ancora validità legale. Perfavore aspetta che il mittente inserisca il numero di fatturazione.
+  </div>
 
-    <div class="card-body card-padding">
-      <div class="row m-b-25">
-        <div class="col-xs-6">
-          <div class="text-left">
-            <p class="c-gray"></p>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
 
-            <h4>Avv. {{invoice.owner.first_name}} {{invoice.owner.last_name}}</h4>
-
-            <span class="text-muted">
-              <address>
-                {{invoice.owner.address}}<br/>
-                <strong>C.F.</strong> {{invoice.owner.fiscal_code}}<br/>
-                <strong>P.I.</strong>{{invoice.owner.vat_number}}
-              </address>
-            </span>
-          </div>
+        <div class="card-header">
+          <div ng-include="'views/partials/letterhead.html'"></div>
+          <ul class="actions">
+            <li>
+              <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                <i class="zmdi zmdi-download"></i>Download PDF
+              </button>
+            </li>
+          </ul>
         </div>
 
-        <div class="col-xs-6">
-          <div class="i-to text-right">
-            <p class="c-gray"></p>
-
-            <h4>Spett.le {{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
-
-            <span class="text-muted">
-              <address>
-                {{invoice.customer.address}}<br>
-                <strong>C.F.</strong> {{invoice.customer.fiscal_code}}<br>
-                <strong>P.I.</strong> {{invoice.customer.vat_number}}<br>
-              </address>
-            </span>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4>Avv. {{invoice.owner.first_name}} {{invoice.owner.last_name}}</h4>
+              <p>
+                <span ng-if="invoice.owner.address">{{invoice.owner.address}}</span><br/>
+                <span ng-if="invoice.owner.fiscal_code">C.F. {{invoice.owner.fiscal_code}}</span><br/>
+                <span ng-if="invoice.owner.vat_number">P.I. {{invoice.owner.vat_number}}</span>
+              </p>
+            </div>
+            <div class="col-sm-6 text-right">
+              <h4>Spett.le {{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
+              <p>
+                <span ng-if="invoice.customer.address">{{invoice.customer.address}}</span><br/>
+                <span ng-if="invoice.customer.fiscal_code">C.F. {{invoice.customer.fiscal_code}}</span><br/>
+                <span ng-if="invoice.customer.vat_number">P.I. {{invoice.customer.vat_number}}</span>
+              </p>
+            </div>
           </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <h4 class="m-0 f-300" permission permission-only="['LAWYER', 'ADMIN']">
+                Fattura n°&nbsp;
+                <input ng-keyup="$event.keyCode == 13 && update()" type="text" ng-model="invoice.number" class="form-control" placeholder="Inserisci numero fattura e premi invio" style="display:inline; max-width: 50%">
+              </h4>
+              <div class="invoice-number">
+                <h4 permission permission-only="['CUSTOMER']" class="pull-left">
+                  Fattura n° {{invoice.number}}
+                </h4>
+                <h4 class="pull-right">{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</h4>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Descrizione</th>
+                    <th>Importo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="i in invoice.services">
+                    <td width="80%">
+                      <strong>{{i.title}}</strong>
+                      <p class="text-muted">{{i.description}}</p>
+                    </td>
+                    <td>€ {{i.price | prettyNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">
+                      <span>IMPONIBILE PRESTAZIONI
+                        <span ng-if="invoice.is_balance">(Saldo)</span>
+                        <span ng-if="invoice.is_deposit">(Acconto)</span>
+                      </span>
+                    </td>
+                    <td><strong>€ {{invoice.payment_settings.services_total | prettyNumber}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">Rimborso spese generali (15%)</td>
+                    <td>€ {{invoice.payment_settings.expenses_refund | prettyNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">TOTALE IMPONIBILE</td>
+                    <td><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund | prettyNumber}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">Rivalsa parziale contributi previdenziali (4%)</td>
+                    <td>€ {{invoice.payment_settings.social_taxes | prettyNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">TOTALE IMPONIBILE</td>
+                    <td><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes | prettyNumber}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">IVA (22%)</td>
+                    <td>€ {{invoice.payment_settings.vat | prettyNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">
+                      <span ng-if="invoice.matter.withholding_tax">TOTALE FATTURA</span>
+                      <span ng-if="!invoice.matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
+                    </td>
+                    <td ng-model="all"><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</strong></td>
+                  </tr>
+                  <tr ng-if="invoice.matter.withholding_tax">
+                    <td class="text-right">RITENUTA ACCONTO (20% del TOTALE IMPONIBILE)</td>
+                    <td>€ {{invoice.payment_settings.withholding_tax | prettyNumber}}</td>
+                  </tr>
+                  <tr ng-if="invoice.matter.withholding_tax">
+                    <td class="text-right"><strong>NETTO DA VERSARE</strong></td>
+                    <td ng-model="all"><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row m-t-25">
+            <div class="col-sm-12">
+              <h4 class="f-300">Modalità di pagamento in caso di Bonifico Bancario</h4>
+              <p class="c-gray">
+                <strong>CheBanca!</strong> - Viale Luigi Bodio, 37, 20158 - Milano (MI)<br/>
+                <strong>Iban</strong> IT 84 O 03058 01604 100571277268<br/>
+                <strong>BIC/SWIFT</strong> MICSITM1XXX<br/>
+                <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
+              </p>
+            </div>
+          </div>
+        </div>  <!-- END Card Body -->
+
+        <div class="card-footer card-padding">
+          <hr>
+          <ul class="list-inline text-center list-unstyled">
+            <li class="m-l-5 m-r-5"><small>Via Mazzini n. 10 - 20123 Milano, Italia</small></li>
+            <li class="m-l-5 m-r-5"><small>Phone: +39 049 8758955 - Fax: +39 049 8759252</small></li>
+            <li class="m-l-5 m-r-5"><small>Email: <a href="mailto:info@crclex.com">info@crclex.com</a></small></li>
+          </ul>
         </div>
 
-        <div class="col-xs-12">
-          <div>
-            <h4 class="m-0 f-300" permission permission-only="['CUSTOMER']" ng-if="invoice.number">Fattura n° {{invoice.number}}</h4>
-            <h4 class="m-0 f-300" permission permission-only="['CUSTOMER']" ng-if="!invoice.number">Questa fattura non ha ancora validità legale. Perfavore aspetta che il mittente ne inserisca il numero</h4>
-            <h4 class="m-0 f-300" permission permission-only="['LAWYER']">
-              Fattura n°&nbsp;<input ng-keyup="$event.keyCode == 13 && update()" type="text" ng-model="invoice.number" ng-value="invoice.number" class="form-control" placeholder="inserisci numero fattura e premi invio" style="display:inline; max-width: 50%">
-            </h4><br/>
-            <h4 class="m-0 f-300"><strong>{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</strong></h4>
-          </div>
-        </div>
       </div>
-
-      <div class="clearfix"></div>
-
-      <table class="table  m-t-25 m-b-25">
-        <thead class="text-uppercase">
-          <tr>
-            <th class="crc-table-head">Descrizione</th>
-            <th class="highlight crc-table-head">Importo</th>
-          </tr>
-        </thead>
-
-        <thead>
-          <tr ng-repeat="i in invoice.services">
-            <td width="80%" style="text-align: left !important">
-              <h5 class="text-uppercase f-400">{{i.title}}</h5>
-              <p class="text-muted">{{i.description}}</p>
-            </td>
-
-            <td>€ {{i.price | prettyNumber}}</td>
-          </tr>
-
-          <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-
-          <tr>
-            <td><strong>Imponibile Prestazioni <span ng-if="invoice.is_balance">(saldo)</span><span ng-if="invoice.is_deposit">(acconto)</span></strong></td>
-            <td><strong>€ {{invoice.payment_settings.services_total | prettyNumber}}</strong></td>
-          </tr>
-          <tr>
-            <td>Rimborso spese generali (15%)</td>
-            <td>€ {{invoice.payment_settings.expenses_refund | prettyNumber}}</td>
-          </tr>
-          <tr>
-            <td><strong>Totale imponibile</strong></td>
-            <td><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund | prettyNumber}}</strong></td>
-          </tr>
-          <tr>
-            <td>Rivalsa parziale contributi previdenziali (4%)</td>
-            <td>€ {{invoice.payment_settings.social_taxes | prettyNumber}}</td>
-          </tr>
-          <tr>
-            <td><strong>Totale imponibile</strong></td>
-            <td><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes | prettyNumber}}</strong></td>
-          </tr>
-          <tr>
-            <td>Iva (22%)</td>
-            <td>€ {{invoice.payment_settings.vat | prettyNumber}}</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td>
-              <span ng-if="invoice.matter.withholding_tax"><strong>Totale fattura</strong></span>
-              <span ng-if="!invoice.matter.withholding_tax"><strong>Netto da Versare</strong></span>
-            </td>
-            <td id="total" ng-model="all"><strong>€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</strong></td>
-          </tr>
-
-          <tr ng-if="invoice.matter.withholding_tax">
-            <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
-            <td>€ {{invoice.payment_settings.withholding_tax | prettyNumber}}</td>
-          </tr>
-
-          <tr ng-if="invoice.matter.withholding_tax">
-            <td>Netto da versare</td>
-            <td id="total_withholding_tax" ng-model="all">€ {{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</td>
-          </tr>
-
-          <tr>
-            <td>Pagato</td>
-            <td class="highlight" ng-if="invoice.paid">€
-              <span ng-if="invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat - invoice.payment_settings.withholding_tax | prettyNumber}}</span>
-              <span ng-if="!invoice.matter.withholding_tax">{{invoice.payment_settings.services_total + invoice.payment_settings.expenses_refund + invoice.payment_settings.social_taxes + invoice.payment_settings.vat | prettyNumber}}</span>
-            </td>
-            <td class="highlight" ng-if="!invoice.paid"><div class="flag flag-closed">Non hai ancora pagato</div></td>
-          </tr>
-        </thead>
-      </table>
-
-      <div class="clearfix"></div>
-
-      <div class="p-25">
-        <h4 class="c-green f-400">Modalità di pagamento in caso di Bonifico Bancario</h4>
-        <p class="c-gray">
-          <strong>CheBanca!</strong> - Viale Luigi Bodio, 37, 20158 - Milano (MI)<br/>
-          <strong>Iban</strong> IT 84 O 03058 01604 100571277268<br/>
-          <strong>BIC/SWIFT</strong> MICSITM1XXX<br/>
-          <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
-        </p>
-      </div>
     </div>
-
-    <footer class="m-t-15 p-20">
-      <ul class="list-inline text-center list-unstyled">
-        <li class="m-l-5 m-r-5"><small>Via Mazzini n. 10 - 20123 Milano, Italia</small></li>
-        <li class="m-l-5 m-r-5"><small>Phone +39 049 8758955 - Fax +39 049 8759252</small></li>
-        <li class="m-l-5 m-r-5"><small>info@crclex.com</small></li>
-      </ul>
-    </footer>
   </div>
+
 </div>

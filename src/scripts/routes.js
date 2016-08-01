@@ -164,7 +164,7 @@
         controller: 'InvoicesListCtrl'
       })
       .state('page.invoice-details', {
-        url: '/invoice-details/:id',
+        url: '/invoices/:id',
         title: 'Invoice Detail',
         requireLogin: true,
         templateUrl: helper.pagesPath('invoice-details.html'),
