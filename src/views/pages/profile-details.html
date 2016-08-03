@@ -12,24 +12,44 @@
   <div class="pmbb-body p-l-30">
     <div class="pmbb-view" data-ng-if="!editProfileInfo">
       <dl class="dl-horizontal">
-        <dt>Nome</dt>
+        <dt>Nome e Cognome</dt>
         <dd>{{ user.first_name}} {{ user.last_name}}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Nome Società</dt>
+        <dd>{{ user.company }}</dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>Email</dt>
         <dd>{{ user.email }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Sesso</dt>
-        <dd>{{ user.gender }}</dd>
+        <dt>Data di Nascita</dt>
+        <dd>{{ user.birthday | amDateFormat:'DD/MM/YYYY'}}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Compleanno</dt>
-        <dd>{{ user.birthday | amDateFormat:'DD/MM/YYYY'}}</dd>
+        <dt>Luogo di Nascita</dt>
+        <dd>{{ user.birth_place }}</dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>Residenza</dt>
         <dd>{{ user.residence }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Domicilio</dt>
+        <dd>{{ user.domicile }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Codice Fiscale</dt>
+        <dd>{{ user.fiscal_code }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Partita Iva</dt>
+        <dd>{{ user.vat_number }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Regime Matrimoniale</dt>
+        <dd>{{ user.matrimonial_regime }}</dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>Telefono</dt>
@@ -37,11 +57,7 @@
       </dl>
       <dl class="dl-horizontal">
         <dt>Cellulare</dt>
-        <dd>{{ user.cellphone }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>Skype</dt>
-        <dd>{{ user.skype }}</dd>
+        <dd>{{ user.mobile_phone }}</dd>
       </dl>
     </div>
 
@@ -63,6 +79,14 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
+        <dt class="p-t-10">Nome Società</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.company" type="text" class="form-control" placeholder="eg. ACME ">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
         <dt class="p-t-10">Email</dt>
         <dd>
           <div class="fg-line">
@@ -71,18 +95,7 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Sesso</dt>
-        <dd>
-          <div class="fg-line">
-            <select class="form-control" ng-model="user.gender">
-              <option value="female">Donna</option>
-              <option value="male">Uomo</option>
-            </select>
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Compleanno</dt>
+        <dt class="p-t-10">Data di Nascita</dt>
         <dd>
           <div class="dtp-container dropdown fg-line">
             <input type='text' class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
@@ -90,10 +103,53 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
+        <dt class="p-t-10">Luogo di Nascita</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="user.birth_place" placeholder="Luogo di Nascita" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
         <dt class="p-t-10">Residenza</dt>
         <dd>
           <div class="fg-line">
-            <input type="text" ng-model="user.residence" placeholder="Residence" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            <input type="text" ng-model="user.residence" placeholder="Residenza" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Domicilio</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="user.domicile" placeholder="Domicilio" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Codice Fiscale</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.fiscal_code" type="text" class="form-control" placeholder="Codice Fiscale">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Partita Iva</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.vat_number" type="text" class="form-control" placeholder="P.Iva">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Regime Matrimoniale</dt>
+        <dd>
+          <div class="fg-line">
+            <select class="form-control" ng-model="user.matrimonial_regime">
+              <option value="separation">Separazione dei beni</option>
+              <option value="sharing">Comunione dei beni</option>
+            </select>
           </div>
         </dd>
       </dl>
@@ -110,14 +166,6 @@
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Skype</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.skype" type="text" class="form-control" placeholder="eg. mario.rossi">
           </div>
         </dd>
       </dl>
@@ -143,26 +191,17 @@
   <div class="pmbb-body p-l-30">
     <div class="pmbb-view" data-ng-if="!editBillingInfo">
       <dl class="dl-horizontal">
-        <dt>Intestatario</dt>
+        <dt>Ragione Sociale</dt>
         <dd>{{ user.billing_holder }} </dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>Indirizzo</dt>
         <dd>{{ user.address }}</dd>
       </dl>
-      <dl class="dl-horizontal">
-        <dt>Codice Fiscale</dt>
-        <dd>{{ user.fiscal_code }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>Partita Iva</dt>
-        <dd>{{ user.vat_number }}</dd>
-      </dl>
     </div>
-
     <form class="pmbb-edit" data-ng-if="editBillingInfo">
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Intestatario</dt>
+        <dt class="p-t-10">Ragione Sociale</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.billing_holder" type="text" class="form-control">
@@ -174,22 +213,6 @@
         <dd>
           <div class="fg-line">
             <input type="text" ng-model="user.address" placeholder="Address" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Partita Iva</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.vat_number" type="text" class="form-control">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Codice Fiscale</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.fiscal_code" type="text" class="form-control">
           </div>
         </dd>
       </dl>
