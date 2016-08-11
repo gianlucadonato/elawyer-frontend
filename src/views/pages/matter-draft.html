@@ -1,15 +1,12 @@
 <div class="container m-t-25 matter matter-list">
-
   <div class="card">
-    <div class="card-header">
-      <h2>
-        <button ui-sref="page.matter-create"
-          class="btn btn-primary btn-icon-text waves-effect pull-right"
-          permission permission-only="['LAWYER', 'ADMIN']">
-          <i class="zmdi zmdi-plus"></i> New
-        </button>
-        LETTERE DI INCARICO - BOZZE <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
-      </h2>
+    <div class="card-header ch-alt m-b-25">
+      <h2>LETTERE DI INCARICO - BOZZE <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <button class="btn bgm-blue btn-float waves-effect" ui-sref="page.matter-create"
+        permission permission-only="['LAWYER', 'ADMIN']"
+        tooltip-placement="bottom" uib-tooltip="Nuova Lettera d'Incarico">
+        <i class="zmdi zmdi-plus"></i>
+      </button>
     </div>
 
     <!-- LAWYER ONLY -->
@@ -91,9 +88,12 @@
       </div>
     </div>
 
-    <div class="alert alert-danger" ng-if="drafts.length == 0 && !isLoading">
-      Nessuna Bozza! Crea una nuova lettera di incarico.
+    <div class="card-body card-padding" ng-if="drafts.length == 0 && !isLoading">
+      <div class="alert alert-danger">
+        Nessuna Bozza! Crea una nuova lettera di incarico.
+      </div>
     </div>
+
     <div class="isLoading" ng-if="isLoading">
       <div class="loader">
         <div class="loader-inner ball-pulse-sync">
