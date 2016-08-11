@@ -54,5 +54,6 @@
   "src/bower_components/loaders.css/loaders.min.css",
   "src/bower_components/jspdf/dist/jspdf.min.js",
   "src/bower_components/chosen/chosen.jquery.js",
-  "src/bower_components/chosen/chosen.css"
+  "src/bower_components/chosen/chosen.css",
+  "src/bower_components/jasny-bootstrap/js/fileinput.js"
 ]

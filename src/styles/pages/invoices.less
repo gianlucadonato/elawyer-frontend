@@ -1,3 +1,55 @@
+/* ==================
+ * INVOICE/LETTER
+ * ===================*/
+.invoice-letter {
+  .invoice-letter-header {
+    img {
+      display: block;
+      width: 130px;
+      height: 130px;
+      float: left;
+      margin-right: 30px;
+    }
+    h4 {
+      // font-weight: 300;
+      margin-bottom: 3px;
+    }
+  }
+  .invoice-letter-body {
+    h4 {
+      margin-bottom: 0px;
+    }
+    hr {
+      margin-top: 8px;
+    }
+  }
+  table {
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    thead tr th {
+      background: #FF621D !important;
+      color: white !important;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+  .invoice-number {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 18px;
+  }
+  .card-footer {
+    padding-top: 0;
+    hr {
+      margin-top: 0;
+    }
+  }
+}
+
+/* ==================
+ * GENERALS
+ * ===================*/
 .invoices {
   .card-header .actions {
     top: 18px;
@@ -30,25 +82,6 @@
     }
     button {
       margin-left: auto;
-    }
-  }
-  table {
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    thead tr th {
-      background: #FF621D !important;
-      color: white !important;
-    }
-    p {
-      margin-bottom: 0;
-    }
-  }
-  .invoice-number {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 18px;
-    h4 {
-      font-weight: 300;
     }
   }
 }

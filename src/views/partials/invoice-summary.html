@@ -1,0 +1,169 @@
+<!-- GENERAL INVOICE -->
+<div class="row">
+  <div class="col-sm-12">
+    <h4>Totale Fattura</h4>
+    <hr>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Servizio</th>
+          <th>Importo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="i in matter.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
+          <td><strong>{{i.title}}</strong></td>
+          <td>€ {{i.price | prettyNumber}}</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>PRESTAZIONI</strong></td>
+          <td><strong>€ {{ invoice.full.total_services | prettyNumber }}</strong></td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese generali (15%)</td>
+          <td>€ {{ invoice.full.expenses_refund | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Contrib. previd. ob. (4%)</td>
+          <td>€ {{ invoice.full.social_taxes| prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">IVA (22%)</td>
+          <td>€ {{ invoice.full.vat | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese sostenute in nome e per conto del cliente ex art. 15 DPR 633/72</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="text-right">
+            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
+            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
+          </td>
+          <td><strong>€ {{ invoice.full.total_price | prettyNumber }}</strong></td>
+        </tr>
+        <tr ng-if="matter.withholding_tax">
+          <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
+          <td><strong>€ {{ invoice.full.final_price | prettyNumber}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row" ng-if="matter.withholding_tax">
+      <div class="col-sm-12 m-t-10">
+        (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.full.withholding_tax | prettyNumber}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" ng-if="matter.deposit > 0">
+  <div class="col-sm-12">
+    <!-- ACCONTO -->
+    <h4 class="m-t-25">Acconto</h4>
+    <hr>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Servizio</th>
+          <th>Importo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="i in matter.items">
+          <td><strong>{{i.title}}</strong></td>
+          <td>€ {{i.price | prettyNumber}}</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>PRESTAZIONI (Acconto)</strong></td>
+          <td><strong>€ {{ invoice.deposit.total_services | prettyNumber }}</strong></td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese generali (15%)</td>
+          <td>€ {{ invoice.deposit.expenses_refund | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Contrib. previd. ob. (4%)</td>
+          <td>€ {{ invoice.deposit.social_taxes| prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">IVA (22%)</td>
+          <td>€ {{ invoice.deposit.vat | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese sostenute in nome e per conto del cliente ex art. 15 DPR 633/72</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="text-right">
+            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
+            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
+          </td>
+          <td><strong>€ {{ invoice.deposit.total_price | prettyNumber }}</strong></td>
+        </tr>
+        <tr ng-if="matter.withholding_tax">
+          <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
+          <td><strong>€ {{ invoice.deposit.final_price | prettyNumber}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row" ng-if="matter.withholding_tax">
+      <div class="col-sm-12 m-t-10">
+        (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.deposit.withholding_tax | prettyNumber}}
+      </div>
+    </div>
+
+    <!-- SALDO -->
+    <h4 class="m-t-25">Saldo</h4>
+    <hr>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Servizio</th>
+          <th>Importo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="i in matter.items">
+          <td><strong>{{i.title}}</strong></td>
+          <td>€ {{i.price | prettyNumber}}</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>PRESTAZIONI (Saldo)</strong></td>
+          <td><strong>€ {{ invoice.balance.total_services | prettyNumber }}</strong></td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese generali (15%)</td>
+          <td>€ {{ invoice.balance.expenses_refund | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Contrib. previd. ob. (4%)</td>
+          <td>€ {{ invoice.balance.social_taxes| prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">IVA (22%)</td>
+          <td>€ {{ invoice.balance.vat | prettyNumber }}</td>
+        </tr>
+        <tr>
+          <td class="text-right">Spese sostenute in nome e per conto del cliente ex art. 15 DPR 633/72</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="text-right">
+            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
+            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
+          </td>
+          <td><strong>€ {{ invoice.balance.total_price | prettyNumber }}</strong></td>
+        </tr>
+        <tr ng-if="matter.withholding_tax">
+          <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
+          <td><strong>€ {{ invoice.balance.final_price | prettyNumber}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row" ng-if="matter.withholding_tax">
+      <div class="col-sm-12 m-t-10">
+        (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.balance.withholding_tax | prettyNumber}}
+      </div>
+    </div>
+  </div>
+</div>

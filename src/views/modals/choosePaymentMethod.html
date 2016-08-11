@@ -1,28 +1,40 @@
-<div class="modal-header">
-    <h4 class="modal-title" ng-show="!bonificando">Choose a Payment Method</h4>
+<div class="modal-header pb-23">
+  <h4 class="modal-title">Scegli un metodo di pagamento</h4>
 </div>
-<div class="modal-body">
-    <div ng-show="!bonificando">
-      <p>Scegli un metodo di pagamento</p>
-	    <button class="btn btn-success btn-icon-text waves-effect" ng-click="payOnline()"><i class="zmdi zmdi-money"></i> Paga online</button>
-	    <button class="btn btn-info btn-icon-text waves-effect" ng-click="bonificando = true"><i class="zmdi zmdi-card"></i> Effetua un bonifico</button>
-	  </div>
-
-    <div ng-show="bonificando">
-      <h2>Effettua un bonifico</h2>
-      <p>Effettua un bonifico tramite la tua banca a questi estremi:</p>
+<div class="modal-body pb-23">
+  <div ng-show="!isBonifico">
+    <button class="btn btn-success btn-block waves-effect" ng-click="payWithStripe()">
+      <i class="zmdi zmdi-money"></i> Paga online
+    </button>
+    <button class="btn btn-info btn-block waves-effect" ng-click="isBonifico = true">
+      <i class="zmdi zmdi-card"></i> Effettua un bonifico
+    </button>
+  </div>
+  <div ng-show="isBonifico">
+    <p>
+      Effettua un bonifico tramite la tua banca a questi estremi: <br/>
       <strong>CheBanca!</strong> - Viale Luigi Bodio, 37, 20158 - Milano (MI)<br/>
       <strong>Iban</strong> IT 84 O 03058 01604 100571277268<br/>
-      <strong>BIC/SWIFT</strong> MICSITM1XXX<br/>
-      <br/><br/>
-      <button class="btn btn-icon-text waves-effect" ng-click="bonificando = false"><i class="zmdi zmdi-arrow-back"></i>  Indietro</button>
-      <button class="btn btn-info btn-icon-text waves-effect" uploadfile><i class="zmdi zmdi-upload"></i> Carica Evidenza di pagamento</button>
-      <input id="upload" type="file" onchange="angular.element(this).scope().upload(this)" style="display: none;">
+      <strong>BIC/SWIFT</strong> MICSITM1XXX<br/><br/>
+    </p>
+    <button class="btn btn-icon-text waves-effect" ng-click="isBonifico = false">
+      <i class="zmdi zmdi-arrow-back"></i>  Indietro
+    </button>
+
+    <div class="fileinput fileinput-new" data-provides="fileinput">
+      <span class="btn btn-primary btn-file waves-effect m-r-10">
+        <span class="fileinput-new">
+          <i class="zmdi zmdi-upload"></i> Carica Evidenza di pagamento
+        </span>
+        <span class="fileinput-exists">
+          <i class="zmdi zmdi-upload"></i> Carica Evidenza di pagamento
+        </span>
+        <input type="file" name="payFile" onchange="angular.element(this).scope().payWithBankTransfer(this)">
+      </span>
+      <span class="fileinput-filename"></span>
+      <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
     </div>
 
-    <!--payOffline() -->
-
+  </div>
 </div>
-<div class="modal-footer">
 
-</div>

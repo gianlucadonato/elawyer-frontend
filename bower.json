@@ -47,6 +47,7 @@
     "font-awesome": "^4.6.3",
     "loaders.css": "^0.1.2",
     "jspdf": "^1.2.61",
-    "chosen": "1.5.1"
+    "chosen": "1.5.1",
+    "jasny-bootstrap": "^3.1.3"
   }
 }

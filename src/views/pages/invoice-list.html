@@ -12,30 +12,23 @@
       <div class="table-responsive" ng-if="invoices.length && !isLoading">
         <table ng-table="mattersTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in invoices">
-            <td data-title="'Title'" sortable="'title'">
-              <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
+            <td data-title="'Titolo'" sortable="'title'">
+              <a ui-sref="page.invoice-details({id: m.id})"> {{ m.matter.title }}</a>
+              <span ng-if="m.invoice_type === 'deposit'"> (Acconto)</span>
+              <span ng-if="m.invoice_type === 'balance'"> (Saldo)</span>
             </td>
-            <td data-title="'Paid'" sortable="'m.paid'">
-              <div class="flag flag-pending" ng-if="!m.paid">Not Paid</div>
-              <div class="flag flag-success" ng-if="m.paid">Paid</div>
+            <td data-title="'Stato'" sortable="'m.is_paid'">
+              <div class="flag flag-success" ng-if="m.is_paid">Pagato</div>
+              <div class="flag flag-pending" ng-if="!m.is_paid">Non Pagato</div>
             </td>
-            <td data-title="'Type'">
-              <div ng-if="m.is_deposit">Deposit</div>
-              <div ng-if="m.is_balance">Balance</div>
-              <div ng-if="!m.is_balance && !m.is_deposit">Summary</div>
+            <td data-title="'Pagamento'" sortable="'m.is_confirmed'">
+              <div class="flag flag-success" ng-if="m.is_confirmed">Verificato</div>
+              <div class="flag flag-closed" ng-if="!m.is_confirmed">Non Verificato</div>
             </td>
-            <td data-title="'Payment'" sortable="'m.is_confirmed'">
-              <div class="flag flag-success" ng-if="m.is_confirmed">Confirmed</div>
-              <div class="flag flag-closed" ng-if="!m.is_confirmed">Not Confirmed</div>
-            </td>
-            <td data-title="'Status'" sortable="'m.number'">
-              <div class="flag flag-pending" ng-if="!m.number">Not legal</div>
-              <div class="flag flag-success" ng-if="m.number">Ready</div>
-            </td>
-            <td data-title="'Lawyer'" sortable="'m.owner.first_name'">
+            <td data-title="'Avvocato'" sortable="'m.owner.first_name'">
               <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
             </td>
-            <td data-title="'Paid Date'" sortable="'created_at'">
+            <td data-title="'Data di Creazione'" sortable="'m.created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
           </tr>
@@ -48,30 +41,27 @@
       <div class="table-responsive" ng-if="invoices.length && !isLoading">
         <table ng-table="mattersTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in invoices">
-            <td data-title="'Title'" sortable="'title'">
+            <td data-title="'Titolo'" sortable="'title'">
               <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
+              <span ng-if="m.invoice_type === 'deposit'"> (Acconto)</span>
+              <span ng-if="m.invoice_type === 'balance'"> (Saldo)</span>
             </td>
-            <td data-title="'Paid'" sortable="'m.paid'">
-              <div class="flag flag-pending" ng-if="!m.paid">Not Paid</div>
-              <div class="flag flag-success" ng-if="m.paid">Paid</div>
+            <td data-title="'Stato'" sortable="'m.is_paid'">
+              <div class="flag flag-closed" ng-if="!m.is_paid">Non Pagata</div>
+              <div class="flag flag-success" ng-if="m.is_paid">Pagata</div>
             </td>
-            <td data-title="'Type'">
-              <div ng-if="m.is_deposit">Deposit</div>
-              <div ng-if="m.is_balance">Balance</div>
-              <div ng-if="!m.is_balance && !m.is_deposit">Summary</div>
+            <td data-title="'Pagamento'" sortable="'m.is_confirmed'">
+              <div class="flag flag-success" ng-if="m.is_confirmed">Verificato</div>
+              <div class="flag flag-closed" ng-if="!m.is_confirmed">Non Verificato</div>
             </td>
-            <td data-title="'Payment'" sortable="'m.is_confirmed'">
-              <div class="flag flag-success" ng-if="m.is_confirmed">Confirmed</div>
-              <div class="flag flag-closed" ng-if="!m.is_confirmed">Not Confirmed</div>
+            <td data-title="'N.Fattura'" sortable="'m.invoice_number'">
+              <div class="flag flag-pending" ng-if="!m.invoice_number">Non Inserito</div>
+              <div class="flag flag-success" ng-if="m.invoice_number">Inserito</div>
             </td>
-            <td data-title="'Status'" sortable="'m.number'">
-              <div class="flag flag-pending" ng-if="!m.number">Not legal</div>
-              <div class="flag flag-success" ng-if="m.number">Ready</div>
-            </td>
-            <td data-title="'Customer'" sortable="'m.customer.first_name'">
+            <td data-title="'Cliente'" sortable="'m.customer.first_name'">
               <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
             </td>
-            <td data-title="'Paid Date'" sortable="'created_at'">
+            <td data-title="'Data di Creazione'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
           </tr>
@@ -80,7 +70,7 @@
     </div>
 
     <div class="alert alert-danger" ng-if="invoices.length == 0 && !isLoading">
-      There are no Invoices.
+      Non ci sono fatture.
     </div>
     <div class="isLoading" ng-if="isLoading">
       <div class="loader">

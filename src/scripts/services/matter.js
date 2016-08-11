@@ -50,19 +50,6 @@
       return deferred.promise;
     };
 
-    api.areas = function(id) {
-      var deferred = $q.defer();
-      $http
-        .get(API.host + '/api/matters/areas')
-        .then(function(res){
-          deferred.resolve(res.data);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
-    };
-
     api.create = function(obj) {
       var deferred = $q.defer();
       $http
@@ -89,6 +76,10 @@
       return deferred.promise;
     };
 
+    api.save = function(obj) {
+      return obj.id ? api.update(obj) : api.create(obj);
+    };
+
     api.send = function(obj) {
       var deferred = $q.defer();
       $http
@@ -102,10 +93,10 @@
       return deferred.promise;
     };
 
-    api.pay = function(id, data) {
+    api.pay = function(obj, opt) {
       var deferred = $q.defer();
       $http
-        .post(API.host + '/api/matters/'+id+'/pay', data)
+        .post(API.host + '/api/matters/'+obj.id+'/pay', opt)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -115,14 +106,23 @@
       return deferred.promise;
     };
 
-    api.save = function(obj) {
-      return obj.id ? api.update(obj) : api.create(obj);
-    };
-
     api.delete = function(obj) {
       var deferred = $q.defer();
       $http
         .delete(API.host + '/api/matters/' + obj.id)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+    api.areas = function(id) {
+      var deferred = $q.defer();
+      $http
+        .get(API.host + '/api/matters/areas')
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -141,32 +141,51 @@
       items.splice(index, 1);
     };
 
-    function percentage(input, percent) {
-      return input/100 * percent;
+    /* CALCULATE INVOICE */
+    function calcInvoice(matter, count_all) {
+      var total_services = 0;
+      matter.items.forEach(function(item) {
+        if (count_all || item.is_mandatory || item.is_selected)
+          total_services += parseFloat(item.price);
+      });
+
+      var deposit_percentage = (total_services * matter.deposit)/100;
+      var balance_percentage = (total_services * (100 - matter.deposit))/100;
+      var invoice = {
+        full: calcTotal(total_services, matter.withholding_tax),
+        deposit: calcTotal(deposit_percentage, matter.withholding_tax),
+        balance: calcTotal(balance_percentage, matter.withholding_tax)
+      };
+      return invoice;
     }
 
-    editor.getPrice = function(sum) {
-      var total = sum;
-      var expenses_refund_percentage = 15;
-      var vat_precentage = 22;
-      var social_taxes_percentage = 4;
-      var expenses_refund = percentage(total, expenses_refund_percentage);
-      var social_taxes = percentage(total + expenses_refund, social_taxes_percentage);
-      var vat = percentage(total + expenses_refund + social_taxes, vat_precentage);
+    function calcTotal(total_services, is_withholding_tax) {
+      var expenses_refund = (total_services * 15)/100;
+      var social_taxes = ((total_services + expenses_refund) * 4)/100;
+      var vat = ((total_services + expenses_refund + social_taxes) * 22)/100;
+      var total_price = (total_services + expenses_refund + social_taxes + vat);
+      var withholding_tax = (total_price * 20)/100;
+      var final_price = total_price;
+
+      if(is_withholding_tax)
+        final_price = total_price - withholding_tax;
+
       return {
-        services_total: total,
-        expenses_refund: expenses_refund,
-        social_taxes: percentage(total + expenses_refund, 4),
-        vat: vat,
-        withholding_tax: percentage(total + expenses_refund + social_taxes + vat, 20),
-        total: total + expenses_refund + percentage(total + expenses_refund, 4) + vat
+        total_services: parseFloat(total_services).toFixed(2),
+        expenses_refund: parseFloat(expenses_refund).toFixed(2),
+        social_taxes: parseFloat(social_taxes).toFixed(2),
+        vat: parseFloat(vat).toFixed(2),
+        withholding_tax: parseFloat(withholding_tax).toFixed(2),
+        total_price: parseFloat(total_price).toFixed(2),
+        final_price: parseFloat(final_price).toFixed(2)
       };
-    };
+    }
 
     return {
       api: api,
       editor: function() {return editor;},
-      template: function() {return angular.copy(template);}
+      template: function() {return angular.copy(template);},
+      calcInvoice: calcInvoice
     };
 
   });

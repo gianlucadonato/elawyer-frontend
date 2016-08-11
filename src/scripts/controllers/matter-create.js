@@ -17,7 +17,7 @@
     $scope.services = [];
     $scope.isLoading = false;
     $scope.isSaving = false;
-    $scope.total = 0;
+    $scope.showAllSrv = true;
 
     $scope.currentTmplPage = 0;
     $scope.totalTmplItems = 0;
@@ -40,16 +40,11 @@
       Matter.api.get($stateParams.id).then(function(data) {
         preventSave = true;
         $scope.matter = data;
-        calcTotal();
+        $scope.invoice = Matter.calcInvoice(data, true);
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
       });
     }
-
-    function percentage(input, percentage) {
-      return input/100 * percentage;
-    }
-
 
     function getAreaOfInterest() {
       Matter.api.areas().then(function(data) {
@@ -59,29 +54,12 @@
       });
     }
 
-    function calcTotal() {
-      $scope.total = 0;
-
-      $scope.matter.items.forEach(function(item){
-        $scope.total += parseInt(item.price);
-      });
-
-      if ($scope.matter.deposit > 0) {
-        $scope.matter.payment_settings = [Matter.editor().getPrice(percentage($scope.total, $scope.matter.deposit)), Matter.editor().getPrice(percentage($scope.total, 100 - $scope.matter.deposit))];
-        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
-      }
-      else {
-        $scope.matter.payment_settings = [];
-        $scope.matter.general_invoice = [Matter.editor().getPrice($scope.total)];
-      }
-    }
-
     // Autosave
     $scope.$watch('matter', function(newValue, oldValue) {
 
       if(!angular.equals(newValue, oldValue) && !preventSave) {
 
-        calcTotal();
+        $scope.invoice = Matter.calcInvoice(newValue, true);
 
         if(newValue.title) {
           if (timeout) {
