@@ -138,7 +138,7 @@
       delete template.is_template;
       preventSave = true;
       $scope.matter = template;
-      calcTotal();
+      $scope.invoice = Matter.calcInvoice(template, true);
       Notify.success('OK!','Template imported successfully!');
       self.addTemplateModal.dismiss();
     }
@@ -243,9 +243,14 @@
       });
     };
 
-    function fetchServices() {
+    $scope.searchServices = function(query) {
+      fetchServices(query);
+    };
+
+    function fetchServices(query) {
       $scope.isLoading = true;
       Service.api.index({
+        title: query,
         page: $scope.currentSrvPage,
         per_page: $scope.perPage,
         is_starred: true
