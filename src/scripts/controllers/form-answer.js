@@ -25,6 +25,16 @@
       });
     }
 
+    $scope.save = function() {
+      Answer.api.update($scope.form).then(function(data) {
+        Notify.success('Congratulazioni!', 'Questionario salvato con successo');
+      }).catch(function(err){
+        Notify.error('Error!', 'Impossibile salvare questionario');
+      });
+    }
+
+    $scope.isArray = angular.isArray;
+
 
     $scope.$watch('form.items', function() {
       console.log($scope.form)

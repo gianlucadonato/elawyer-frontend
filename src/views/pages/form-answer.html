@@ -1,4 +1,5 @@
-<div class="container mt-25 matter matter-list">
+<div class="container m-t-25 matter matter-list">
+
 
   <div class="card">
     <div class="card-header">
@@ -7,18 +8,42 @@
       </h2>
     </div>
 
-    <!-- LAWYER ONLY -->
-    <div class="card-body card-padding">
+
+    <div class="card-body card-padding" ng-if="review">
+      <div class="question" ng-repeat="i in form.items">
+          <div>
+            <div class="form-group">
+              <h4>{{$index + 1}}. {{i.title}}</h4>
+              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">{{r}}, </span>
+              <span ng-if="!isArray(i.value)">{{i.value}}</span>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="card-body card-padding" permission permission-only="['LAWYER']">
+      <div class="question" ng-repeat="i in form.items">
+          <div>
+            <div class="form-group">
+              <h4>{{$index + 1}}. {{i.title}}</h4>
+              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">{{r}}, </span>
+              <span ng-if="!isArray(i.value)">{{i.value}}</span>
+            </div>
+          </div>
+      </div>
+    </div>
+
+
+    <div class="card-body card-padding" permission permission-only="['CUSTOMER']" ng-if="!review">
       <form>
         <div class="question" ng-repeat="i in form.items">
-
           <div ng-if="i.type == 'date'">
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <span>{{i.description}}</span><br/>
               <div class="dd-block">
                 <div class="date-picker">
-                    <uib-datepicker show-weeks="false" ng-model="dtInline" min-date="minDate" class="dp-inline"></uib-datepicker>
+                    <uib-datepicker show-weeks="false" ng-model="i.value" ng-value="i.value" min-date="minDate" class="dp-inline"></uib-datepicker>
                 </div>
               </div>
             </div>
@@ -31,7 +56,7 @@
               <div class="input-group">
                   <span class="input-group-addon" ng-show="i.icon"><i class="zmdi zmdi-{{i.icon}}"></i></span>
                   <div class="fg-line">
-                    <input type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-value="i.value">
+                    <input type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-value="i.value" ng-model="i.value">
                   </div>
               </div>
             </div>
@@ -43,10 +68,10 @@
               <span>{{i.description}}</span>
               <div class="input-group">
                 <div class="checkbox m-b-15">
-                  <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="i in i.options">
-                      <input type="checkbox" value="{{i}}" ng-value="i.value">
+                  <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="r in i.options track by $index">
+                      <input type="checkbox" value="{{r}}" checklist-model="i.value" checklist-value="r">
                       <i class="input-helper"></i>
-                      {{i}}
+                      {{r}}
                   </label>
                 </div>
               </div>
@@ -58,11 +83,11 @@
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <span>{{i.description}}</span>
               <div class="input-group">
-                <div class="radio m-b-15" ng-repeat="i in i.options">
+                <div class="radio m-b-15" ng-repeat="r in i.options track by $index">
                     <label>
-                        <input type="radio" name="sample" value="{{i}}">
+                        <input type="radio" name="sample" value="{{i.value || r}}" ng-model="i.value">
                         <i class="input-helper"></i>
-                        {{i}}
+                        {{r}}
                     </label>
                 </div>
               </div>
@@ -92,7 +117,6 @@
                 <!-- <div style="width : 100%; height: 250px"></div> -->
               </div>
             </div>
-
           </div>
 
 
@@ -100,12 +124,23 @@
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory">*</span></h4>
               <span>{{i.description}}</span>
-                <textarea type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" style="max-width: 400px">{{i.default}}</textarea>
+                <textarea type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-model="i.value" ng-value="i.value" style="max-width: 400px">{{i.default}}</textarea>
             </div>
           </div>
         </div>
       </form>
-      <div style="width : 100%; height: 250px"></div>
+    </div>
+
+    <div class="card-footer card-padding card-actions" permission permission-only="['CUSTOMER']">
+      <button class="btn btn-orange btn-icon-text waves-effect" ng-click="review = true" ng-show="!review">
+        <span>Visualizza sommario </span><i class="zmdi zmdi-arrow-forward"></i>
+      </button>
+      <button class="btn btn-icon-text waves-effect" ng-show="review" ng-click="review = false">
+        <span>Indietro </span><i class="zmdi zmdi-arrow-back"></i>
+      </button>
+      <button class="btn btn-success btn-icon-text waves-effect" ng-show="review" ng-click="save()">
+        <span>Salva </span><i class="zmdi zmdi-upload"></i>
+      </button>
     </div>
 
     <div class="isLoading" ng-if="isLoading">

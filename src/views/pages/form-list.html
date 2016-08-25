@@ -1,4 +1,4 @@
-<div class="container mt-25 matter matter-list">
+<div class="container m-t-25 matter matter-list">
 
   <div class="card">
     <div class="card-header">
@@ -21,7 +21,7 @@
               <a ui-sref="page.form-answer({id: m.id})">{{ m.title }}</a>
             </td>
             <td data-title="'Progress'" sortable="'items.length'">
-              {{ m.items.length }}
+              {{ m.items | withval }} / {{m.items.length}}
             </td>
             <td data-title="'Avvocato'" sortable="'owner'">
               <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
@@ -53,7 +53,7 @@
               <a ui-sref="page.form-answer({id: m.id})">{{ m.title }}</a>
             </td>
             <td data-title="'Progress'" sortable="'items.length'">
-              {{ m.items.length }}
+              {{ m.items | withval }} / {{m.items.length}}
             </td>
             <td data-title="'Cliente'" sortable="'customer'">
               <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
