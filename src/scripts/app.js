@@ -5,6 +5,7 @@ var App = angular.module('eLawyer', [
   'ngStorage',
   'ngResource',
   'ngMessages',
+  'localytics.directives', //angular chosend
   'ui.router',
   'ui.bootstrap',
   'permission',

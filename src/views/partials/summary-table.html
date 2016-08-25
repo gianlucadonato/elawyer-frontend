@@ -157,16 +157,6 @@
                   <th id="total">€ {{r.services_total + r.expenses_refund + r.social_taxes + r.vat | prettyNumber}}</th>
                 </tr>
 
-                <!-- <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
-                  <th>Acconto</th>
-                  <th id="total_acconto">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: matter.deposit) | prettyNumber}}</th>
-                </tr>
-
-                <tr ng-if="matter.deposit > 0 && !matter.withholding_tax">
-                  <th>Saldo</th>
-                  <th id="total_saldo">€ {{((total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) + (total + (total | percentage: 15) + ((total + (total | percentage: 15)) | percentage: 4) | percentage: 22)) | percentage: (100 - matter.deposit)) | prettyNumber}}</th>
-                </tr> -->
-
                 <tr ng-if="matter.withholding_tax">
                   <td>Ritenuta d'acconto (-20% Totale Imponibile)</td>
                   <td>€ {{r.withholding_tax | prettyNumber}}</td>

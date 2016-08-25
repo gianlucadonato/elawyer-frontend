@@ -1,9 +1,9 @@
 <div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Import Template</h4>
+  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Import Question</h4>
 </div>
 <div class="modal-body import-matter-template">
-  <div class="listview" ng-if="templates.length && !isLoading">
-    <a class="lv-item" href="" ng-click="addTemplate(t)" data-ng-repeat="t in templates">
+  <div class="listview" ng-if="questions.length && !isLoading">
+    <a class="lv-item" href="" ng-click="addQuestion(t)" data-ng-repeat="t in questions">
       <div class="media">
         <div class="pull-left">
           <button class="btn bgm-lightblue waves-effect">
@@ -17,8 +17,8 @@
       </div>
     </a>
   </div>
-  <div class="alert alert-danger" ng-if="templates.length == 0 && !isLoading">
-    Templates Empty!
+  <div class="alert alert-danger" ng-if="questions.length == 0 && !isLoading">
+    Questions Empty!
   </div>
   <div class="isLoading" ng-if="isLoading">
     <div class="loader">
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="pagination-wrp" ng-class="{'hide': totalTmplItems <= perPage }">
-    <uib-pagination total-items="totalTmplItems" items-per-page="perPage" ng-model="currentTmplPage" ng-change="nextTemplate(currentTmplPage)"></uib-pagination>
+  <div class="pagination-wrp" ng-class="{'hide': totalSrvItems <= perPage }">
+    <uib-pagination total-items="totalSrvItems" items-per-page="perPage" ng-model="currentSrvPage" ng-change="nextService(currentSrvPage)"></uib-pagination>
   </div>
 </div>

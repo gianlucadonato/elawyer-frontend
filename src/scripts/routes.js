@@ -144,6 +144,50 @@
         }
       })
       //------------------------------
+      // FORMS
+      //------------------------------
+      .state('page.form-list', {
+        url: '/forms/list',
+        title: 'Forms List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-list.html'),
+        controller: 'FormListCtrl'
+      })
+      .state('page.form-create', {
+        url: '/forms/create',
+        title: 'Forms Create',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-create.html'),
+        controller: 'FormCreateCtrl'
+      })
+      .state('page.form-answer', {
+        url: '/forms/:id/answer',
+        title: 'Forms Answer',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-answer.html'),
+        controller: 'FormAnswerCtrl'
+      })
+      .state('page.form-edit', {
+        url: '/forms/:id/edit',
+        title: 'Forms Edit',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-create.html'),
+        controller: 'FormCreateCtrl'
+      })
+      .state('page.form-draft', {
+        url: '/forms/draft',
+        title: 'Forms Draft',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-draft.html'),
+        controller: 'FormDraftCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
+      })
+
+      //------------------------------
       // DOCUMENTS
       //------------------------------
       .state('page.documents', {

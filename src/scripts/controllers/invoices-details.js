@@ -155,7 +155,7 @@
     $scope.confirm = function() {
       swal({
           title: "Are you sure ? ",
-          text: "Sei sicuro di avere ricevuto un'evidenza di pagamento valida?",
+          text: "Sei sicuro di avere ricevuto un'evidenza di pagamento valida ?",
           type: "warning",
           showCancelButton: true,
           confirmButtonText: "OK!",

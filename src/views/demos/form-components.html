@@ -627,7 +627,7 @@
                     <div class="date-picker input-group" ng-class="{ 'is-opened': opened == true }">
                         <span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
                         <div class="fg-line" ng-class="{ 'fg-toggled': opened == true }">
-                            <input ng-click="open($event, 'opened')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="dtPopup" is-open="opened" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
+                            <input ng-click="openDP($event, 'opened')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" is-open="opened" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
                         </div>
                     </div>
 

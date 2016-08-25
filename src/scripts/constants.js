@@ -14,9 +14,9 @@
         'simpleWeather': ['vendors/jquery.simpleWeather.min.js'],
         'mediaelement':  ['vendors/mediaelement/mediaelement-and-player.min.js',
                           'vendors/mediaelement/mediaelementplayer.min.css'],
-        'chosen':        ['vendors/chosen/chosen.jquery.js',
-                          'vendors/chosen/angular-chosen-localytics.js',
-                          'vendors/chosen/chosen.min.css'],
+        // 'chosen':        ['vendors/chosen/chosen.jquery.js',
+        //                   'vendors/chosen/angular-chosen-localytics.js',
+        //                   'vendors/chosen/chosen.min.css'],
         'lightgallery':  ['vendors/lightgallery/css/lightgallery.css',
                           'vendors/lightgallery/js/lightgallery.min.js']
       }
