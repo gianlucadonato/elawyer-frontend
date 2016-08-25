@@ -9,23 +9,23 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Title</th>
+              <th>Titolo</th>
               <th>Area</th>
-              <th>Status</th>
-              <th permission permission-only="['LAWYER', 'ADMIN']">Customer</th>
-              <th permission permission-only="['CUSTOMER', 'ADMIN']">Lawyer</th>
-              <th>Open Date</th>
+              <!-- <th>Stato</th> -->
+              <th permission permission-only="['LAWYER', 'ADMIN']">Cliente</th>
+              <th permission permission-only="['CUSTOMER', 'ADMIN']">Avvocato</th>
+              <th>Data di Apertura</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{matter.title}}</td>
               <td>{{matter.area_of_interest}}</td>
-              <td>
+              <!-- <td>
                 <div class="flag flag-success" ng-if="matter.status == 'success'">Open</div>
                 <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
                 <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
-              </td>
+              </td> -->
               <td permission permission-only="['LAWYER', 'ADMIN']">
                 <a ui-sref="profile.details(matter.customer)">{{matter.customer.first_name}} {{matter.customer.last_name}}</a>
               </td>
@@ -42,16 +42,42 @@
 
   <div class="row" ng-if="!showNext">
     <div class="col-sm-8">
-      <div class="card m-t-25">
+      <div class="card m-t-25 invoice-letter">
         <div class="card-header">
-          <div ng-include="'views/partials/letterhead.html'"></div>
+          <div class="invoice-letter-header">
+            <img src="images/logo.png" alt="">
+            <div class="pull-right text-right">
+              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <p>
+                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
+                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
+                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
         </div>
         <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <p>
+                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
+                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
+                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+              </p>
+            </div>
+            <div class="col-sm-6 text-right"></div>
+          </div>
+
           <h3>Lettera di incarico</h3>
           <hr/>
-          <p>
+          <p ng-if="matter.description">{{matter.description}}</p>
+          <p ng-if="!matter.description">
             Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’Incarico).<br/><br/>
             Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.
+          </p>
+          <p>
             <h4>Oggetto dell’Incarico</h4>
             L'incarico avrà per oggetto le seguenti attività:
           </p>
@@ -61,8 +87,8 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Services</th>
-                  <th>Price</th>
+                  <th>Servizi</th>
+                  <!-- <th>Price</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -95,9 +121,9 @@
                       </ol>
                     </ul>
                   </td>
-                  <td width="15%">
+                  <!-- <td width="15%">
                     <span>€ {{item.price}}</span>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -105,7 +131,7 @@
         </div>
         <div class="card-footer card-padding card-actions">
           <button class="btn btn-orange btn-icon-text waves-effect" ng-click="next()">
-            <span>Continue </span><i class="zmdi zmdi-arrow-forward"></i>
+            <span>Avanti </span><i class="zmdi zmdi-arrow-forward"></i>
           </button>
         </div>
       </div>
@@ -120,7 +146,7 @@
           <table width="100%">
             <tbody>
               <tr ng-repeat="srv in matter.items">
-                <td width="85%">
+                <td width="75%">
                   <div class="checkbox">
                     <label ng-if="!srv.is_mandatory">
                       <input type="checkbox" ng-model="srv.is_selected">
@@ -143,8 +169,8 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
-                <th width="85%">Netto da Versare:</th>
-                <th>€ {{total | prettyNumber}}</th>
+                <th width="75%">Netto da Versare:</th>
+                <th>€ {{ invoice.full.total_services | prettyNumber}}</th>
               </tr>
             </tbody>
           </table>
@@ -153,22 +179,64 @@
     </div>
   </div>
 
-</div>
+  <!-- NEXT PAGE -->
+  <div class="row" ng-show="showNext">
+    <div class="col-sm-12">
+      <div class="card m-t-25 invoice-letter">
+        <div class="card-header">
+          <div class="invoice-letter-header">
+            <img src="images/logo.png" alt="">
+            <div class="pull-right text-right">
+              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <p>
+                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
+                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
+                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <p>
+                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
+                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
+                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+              </p>
+            </div>
+            <div class="col-sm-6 text-right"></div>
+          </div>
 
-<div class="container">
-  <section ng-include="'views/partials/summary-table.html'" ng-hide="!showNext"></section>
-</div>
+          <div class="row">
+            <div class="col-sm-12 invoice-letter-body">
+              <div ng-include="'views/partials/invoice-summary.html'"></div>
+            </div>
+          </div>
 
+        </div>
 
-<div class="container" ng-hide="!showNext">
-  <div style="display:inline-block; float:right">
-    <button class="btn waves-effect" ng-click="showNext = false" style=""><i class="zmdi zmdi-arrow-back"></i><span> Indietro</span></button>
-    <span ng-if="current_user.id == matter.customer.id">
-    <button class="btn btn-info waves-effect" ng-click="pay(false)" ng-if="matter.deposit>0" style="">Paga acconto</button>
-    <button class="btn btn-info waves-effect" ng-click="pay(true)" style="">Paga Fattura
-      <span ng-if="matter.deposit>0"> complessiva</span>
-    </button>
-    </span>
+        <div class="card-footer card-padding"
+          ng-hide="matter.invoice_id || matter.deposit_invoice_id">
+          <div class="pull-right">
+            <button class="btn waves-effect" ng-click="showNext = false">
+              <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
+            </button>
+            <span ng-if="current_user.id == matter.customer.id">
+              <button class="btn btn-info waves-effect" ng-click="openPaymentModal('deposit')" ng-if="matter.deposit>0">
+                Paga acconto
+              </button>
+              <button class="btn btn-primary waves-effect" ng-click="openPaymentModal('full')">
+                Paga Fattura <span ng-if="matter.deposit>0"> Complessiva</span>
+              </button>
+            </span>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <br/><br/><br/><br/>
+
 </div>

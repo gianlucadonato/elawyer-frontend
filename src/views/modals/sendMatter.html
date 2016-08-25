@@ -1,14 +1,14 @@
 <div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> Send Matter</h4>
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> INVIA LETTERA D'INCARICO</h4>
 </div>
 <div class="modal-body send-matter-template">
   <form ng-submit="sendMatterTo(cUser)">
     <div class="form-group">
-      <input type="text" ng-model="cUser" placeholder="Search a Customer" class="form-control"
+      <input type="text" ng-model="cUser" placeholder="Cerca Cliente" class="form-control"
              uib-typeahead="u as u.name for u in searchUser($viewValue)">
     </div>
     <div class="form-group m-t-10">
-      <button type="submit" class="btn btn-orange btn-block waves-effect">SEND</button>
+      <button type="submit" class="btn btn-orange btn-block waves-effect">INVIA</button>
     </div>
   </form>
 </div>

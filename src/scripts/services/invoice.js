@@ -9,7 +9,6 @@
   App.factory('Invoice', function ($rootScope, $q, $http, API, Service) {
 
     var api = {};
-    var editor = {};
     var template = {
       title: '',
       description: '',
@@ -20,7 +19,6 @@
       expenses_refund: 0,
       social_taxes: 0,
       vat: 0,
-      withholding_tax: 0,
       is_template: false,
       items: [Service.template()]
     };
@@ -32,19 +30,6 @@
         .get(API.host + '/api/invoices', {
           params: params
         })
-        .then(function(res){
-          deferred.resolve(res.data);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
-    };
-
-    api.pay = function(id, data) {
-      var deferred = $q.defer();
-      $http
-        .post(API.host + '/api/invoices/'+id+'/pay', data)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -81,6 +66,33 @@
       return deferred.promise;
     };
 
+    api.download = function(id) {
+      var deferred = $q.defer();
+      $http
+        .get(API.host + '/api/invoices/'+id+'/download', {
+          responseType: 'arraybuffer'
+        })
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
+    api.pay = function(id, data) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/invoices/'+id+'/pay', data)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
 
     return {
       api: api,

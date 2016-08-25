@@ -1,0 +1,87 @@
+/* ==================
+ * INVOICE/LETTER
+ * ===================*/
+.invoice-letter {
+  .invoice-letter-header {
+    img {
+      display: block;
+      width: 130px;
+      height: 130px;
+      float: left;
+      margin-right: 30px;
+    }
+    h4 {
+      // font-weight: 300;
+      margin-bottom: 3px;
+    }
+  }
+  .invoice-letter-body {
+    h4 {
+      margin-bottom: 0px;
+    }
+    hr {
+      margin-top: 8px;
+    }
+  }
+  table {
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    thead tr th {
+      background: #FF621D !important;
+      color: white !important;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+  .invoice-number {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 18px;
+  }
+  .card-footer {
+    padding-top: 0;
+    hr {
+      margin-top: 0;
+    }
+  }
+}
+
+/* ==================
+ * GENERALS
+ * ===================*/
+.invoices {
+  .card-header .actions {
+    top: 18px;
+    right: 18px;
+  }
+}
+
+/* ==================
+ * INVOICE LIST
+ * ===================*/
+.invoice-list {
+  // Data Table
+  .ng-table-counts {
+    display: none;
+  }
+  .ng-table-pager {
+    display: flex;
+    justify-content: center;
+  }
+}
+/* ==================
+ * INVOICE DETAILS
+ * ===================*/
+.invoice-details {
+  .top-alert {
+    display: flex;
+    span:first-child {
+      line-height: 1;
+      padding: 6px 0px;
+    }
+    button {
+      margin-left: auto;
+    }
+  }
+}

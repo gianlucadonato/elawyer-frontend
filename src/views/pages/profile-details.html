@@ -1,6 +1,6 @@
 <div class="pmb-block">
   <div class="pmbb-header">
-    <h2><i class="zmdi zmdi-account-circle m-r-5"></i> Profile Informations</h2>
+    <h2><i class="zmdi zmdi-account-circle m-r-5"></i> Informazioni Profilo</h2>
     <ul class="actions" data-ng-if="!editProfileInfo && user.id == me.id">
       <li class="dropdown">
         <a href="" data-ng-click="toggleProfileInfo()">
@@ -12,42 +12,58 @@
   <div class="pmbb-body p-l-30">
     <div class="pmbb-view" data-ng-if="!editProfileInfo">
       <dl class="dl-horizontal">
-        <dt>Full Name</dt>
+        <dt>Nome e Cognome</dt>
         <dd>{{ user.first_name}} {{ user.last_name}}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Nome Società</dt>
+        <dd>{{ user.company }}</dd>
       </dl>
       <dl class="dl-horizontal">
         <dt>Email</dt>
         <dd>{{ user.email }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Gender</dt>
-        <dd>{{ user.gender }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>Birthday</dt>
+        <dt>Data di Nascita</dt>
         <dd>{{ user.birthday | amDateFormat:'DD/MM/YYYY'}}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Residence</dt>
+        <dt>Luogo di Nascita</dt>
+        <dd>{{ user.birth_place }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Residenza</dt>
         <dd>{{ user.residence }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Phone</dt>
+        <dt>Domicilio</dt>
+        <dd>{{ user.domicile }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Codice Fiscale</dt>
+        <dd>{{ user.fiscal_code }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Partita Iva</dt>
+        <dd>{{ user.vat_number }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Regime Matrimoniale</dt>
+        <dd>{{ user.matrimonial_regime }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Telefono</dt>
         <dd>{{ user.phone }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Mobile Phone</dt>
-        <dd>{{ user.cellphone }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>Skype</dt>
-        <dd>{{ user.skype }}</dd>
+        <dt>Cellulare</dt>
+        <dd>{{ user.mobile_phone }}</dd>
       </dl>
     </div>
 
     <form class="pmbb-edit" data-ng-if="editProfileInfo">
       <dl class="dl-horizontal">
-        <dt class="p-t-10">First Name</dt>
+        <dt class="p-t-10">Nome</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.first_name" type="text" class="form-control" value="{{ user.first_name }}" placeholder="eg. Mario">
@@ -55,10 +71,18 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Last Name</dt>
+        <dt class="p-t-10">Cognome</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.last_name" type="text" class="form-control" value="{{ user.last_name }}" placeholder="eg. Rossi">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Nome Società</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.company" type="text" class="form-control" placeholder="eg. ACME ">
           </div>
         </dd>
       </dl>
@@ -71,18 +95,7 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Gender</dt>
-        <dd>
-          <div class="fg-line">
-            <select class="form-control" ng-model="user.gender">
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-            </select>
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Birthday</dt>
+        <dt class="p-t-10">Data di Nascita</dt>
         <dd>
           <div class="dtp-container dropdown fg-line">
             <input type='text' class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
@@ -90,15 +103,58 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Residence</dt>
+        <dt class="p-t-10">Luogo di Nascita</dt>
         <dd>
           <div class="fg-line">
-            <input type="text" ng-model="user.residence" placeholder="Residence" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            <input type="text" ng-model="user.birth_place" placeholder="Luogo di Nascita" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
           </div>
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Phone</dt>
+        <dt class="p-t-10">Residenza</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="user.residence" placeholder="Residenza" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Domicilio</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="user.domicile" placeholder="Domicilio" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Codice Fiscale</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.fiscal_code" type="text" class="form-control" placeholder="Codice Fiscale">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Partita Iva</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.vat_number" type="text" class="form-control" placeholder="P.Iva">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Regime Matrimoniale</dt>
+        <dd>
+          <div class="fg-line">
+            <select class="form-control" ng-model="user.matrimonial_regime">
+              <option value="separation">Separazione dei beni</option>
+              <option value="sharing">Comunione dei beni</option>
+            </select>
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
@@ -106,24 +162,16 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Mobile Phone</dt>
+        <dt class="p-t-10">Cellulare</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
           </div>
         </dd>
       </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Skype</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.skype" type="text" class="form-control" placeholder="eg. mario.rossi">
-          </div>
-        </dd>
-      </dl>
       <div class="m-t-30">
-        <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">Save</button>
-        <button class="btn btn-link btn-sm" data-ng-click="toggleProfileInfo()" >Cancel</button>
+        <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">SALVA</button>
+        <button class="btn btn-link btn-sm" data-ng-click="toggleProfileInfo()" >ANNULLA</button>
       </div>
     </form>
   </div>
@@ -131,7 +179,7 @@
 
 <div class="pmb-block">
   <div class="pmbb-header">
-    <h2><i class="zmdi zmdi-card m-r-5"></i> Billing Information</h2>
+    <h2><i class="zmdi zmdi-card m-r-5"></i> Dati di fatturazione</h2>
     <ul class="actions" data-ng-if="!editBillingInfo && user.id == me.id">
       <li class="dropdown">
         <a href="" data-ng-click="toggleBillingInfo()">
@@ -143,26 +191,17 @@
   <div class="pmbb-body p-l-30">
     <div class="pmbb-view" data-ng-if="!editBillingInfo">
       <dl class="dl-horizontal">
-        <dt>Holder Name</dt>
+        <dt>Ragione Sociale</dt>
         <dd>{{ user.billing_holder }} </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Address</dt>
+        <dt>Indirizzo</dt>
         <dd>{{ user.address }}</dd>
       </dl>
-      <dl class="dl-horizontal">
-        <dt>Fiscal Code</dt>
-        <dd>{{ user.fiscal_code }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>VAT Number (P.Iva)</dt>
-        <dd>{{ user.vat_number }}</dd>
-      </dl>
     </div>
-
     <form class="pmbb-edit" data-ng-if="editBillingInfo">
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Holder</dt>
+        <dt class="p-t-10">Ragione Sociale</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.billing_holder" type="text" class="form-control">
@@ -170,32 +209,16 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Address</dt>
+        <dt class="p-t-10">Indirizzo</dt>
         <dd>
           <div class="fg-line">
             <input type="text" ng-model="user.address" placeholder="Address" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
           </div>
         </dd>
       </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">VAT Number (P.Iva)</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.vat_number" type="text" class="form-control">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Fiscal Code</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.fiscal_code" type="text" class="form-control">
-          </div>
-        </dd>
-      </dl>
       <div class="m-t-30">
-          <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">Save</button>
-          <button class="btn btn-link btn-sm" data-ng-click="toggleBillingInfo()" >Cancel</button>
+          <button class="btn btn-primary btn-sm" data-ng-click="updateUser(user)">SALVA</button>
+          <button class="btn btn-link btn-sm" data-ng-click="toggleBillingInfo()" >ANNULLA</button>
       </div>
     </form>
   </div>

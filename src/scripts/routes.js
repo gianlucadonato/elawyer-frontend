@@ -204,11 +204,11 @@
         url: '/invoices',
         title: 'Invoices',
         requireLogin: true,
-        templateUrl: helper.pagesPath('invoices.html'),
+        templateUrl: helper.pagesPath('invoice-list.html'),
         controller: 'InvoicesListCtrl'
       })
       .state('page.invoice-details', {
-        url: '/invoice-details/:id',
+        url: '/invoices/:id',
         title: 'Invoice Detail',
         requireLogin: true,
         templateUrl: helper.pagesPath('invoice-details.html'),

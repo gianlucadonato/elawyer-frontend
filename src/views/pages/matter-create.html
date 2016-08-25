@@ -33,8 +33,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Description</th>
+                    <th>Titolo</th>
                     <th>Area</th>
                   </tr>
                 </thead>
@@ -42,22 +41,31 @@
                   <tr>
                     <td>
                       <div class="form-group">
-                        <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="matter.title">
-                      </div>
-                    </td>
-                    <td>
-                      <div class="form-group">
-                        <textarea auto-size class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
+                        <input type="text" name="Title" class="form-control" placeholder="Inserisci Titolo (Per uso interno)" ng-model="matter.title">
                       </div>
                     </td>
                     <td>
                       <div class="form-group">
                         <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!insertArea">
-                          <option value="" disabled selected>Select Area</option>
+                          <option value="" disabled selected>Seleziona Area</option>
                           <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
                           <option value="__manual__">Immetti manualmente</option>
                         </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Insert Area" ng-model="matter.area_of_interest">
+                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="matter.area_of_interest">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead><tr><th>Intestazione</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="matter.description"></textarea>
                       </div>
                     </td>
                   </tr>
@@ -67,16 +75,14 @@
           </form>
 
           <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importService()"
-            tooltip-placement="bottom" uib-tooltip="Import Service">
+            tooltip-placement="bottom" uib-tooltip="Importa Fase">
             <i class="zmdi zmdi-plus"></i>
           </button>
           <button class="btn bgm-blue btn-float waves-effect" ng-click="sendMatterModal()"
-            tooltip-placement="bottom" uib-tooltip="Send to Client">
+            tooltip-placement="bottom" uib-tooltip="Invia a Cliente">
             <i class="zmdi zmdi-mail-send"></i>
           </button>
         </div>
-
-
 
         <div class="card-body card-padding">
           <div ui-tree>
@@ -84,22 +90,22 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Services</th>
-                  <th>Price</th>
-                  <th>Actions</th>
+                  <th>FASI</th>
+                  <th>PREZZO</th>
+                  <th>AZIONI</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- SERVICES -->
                 <tr ng-repeat="item in matter.items" ui-tree-node>
                   <td ui-tree-handle width="3%">{{$index + 1}}</td>
-                  <td width="75%">
+                  <td width="70%">
                     <form>
                       <div class="form-group">
-                        <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="item.title">
+                        <input type="text" name="Title" class="form-control" placeholder="Titolo" ng-model="item.title">
                       </div>
                       <div class="form-group">
-                        <textarea auto-size class="form-control" placeholder="Description" ng-model="item.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Descrizione" ng-model="item.description"></textarea>
                       </div>
                       <div class="checkbox">
                         <label>
@@ -131,7 +137,7 @@
                       </tbody>
                     </table>
                   </td>
-                  <td width="8%">
+                  <td>
                     <form>
                       <div class="input-group amount">
                         <span class="input-group-addon"><i class="fa fa-eur"></i></span>
@@ -139,7 +145,7 @@
                       </div>
                     </form>
                   </td>
-                  <td width="14%" class="text-right">
+                  <td class="text-right">
                     <ul class="actions">
                       <li>
                         <a href="" ng-click="editor.addItem(item.items)"
@@ -174,7 +180,7 @@
             <span ng-if="!isSaving && !errorSaving">Saved</span>
             <a href="" ng-class="{'is-saving': (isSaving || errorSaving)}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
-          <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Add Service</button>
+          <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Aggiungi Fase</button>
         </div>
 
       </div>
@@ -189,22 +195,49 @@
           <h2>Impostazioni di pagamento</h2>
         </div>
         <div class="card-body card-padding">
-
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" ng-value="matter.withholding_tax" ng-model="matter.withholding_tax">
-              <i class="input-helper"></i>
+          <form>
+            <p class="c-black f-500 m-b-20">Ritenuta d'acconto</p>
+            <label class="radio radio-inline m-r-20">
+              <input type="radio" name="withholding_tax" ng-value="false" ng-model="matter.withholding_tax" selected>
+              <i class="input-helper"></i> NO
             </label>
-            <span>Ritenuta d'acconto</span>
-          </div>
-
-          <p class="f-500 c-black m-b-5">Percentuale acconto</p>
-          <input type="number" name="Title" class="form-control" placeholder="20" max="100" min="0" ng-model="matter.deposit" ng-value="matter.deposit">
-
+            <label class="radio radio-inline m-r-20">
+              <input type="radio" name="withholding_tax" ng-value="true" ng-model="matter.withholding_tax">
+              <i class="input-helper"></i> SI
+            </label>
+            <p class="c-black f-500 m-b-20 m-t-20">Percentuale Acconto</p>
+            <div class="deposit-percentage">
+              <div slider class="input-slider" ng-model="matter.deposit" start=0 end=100></div>
+              <div class="deposit-number">
+                % <input type="number" name="deposit" ng-model="matter.deposit">
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
-  <div ng-include="'views/partials/summary-table.html'"></div>
+  <!-- INVOICE PREVIEW -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Anteprima Fattura</h2>
+        </div>
+        <div class="card-body card-padding invoice-letter">
+          <div ng-include="'views/partials/invoice-summary.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-b-25">
+    <div class="col-sm-12">
+      <button class="btn btn-info waves-effect pull-right" ng-click="sendMatterModal()">
+        <i class="zmdi zmdi-mail-send"></i> Invia a cliente
+      </button>
+    </div>
+  </div>
+
 </div>

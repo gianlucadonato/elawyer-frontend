@@ -2,6 +2,15 @@
   <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Import Service</h4>
 </div>
 <div class="modal-body import-matter-template">
+  <form>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+      <div class="fg-line">
+        <input type="text" class="form-control" placeholder="Cerca.." ng-model="query" ng-change="searchServices(query)">
+      </div>
+    </div>
+  </form>
+
   <div class="listview" ng-if="services.length && !isLoading">
     <a class="lv-item" href="" ng-click="addService(t)" data-ng-repeat="t in services">
       <div class="media">

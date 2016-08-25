@@ -1,20 +1,22 @@
-<div class="container mt-25">
+<div class="container m-t-25">
 
   <div class="card">
-    <div class="card-header card-header-flex">
-      <h2>CUSTOMERS <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
-      <a href="" class="btn btn-success" ng-click="openNewCustomerModal()">
-        <i class="zmdi zmdi-account-add"></i> New Customer
-      </a>
+    <div class="card-header ch-alt m-b-25">
+      <h2>CLIENTI <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <button class="btn bgm-blue btn-float waves-effect" ng-click="openNewCustomerModal()"
+        permission permission-only="['LAWYER', 'ADMIN']"
+        tooltip-placement="bottom" uib-tooltip="Crea Nuovo Cliente">
+        <i class="zmdi zmdi-account-add"></i>
+      </button>
     </div>
-    <br>
-    <div class="table-responsive">
-      <table class="table table-bordered">
+
+    <div class="card-body">
+      <table class="table table-bordered table-responsive">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Nome</th>
             <th>Email</th>
-            <th permission permission-only="['ADMIN']">Actions</th>
+            <th permission permission-only="['ADMIN']">Azioni</th>
           </tr>
         </thead>
         <tbody>
@@ -25,13 +27,13 @@
               <ul class="actions">
                 <li>
                   <a href=""
-                    tooltip-placement="bottom" uib-tooltip="Edit">
+                    tooltip-placement="bottom" uib-tooltip="Modifica">
                     <i class="zmdi zmdi-edit"></i>
                   </a>
                 </li>
                 <li>
                   <a href="" ng-click="deleteCustomer(c)"
-                    tooltip-placement="bottom" uib-tooltip="Delete">
+                    tooltip-placement="bottom" uib-tooltip="Elimina">
                    <i class="zmdi zmdi-delete"></i>
                   </a>
                 </li>

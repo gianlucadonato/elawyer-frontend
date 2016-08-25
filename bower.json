@@ -48,6 +48,7 @@
     "loaders.css": "^0.1.2",
     "jspdf": "^1.2.61",
     "chosen": "1.5.1",
-    "angular-chosen-localytics": "~1.4.3"
+    "angular-chosen-localytics": "~1.4.3",
+    "jasny-bootstrap": "^3.1.3"
   }
 }

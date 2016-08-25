@@ -34,23 +34,23 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Priority</th>
+                    <th>Titolo</th>
+                    <th>Intestazione</th>
+                    <th>Priorità</th>
                     <th>Area</th>
-                    <th>Status</th>
+                    <!-- <th>Stato</th> -->
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
                       <div class="form-group">
-                        <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="matter.title">
+                        <input type="text" name="Title" class="form-control" placeholder="Inserisci Titolo" ng-model="matter.title">
                       </div>
                     </td>
                     <td>
                       <div class="form-group">
-                        <textarea auto-size class="form-control" placeholder="Description" ng-model="matter.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="matter.description"></textarea>
                       </div>
                     </td>
                     <td>
@@ -61,14 +61,14 @@
                     <td>
                       <div class="form-group">
                         <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!insertArea">
-                          <option value="" disabled selected>Select Area</option>
+                          <option value="" disabled selected>Seleziona Area</option>
                           <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
                           <option value="__manual__">Immetti manualmente</option>
                         </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Insert Area" ng-model="matter.area_of_interest">
+                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="matter.area_of_interest">
                       </div>
                     </td>
-                    <td>
+                    <!-- <td>
                       <div class="form-group">
                         <select class="form-control" ng-model="matter.status">
                           <option value="" disabled selected>Status</option>
@@ -77,7 +77,7 @@
                           <option value="closed">Closed</option>
                         </select>
                       </div>
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
@@ -85,15 +85,14 @@
           </form>
 
           <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importService()"
-            tooltip-placement="bottom" uib-tooltip="Import Service">
+            tooltip-placement="bottom" uib-tooltip="Importa Fase">
             <i class="zmdi zmdi-plus"></i>
           </button>
           <button class="btn bgm-blue btn-float waves-effect" ng-click="sendMatterModal()"
-            tooltip-placement="bottom" uib-tooltip="Send to Client">
+            tooltip-placement="bottom" uib-tooltip="Invia a Cliente">
             <i class="zmdi zmdi-mail-send"></i>
           </button>
         </div>
-
 
 
         <div class="card-body card-padding">
@@ -102,16 +101,16 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Services</th>
-                  <th>Price</th>
-                  <th>Actions</th>
+                  <th>FASE</th>
+                  <th>PREZZO</th>
+                  <th>AZIONI</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- SERVICES -->
                 <tr ng-repeat="item in matter.items" ui-tree-node>
                   <td ui-tree-handle width="3%">{{$index + 1}}</td>
-                  <td width="75%">
+                  <td width="70%">
                     <form>
                       <div class="form-group">
                         <input type="text" name="Title" class="form-control" placeholder="Title" ng-model="item.title">
@@ -149,7 +148,7 @@
                       </tbody>
                     </table>
                   </td>
-                  <td width="8%">
+                  <td>
                     <form>
                       <div class="input-group amount">
                         <span class="input-group-addon"><i class="fa fa-eur"></i></span>
@@ -157,7 +156,7 @@
                       </div>
                     </form>
                   </td>
-                  <td width="14%" class="text-right">
+                  <td class="text-right">
                     <ul class="actions">
                       <li>
                         <a href="" ng-click="editor.addItem(item.items)"
@@ -224,5 +223,26 @@
     </div>
   </div>
 
-  <div ng-include="'views/partials/summary-table.html'"></div>
+  <!-- INVOICE PREVIEW -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="summary-box" class="card m-t-25">
+        <div class="card-header ch-alt">
+          <h2>Anteprima Fattura</h2>
+        </div>
+        <div class="card-body card-padding invoice-letter">
+          <div ng-include="'views/partials/invoice-summary.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-b-25">
+    <div class="col-sm-12">
+      <button class="btn btn-info waves-effect pull-right" ng-click="sendMatterModal()">
+        <i class="zmdi zmdi-mail-send"></i> Invia a cliente
+      </button>
+    </div>
+  </div>
+
 </div>
