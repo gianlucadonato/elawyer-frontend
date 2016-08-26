@@ -1,3 +1,10 @@
-<div class="file-manager">
-  <angular-filemanager></angular-filemanager>
+<div class="file-manager-wrapper">
+  <div class="signin-overlay" ng-show="showSignInOverlay">
+    <button id="btn-gdrive" class="btn btn-success btn-lg" ng-click="signInDrive($event)">
+      Sign in with Google
+    </button>
+  </div>
+  <div class="file-manager">
+    <angular-filemanager></angular-filemanager>
+  </div>
 </div>
