@@ -132,10 +132,7 @@
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
-                    <td class="text-right">
-                      <span ng-if="invoice.matter.withholding_tax">TOTALE FATTURA</span>
-                      <span ng-if="!invoice.matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
-                    </td>
+                    <td class="text-right">TOTALE FATTURA</td>
                     <td><strong>€ {{invoice.calc.total_price | prettyNumber}}</strong></td>
                   </tr>
                   <tr ng-if="invoice.matter.withholding_tax">

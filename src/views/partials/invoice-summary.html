@@ -36,10 +36,7 @@
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td class="text-right">
-            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
-            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
-          </td>
+          <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.full.total_price | prettyNumber }}</strong></td>
         </tr>
         <tr ng-if="matter.withholding_tax">
@@ -94,10 +91,7 @@
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td class="text-right">
-            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
-            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
-          </td>
+          <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.deposit.total_price | prettyNumber }}</strong></td>
         </tr>
         <tr ng-if="matter.withholding_tax">
@@ -148,10 +142,7 @@
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td class="text-right">
-            <span ng-if="matter.withholding_tax">TOTALE FATTURA</span>
-            <span ng-if="!matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
-          </td>
+          <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.balance.total_price | prettyNumber }}</strong></td>
         </tr>
         <tr ng-if="matter.withholding_tax">
