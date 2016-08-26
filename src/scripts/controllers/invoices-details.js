@@ -98,6 +98,7 @@
       });
     };
 
+
     $scope.payWithBankTransfer = function(data) {
       Uploader.upload(data.files)
         .then(function(data) {

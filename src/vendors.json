@@ -7,6 +7,7 @@
   "src/bower_components/angular-ui-router/release/angular-ui-router.min.js",
   "src/bower_components/angular-jwt/dist/angular-jwt.min.js",
   "src/bower_components/angular-messages/angular-messages.min.js",
+  "src/bower_components/angular-chosen-localytics/dist/angular-chosen.min.js",
   "src/bower_components/ngstorage/ngStorage.min.js",
   "src/bower_components/angular-loading-bar/src/loading-bar.js",
   "src/bower_components/oclazyload/dist/ocLazyLoad.min.js",

@@ -41,6 +41,21 @@
       </ul>
     </li>
 
+    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('users') }"
+      permission permission-only="['LAWYER', 'ADMIN']">
+      <a href="" toggle-submenu><i class="zmdi zmdi-format-list-numbered"></i> Questionari</a>
+      <ul>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.form-list" data-ng-click="mactrl.sidebarStat($event)">Inviati</a></li>
+        <li><a data-ui-sref-active="active" data-ui-sref="page.form-draft" data-ng-click="mactrl.sidebarStat($event)">Questionari</a></li>
+      </ul>
+    </li>
+
+    <li data-ui-sref-active="active" permission permission-only="'CUSTOMER'">
+      <a data-ui-sref="page.form-list" data-ng-click="mactrl.sidebarStat($event)">
+        <i class="zmdi zmdi-format-list-numbered"></i> Questionari
+      </a>
+    </li>
+
     <li data-ui-sref-active="active" permission permission-only="'CUSTOMER'">
       <a data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">
         <i class="zmdi zmdi-case"></i> Lettere di incarico
