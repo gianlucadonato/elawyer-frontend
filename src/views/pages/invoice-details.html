@@ -99,7 +99,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="i in invoice.matter.items">
+                  <tr ng-repeat="i in invoice.matter.items" ng-if="i.is_mandatory || i.is_selected">
                     <td width="80%">
                       <strong>{{i.title}}</strong>
                       <!-- <p class="text-muted">{{i.description}}</p> -->

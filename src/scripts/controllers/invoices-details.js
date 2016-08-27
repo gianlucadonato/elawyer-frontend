@@ -8,6 +8,8 @@
 
   App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, Matter, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
+    $scope.invoice = {};
+
     function activate() {
       getInvoice();
     }
@@ -25,14 +27,19 @@
 
     // Download PDF
     $scope.download = function() {
-      var newWin = $window.open('', '_blank');
-      Invoice.api.download($scope.invoice.id).then(function(data){
-        var file = new Blob([data], { type: 'application/pdf' });
-        var fileURL = URL.createObjectURL(file);
-        newWin.location = fileURL;
-      }).catch(function(err){
-        console.log('Unable to download pdf', err);
-      });
+      if($scope.invoice.invoice_link) {
+        $window.open($scope.invoice.invoice_link, '_blank');
+      } else {
+        // Generate Invoice Link
+        var newWin = $window.open('', '_blank');
+        Invoice.api.download($scope.invoice.id).then(function(data){
+          var file = new Blob([data], { type: 'application/pdf' });
+          var fileURL = URL.createObjectURL(file);
+          newWin.location = fileURL;
+        }).catch(function(err){
+          console.log('Unable to download pdf', err);
+        });
+      }
     };
 
     // Update Invoice Number
