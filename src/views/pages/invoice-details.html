@@ -154,7 +154,9 @@
                 <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
               </p>
             </div>
-            <div class="col-sm-12">(*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.calc.withholding_tax | prettyNumber}}</div>
+            <div class="col-sm-12" ng-if="invoice.matter.withholding_tax">
+              (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.calc.withholding_tax | prettyNumber}}
+            </div>
           </div>
         </div>  <!-- END Card Body -->
 
