@@ -8,7 +8,7 @@ input {
 }
 </style>
 
-<table ui-tree-nodes="" ng-model="context.subItems" class="table table-bordered services">
+<table ui-tree-nodes="" ng-model="context.subItems" class="table table-bordered services" ng-if="context.show">
   <thead>
     <tr ng-show="context.length > 0">
       <th>#</th>
@@ -62,7 +62,7 @@ input {
                     <h4 style="max-width: 80%">Nel caso un utente risponda "{{context.title || ['No', 'Si'][$index]}}" alla domanda "{{subItem.title}}", mostra il seguente questionario:</h4>
                     <ul class="actions">
                       <li ng-if="context.position != 'fixed';" >
-                        <a href="" ng-click="context.position = 'fixed'; context.color = 'white';" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
+                        <a href="" ng-click="context.position = 'fixed'; context.color = 'white'; context.show = true;" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
                       </li>
                       <li ng-if="context.position == 'fixed';">
                         <a href="" ng-click="context.position = 'static'; context.color = context.sColor;" tooltip-placement="bottom" uib-tooltip="Esci dalla modalità a tutto schermo"><i class="zmdi zmdi-fullscreen-exit"></i></a>
@@ -72,6 +72,12 @@ input {
                       </li>
                       <li tooltip-placement="bottom">
                         <a href="" ng-click="saveAsTemplate(context)" tooltip-placement="bottom" uib-tooltip="Salva questionario"><i class="zmdi zmdi-save"></i></a>
+                      </li>
+                      <li tooltip-placement="bottom" ng-if="!context.show">
+                        <a href="" ng-click="context.show = true" tooltip-placement="bottom" uib-tooltip="Mostra form"><i class="zmdi zmdi-plus-circle"></i></a>
+                      </li>
+                      <li tooltip-placement="bottom" ng-if="context.show">
+                        <a href="" ng-click="context.show = false" tooltip-placement="bottom" uib-tooltip="Nascondi form"><i class="zmdi zmdi-close-circle"></i></a>
                       </li>
                     </ul>
                   </div>
@@ -123,7 +129,7 @@ input {
                     <h4 style="max-width: 80%">Nel caso un utente risponda "{{context.title || ['No', 'Si'][$index]}}" alla domanda "{{subItem.title}}", mostra il seguente questionario:</h4>
                     <ul class="actions">
                       <li ng-if="context.position != 'fixed';" >
-                        <a href="" ng-click="context.position = 'fixed'; context.color = 'white';" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
+                        <a href="" ng-click="context.position = 'fixed'; context.color = 'white'; context.show = true;" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
                       </li>
                       <li ng-if="context.position == 'fixed';">
                         <a href="" ng-click="context.position = 'static'; context.color = context.sColor;" tooltip-placement="bottom" uib-tooltip="Esci dalla modalità a tutto schermo"><i class="zmdi zmdi-fullscreen-exit"></i></a>
@@ -133,6 +139,12 @@ input {
                       </li>
                       <li tooltip-placement="bottom">
                         <a href="" ng-click="saveAsTemplate(context)" tooltip-placement="bottom" uib-tooltip="Salva questionario"><i class="zmdi zmdi-save"></i></a>
+                      </li>
+                      <li tooltip-placement="bottom" ng-if="!context.show">
+                        <a href="" ng-click="context.show = true" tooltip-placement="bottom" uib-tooltip="Mostra form"><i class="zmdi zmdi-plus-circle"></i></a>
+                      </li>
+                      <li tooltip-placement="bottom" ng-if="context.show">
+                        <a href="" ng-click="context.show = false" tooltip-placement="bottom" uib-tooltip="Nascondi form"><i class="zmdi zmdi-close-circle"></i></a>
                       </li>
                     </ul>
                   </div>
@@ -170,7 +182,7 @@ input {
     tooltip-placement="bottom" uib-tooltip="Importa Domanda">
     <i class="zmdi zmdi-plus"></i> Importa domanda
   </button>
-  <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(context.subItems)">Aggiungi Domanda</button>
+  <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(context.subItems); context.show = true;">Aggiungi Domanda</button>
 </div>
 
 <hr/>
