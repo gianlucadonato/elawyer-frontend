@@ -23,6 +23,7 @@
       $scope.isLoading = true;
       Form.api.index({
         is_draft: true,
+        is_template: false,
         per_page: $scope.perPage
       }).then(function(data){
         $scope.forms = data.forms;
@@ -116,6 +117,7 @@
       if($scope.form.id)
         Answer.api.create({
           id: $scope.form.id,
+          customer_id: user.id,
           email: user.email
         }).then(function(data){
           self.sendFormModal.dismiss();

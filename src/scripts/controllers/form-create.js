@@ -47,12 +47,51 @@
     $scope.choose = function(ev) {
       $scope.form.items[$scope.usingIndex].icon = ev.toElement.innerHTML;
       modal.dismiss();
-    }
+    };
 
     $scope.createOption = function(index, item) {
+        var item = item || {title: '', subItems: []};
         $scope.form.items[index].options.push(item);
-    }
+    };
 
+    $scope.forceSubItem = function(context) {
+      if (!context.subItems)
+        context.subItems = [];
+    };
+
+
+    var colorCursor = 0;
+    $scope.getClass = function() {
+      var colors = ['#fff9f0', '#f2f9f2', '#e2d4cf', '#ebedf8', '#f0d2f5', '#e8f8ff', '#87fff4', '#c5f8ff'];
+      if (!colors[colorCursor])
+        colorCursor = 0;
+
+      colorCursor++;
+      var a = colors[colorCursor - 1];
+      console.log(a);
+      return a;
+    };
+
+    $scope.createSubOption = function(model, isRadio) {
+
+      var tmp = {title: '', subItems: []};
+      var refTmp = {title : '', subItems: []};
+
+      if (!isRadio)
+        model.push(angular.copy(tmp));
+      else {
+        if (model.length > 2)
+          model.splice(2, model.length - 1);
+        else if (model.length === 1)
+          model.push(tmp);
+        else if (model.length === 0) {
+          model.push(tmp, refTmp);
+        }
+
+      }
+
+      return;
+    };
 
     $scope.chooseIcon = function(index) {
       $scope.usingIndex = index;
@@ -138,7 +177,9 @@
 
     /* Form Templates
      * ======================*/
-    $scope.importTemplate = function() {
+    $scope.importTemplate = function(item) {
+      $scope.importContext = item;
+
       fetchTemplates();
       // Open Modal
       self.addTemplateModal = $uibModal.open({
@@ -151,7 +192,7 @@
       });
     };
 
-    $scope.addTemplate = function(item) {
+    $scope.addTemplate = function(tmp, importContext) {
       if($scope.form.id) {
         swal({
           title: "Attenzione!",
@@ -164,29 +205,43 @@
           closeOnConfirm: true,
           closeOnCancel: true
         }, function(isConfirm){
-          if (isConfirm) addTemplate(item);
+          if (isConfirm) addTemplate(tmp, importContext);
           else return false;
         });
       } else {
-        addTemplate(item);
+        addTemplate(tmp, importContext);
       }
     };
 
-    function addTemplate(item) {
-      var index = $scope.templates.indexOf(item);
-      var template = angular.copy($scope.templates[index]);
+    function addTemplate(template, item) {
+
+
+      console.log(template, item);
+
+      var template = angular.copy(template);
       delete template.id;
       delete template.is_template;
       preventSave = true;
-      $scope.form = template;
+
+      for (var i in template.items) {
+        if (item.items)
+          item.items.push(template.items[i]);
+        else if (item.subItems)
+          item.subItems.push(template.items[i]);
+      }
+
       Notify.success('OK!','Template imported successfully!');
       self.addTemplateModal.dismiss();
     }
 
     $scope.saveAsTemplate = function(matter) {
+      var matter = angular.copy(matter);
+
+      delete matter.title;
+
       matter.is_template = true;
-      if(matter.id) {
-        // Update Form
+      if(false) {
+        // Update Form. Don't do that !!
         Form.api.update(matter).then(function(data){
           Notify.success('OK!','Saved Successfully!');
         }).catch(function(err){
@@ -201,6 +256,21 @@
           }
         });
       } else {
+        delete matter.id;
+        if (matter.subItems) {
+          matter.items = angular.copy(matter.subItems);
+          delete matter.subItems;
+        }
+
+        if (!matter.title) {
+          var person = prompt("Dai un nome a questo template prima di salvarlo");
+          if (person)
+            matter.title = person;
+          else {
+            Notify.error('Error!', 'Impossibile salvare un template senza nome ! :(');
+            return;
+          }
+        }
         // Create New Form
         Form.api.create(matter).then(function(data){
           Notify.success('OK!','Saved Successfully!');
@@ -242,7 +312,9 @@
 
     /* Form's Questions
      * ======================*/
-    $scope.importQuestion = function() {
+    $scope.importQuestion = function(context) {
+      $scope.importContext = context;
+
       fetchQuestions();
       // Open Modal
       self.addQuestionModal = $uibModal.open({
@@ -256,19 +328,19 @@
     };
 
     $scope.addQuestion = function(item) {
-      var index = $scope.questions.indexOf(item);
-      var service = angular.copy($scope.questions[index]);
+      var service = angular.copy(item);
       delete service.id;
       delete service.is_starred;
-      $scope.form.items.push(service);
+
+      $scope.importContext.push(service);
+
       Notify.success('OK!','Question imported successfully!');
       self.addQuestionModal.dismiss();
     };
 
     $scope.saveQuestion = function(service) {
       Question.api.create(service).then(function(data){
-        var index = $scope.form.items.indexOf(service);
-        $scope.form.items[index].is_starred = true;
+        service.is_starred = true;
         Notify.success('OK!','Saved Successfully!');
       }).catch(function(err){
         try {

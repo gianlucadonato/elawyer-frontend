@@ -11,24 +11,60 @@
 
     <div class="card-body card-padding" ng-if="review">
       <div class="question" ng-repeat="i in form.items">
+
+          <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
+
           <div>
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}</h4>
-              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">{{r}}, </span>
-              <span ng-if="!isArray(i.value)">{{i.value}}</span>
+              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
+                <span ng-if="isObject(r)">{{r.title}}</span>
+                <span ng-if="!isObject(r)">{{r}}</span>,
+              </span>
+              <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
+              <span ng-if="isObject(i.value)">{{i.value.title}}</span>
+              <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
             </div>
+
+
+            <span ng-if="i.type == 'select'">
+              <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+            </span>
+
+            <span ng-if="i.type == 'radio'">
+              <div ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+            </span>
+
           </div>
       </div>
     </div>
 
     <div class="card-body card-padding" permission permission-only="['LAWYER']">
       <div class="question" ng-repeat="i in form.items">
+
+          <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
+
           <div>
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}</h4>
-              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">{{r}}, </span>
-              <span ng-if="!isArray(i.value)">{{i.value}}</span>
+              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
+                <span ng-if="isObject(r)">{{r.title}}</span>
+                <span ng-if="!isObject(r)">{{r}}</span>,
+              </span>
+              <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
+              <span ng-if="isObject(i.value)">{{i.value.title}}</span>
+              <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
             </div>
+
+
+             <span ng-if="i.type == 'select'">
+              <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+            </span>
+
+            <span ng-if="i.type == 'radio'">
+              <div ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+            </span>
+
           </div>
       </div>
     </div>
@@ -37,6 +73,7 @@
     <div class="card-body card-padding" permission permission-only="['CUSTOMER']" ng-if="!review">
       <form>
         <div class="question" ng-repeat="i in form.items">
+
           <div ng-if="i.type == 'date'">
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
@@ -69,9 +106,9 @@
               <div class="input-group">
                 <div class="checkbox m-b-15">
                   <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="r in i.options track by $index">
-                      <input type="checkbox" value="{{r}}" checklist-model="i.value" checklist-value="r">
+                      <input type="checkbox" value="{{r.title}}" checklist-model="i.value" checklist-value="r.title">
                       <i class="input-helper"></i>
-                      {{r}}
+                      {{r.title}}
                   </label>
                 </div>
               </div>
@@ -85,23 +122,31 @@
               <div class="input-group">
                 <div class="radio m-b-15" ng-repeat="r in i.options track by $index">
                     <label>
-                        <input type="radio" name="sample" value="{{i.value || r}}" ng-model="i.value">
+                        <input type="radio" name="sample" value="{{r.title}}" ng-model="i.value">
                         <i class="input-helper"></i>
-                        {{r}}
+                        {{r.title}}
                     </label>
                 </div>
               </div>
             </div>
+
+            <div ng-repeat="q in i.options track by $index" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+
           </div>
+
 
           <div ng-if="i.type == 'select'" style="z-index:10000">
             <div class="form-group" style="overflow: visible !important">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <span>{{i.description}}</span>
               <div class="input-group" style="overflow: visible !important">
-                <select chosen class="w-100 localytics-chosen" ng-options="r for r in i.options" ng-model="i.value"  data-placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000; width:400px !important">
+
+                <select chosen class="w-100 localytics-chosen" ng-options="r.title for r in i.options track by r.title" ng-model="i.value" ng-value="i.value.title"  data-placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000; width:400px !important">
                   <option value=""></option>
                 </select>
+
+                <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+
               </div>
             </div>
           </div>
@@ -111,7 +156,7 @@
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <span>{{i.description}}</span>
               <div class="input-group" style="overflow: visible !important">
-                <select chosen multiple class="w-100 localytics-chosen" ng-options="r for r in i.options" ng-model="i.value"  placeholder-text-single="'Seleziona un\'opzione'" style="width:400px !important">
+                <select chosen multiple class="w-100 localytics-chosen" ng-options="r.title for r in i.options" ng-model="i.value"  placeholder-text-single="'Seleziona un\'opzione'" style="width:400px !important">
                   <option value=""></option>
                 </select>
                 <!-- <div style="width : 100%; height: 250px"></div> -->

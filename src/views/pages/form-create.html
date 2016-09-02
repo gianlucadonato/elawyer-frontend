@@ -1,7 +1,5 @@
 <style>
 .form-create input {
-  border-bottom: 1px solid #ddd !important;
-  margin-bottom: 15px;
   width: 100% !important;
 }
 
@@ -20,7 +18,7 @@
         <a href="" ng-click="saveAsTemplate(form)"><i class="fa fa-floppy-o"></i></a>
       </li>
       <li tooltip-placement="bottom" uib-tooltip="Import from Template">
-        <a href="" ng-click="importTemplate()"><i class="zmdi zmdi-download"></i></a>
+        <a href="" ng-click="importTemplate(form)"><i class="zmdi zmdi-download"></i></a>
       </li>
       <li class="dropdown" uib-dropdown>
         <a href="" uib-dropdown-toggle>
@@ -69,7 +67,7 @@
             </div>
           </form>
 
-          <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importQuestion()"
+          <button class="btn bgm-darkorange btn-float waves-effect" ng-click="importQuestion(form.items)"
             tooltip-placement="bottom" uib-tooltip="Importa Domanda">
             <i class="zmdi zmdi-plus"></i>
           </button>
@@ -84,229 +82,137 @@
                 <tr>
                   <th>#</th>
                   <th>Domanda</th>
-                  <th>Formato Risposta</th>
                   <th>Azioni</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- Questions -->
                 <tr ng-repeat="item in form.items" ui-tree-node>
-                  <td ui-tree-handle width="3%">{{$index + 1}}</td>
-                  <td width="35%">
+                  <td ui-tree-handle width="3%"><div class="m-t-10">{{$index + 1}}</div></td>
+                  <td width="92%">
                     <form>
-                      <div class="form-group">
+                      <div class="form-group" style="overflow: visible">
                         <input type="text" name="Title" class="form-control" placeholder="Domanda" ng-model="item.title">
-                        <textarea auto-size class="form-control" placeholder="Aiuto o nota" ng-model="item.description"></textarea>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" value="" ng-model="item.is_mandatory">
-                          <i class="input-helper"></i>
-                        </label>
-                        <span>Domanda Obbligatorio</span>
-                      </div>
-                    </form>
-                  </td>
-                  <td width="55%">
-                    <label class="f-500 c-black">Tipo domanda</label>
-                    <select chosen class="w-100 localytics-chosen" ng-model="item.type" ng-value="item.type" data-placeholder="Your Favorite Football Team">
-                        <optgroup label="Domande primitive">
-                            <option value="input">Domanda aperta (input)</option>
-                            <option value="textarea">Domanda aperta (area di testo)</option>
-                            <option value="select">Domanda a selezione singola (select)</option>
-                            <option value="checkbox">Domanda a selezione multipla (checkbox)</option>
-                            <option value="multiple-select">Domanda a selezione multipla con molte alternative (select multiple)</option>
-                            <option value="radio">Domanda con una possibile risposta su due alternative. (radio)</option>
-                        </optgroup>
-                        <optgroup label="Formati di aiuto">
-                            <option value="date">Data</option>
-                        </optgroup>
-                    </select>
-
-                    <div ng-if="item.type == 'input'">
-                      <div class="form-group">
-                        <!-- <label class="f-500 c-black">Valore predefinito</label>
-                        <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.default" ng-value="item.default"> -->
-                        <label class="f-500 c-black">Placeholder</label>
-                        <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Inserisci" ng-model="item.placeholder">
-                        <label class="f-500 c-black">Icona</label><br/>
-                        <button class="btn btn-info waves-effect" ng-click="chooseIcon($index)">Scegli</button>
-                      </div>
-                    </div>
-
-
-                    <div ng-if="item.type == 'textarea'">
-                      <div class="form-group">
-                        <!-- <label class="f-500 c-black">Valore predefinito</label>
-                        <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.default" ng-value="item.default"> -->
-                        <label class="f-500 c-black">Placeholder</label>
-                        <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Inserisci" ng-model="item.placeholder">
-                      </div>
-                    </div>
-
-                    <div ng-if="item.type == 'select'">
-                      <div class="form-group">
-                        <label class="f-500 c-black">Valori possibili</label><br/>
-                        <div class="form-group" ng-repeat="r in item.options track by $index">
-                          <span class="f-500 c-black m-b-15">{{$index+1}} {{r}}&nbsp;&nbsp;
-                            <button class="btn btn-danger waves-effect" ng-click="item.options.splice($index, 1)">Rimuovi</button>
-                          </span>
-                          <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-brush"></i></span>
-                            <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index]" ng-value="item.options[$index]">
-                          </div>
+                        <input class="form-control" placeholder="Aiuto o nota" ng-model="item.description" style="color: #5E5E5E; font-size: 13px; line-height: 13px" />
+                        <div class="checkbox m-b-15">
+                          <label>
+                            <input type="checkbox" value="" ng-model="item.is_mandatory">
+                            <i class="input-helper"></i>
+                            Domanda Obbligatorio
+                          </label>
                         </div>
-                        <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index, '')">Aggiungi valore</button>
-                      </div>
-                    </div>
+                        <select chosen class="w-100 localytics-chosen" ng-model="item.type" ng-value="item.type" data-placeholder="Your Favorite Football Team">
+                          <optgroup label="Domande primitive">
+                              <option value="input">Domanda aperta (input)</option>
+                              <option value="textarea">Domanda aperta (area di testo)</option>
+                              <option value="select">Domanda a selezione singola (select)</option>
+                              <option value="checkbox">Domanda a selezione multipla (checkbox)</option>
+                              <option value="multiple-select">Domanda a selezione multipla con molte alternative (select multiple)</option>
+                              <option value="radio">Domanda con una possibile risposta su due alternative. (radio)</option>
+                          </optgroup>
+                          <optgroup label="Formati di aiuto">
+                              <option value="date">Data</option>
+                          </optgroup>
+                        </select>
 
-                    <div ng-if="item.type == 'multiple-select'">
-                      <div class="form-group">
-                        <label class="f-500 c-black">Valori possibili</label><br/>
-                        <div class="form-group" ng-repeat="r in item.options track by $index">
-                          <span class="f-500 c-black m-b-15">{{$index+1}} {{r}}&nbsp;&nbsp;
-                            <button class="btn btn-danger waves-effect" ng-click="item.options.splice($index, 1)">Rimuovi</button>
-                          </span>
-                          <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-brush"></i></span>
-                            <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index]" ng-value="item.options[$index]">
+                        <div ng-if="item.type == 'select'">
+                          <div class="form-group">
+                            <div class="form-group" ng-repeat="r in item.options track by $index">
+                              <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-delete" ng-click="item.options.splice($index, 1)" style="color: #F44336; cursor: pointer"></i></span>
+                                <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index].title" ng-value="item.options[$index].title">
+                              </div>
+                            </div>
+                            <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index)">Aggiungi opzione</button>
                           </div>
-                        </div>
-                        <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index, '')">Aggiungi valore</button>
-                      </div>
-                    </div>
 
-                    <div ng-if="item.type == 'checkbox'">
-                      <div class="form-group">
-                        <label class="f-500 c-black">Valori possibili</label><br/>
-                        <div class="form-group" ng-repeat="r in item.options track by $index">
-                          <span class="f-500 c-black m-b-15">{{$index+1}} {{r}}&nbsp;&nbsp;
-                            <button class="btn btn-danger waves-effect" ng-click="item.options.splice($index, 1)">Rimuovi</button>
-                          </span>
-                          <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-brush"></i></span>
-                            <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index]" ng-value="item.options[$index]">
-                          </div>
-                        </div>
-                        <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index, '')">Aggiungi valore</button>
-                      </div>
-                    </div>
+                          <div class="p-15" style="position: {{context.position || 'static'}}; top: 70px; left: 0px; right: 0; background: {{context.color}}; z-index:1049; height: 100%; overflow:scroll" ng-repeat="context in item.options" ng-init="context.color=getClass(); context.sColor = context.color; forceSubItem(context)">
+                              <div class="block-header">
+                                <h4 style="max-width: 80%">Nel caso un utente risponda "{{context.title}}" alla domanda "{{item.title}}" mostra il seguente questionario:</h4>
+                                <ul class="actions">
+                                  <li ng-if="context.position != 'fixed'" >
+                                    <a href="" ng-click="context.position = 'fixed'; context.color = 'white'" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
+                                  </li>
+                                  <li ng-if="context.position == 'fixed'">
+                                    <a href="" ng-click="context.position = 'static'; context.color = context.sColor" tooltip-placement="bottom" uib-tooltip="Esci dalla modalità a tutto schermo"><i class="zmdi zmdi-fullscreen-exit"></i></a>
+                                  </li>
+                                  <li tooltip-placement="bottom">
+                                    <a href="" ng-click="importTemplate(context)" tooltip-placement="bottom" uib-tooltip="Importa questionario"><i class="zmdi zmdi-download"></i></a>
+                                  </li>
+                                  <li tooltip-placement="bottom">
+                                    <a href="" ng-click="saveAsTemplate(context)" tooltip-placement="bottom" uib-tooltip="Salva questionario"><i class="zmdi zmdi-save"></i></a>
+                                  </li>
+                                </ul>
+                              </div>
 
-                    <div ng-if="item.type == 'radio'">
-                      <div class="form-group">
-                        <label class="f-500 c-black">Valori possibili</label><br/>
-                        <div class="form-group" ng-repeat="r in item.options track by $index">
-                          <span class="f-500 c-black m-b-15">{{$index+1}} {{r}}&nbsp;&nbsp;
-                            <button class="btn btn-danger waves-effect" ng-click="item.options.splice($index, 1)">Rimuovi</button>
-                          </span>
-                          <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-brush"></i></span>
-                            <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index]" ng-value="item.options[$index]">
-                          </div>
-                        </div>
-                        <button class="btn btn-info waves-effect" ng-show="item.options.length < 2" ng-click="createOption($parent.$index, '')">Aggiungi valore</button>
-                      </div>
-                    </div>
-
-                    <hr/>
-
-
-                    <!-- Anteprime Risultato -->
-                    <h3>Anteprima</h3>
-                    <div ng-if="item.type == 'date'">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span><br/><br/>
-                        <div class="dd-block">
-                          <div class="date-picker">
-                              <uib-datepicker show-weeks="false" ng-model="dtInline" min-date="minDate" class="dp-inline"></uib-datepicker>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div ng-if="item.type == 'input'">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                        <div class="input-group">
-                            <span class="input-group-addon" ng-show="item.icon"><i class="zmdi zmdi-{{item.icon}}"></i></span>
-                            <div class="fg-line">
-                              <input type="text" name="Valore predefinito" class="form-control" value="{{item.default}}"  placeholder="{{item.placeholder}}">
+                              <div ng-include="'views/pages/create-form-table.html'"></div>
                             </div>
                         </div>
-                      </div>
-                    </div>
 
-                    <div ng-if="item.type == 'checkbox'" style="z-index:10000">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                        <div class="input-group">
-                          <div class="checkbox m-b-15">
-                            <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="i in item.options">
-                                <input type="checkbox" value="{{i}}">
-                                <i class="input-helper"></i>
-                                {{i}}
-                            </label>
+                        <div ng-if="item.type == 'multiple-select'">
+                          <div class="form-group">
+                            <div class="form-group" ng-repeat="r in item.options track by $index">
+                              <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-delete" ng-click="item.options.splice($index, 1)" style="color: #F44336; cursor: pointer"></i></span>
+                                <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index].title" ng-value="item.options[$index].title">
+                              </div>
+                            </div>
+                            <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index)">Aggiungi opzione</button>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-                    <div ng-if="item.type == 'radio'" style="z-index:10000">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                        <div class="input-group">
-                          <div class="radio m-b-15" ng-repeat="i in item.options">
-                              <label>
-                                  <input type="radio" name="sample" value="{{i}}">
-                                  <i class="input-helper"></i>
-                                  {{i}}
-                              </label>
+                        <div ng-if="item.type == 'checkbox'">
+                          <div class="form-group">
+                            <div class="form-group" ng-repeat="r in item.options track by $index">
+                              <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-delete" ng-click="item.options.splice($index, 1)" style="color: #F44336; cursor: pointer"></i></span>
+                                <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Bottiglia" ng-model="item.options[$index].title" ng-value="item.options[$index].title">
+                              </div>
+                            </div>
+                            <button class="btn btn-info waves-effect" ng-click="createOption($parent.$index)">Aggiungi opzione</button>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-                    <div ng-if="item.type == 'select'" style="z-index:10000">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                        <div class="input-group">
-                          <select chosen class="w-100 localytics-chosen" ng-options="r for r in item.options" ng-model="item.value"  data-placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000">
-                            <option value=""></option>
-                          </select>
-                          <div style="height:250px; width: 100%"></div>
+                        <div ng-if="item.type == 'radio'" ng-init="createSubOption(item.options, true)">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="zmdi zmdi-circle-o"></i></span>
+                              <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: No" ng-model="item.options[0].title" ng-value="item.options[0].title">
+                            </div>
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="zmdi zmdi-circle-o"></i></span>
+                              <input type="text" name="Valore predefinito" class="form-control" placeholder="e.g.: Si" ng-model="item.options[1].title" ng-value="item.options[1].title">
+                            </div>
+
+                          </div>
+
+
+                            <div class="p-15" style="position: {{context.position || 'static'}}; top: 70px; left: 0px; right: 0; background: {{context.color}}; z-index:1049; height: 100%; overflow:scroll" ng-repeat="context in item.options" ng-init="context.color=getClass(); context.sColor = context.color">
+                              <div class="block-header">
+                                <h4 style="max-width: 80%">Nel caso un utente risponda "{{context.title || ['No', 'Si'][$index]}}" alla domanda "{{item.title}}" mostra il seguente questionario:</h4>
+                                <ul class="actions">
+                                  <li ng-if="context.position != 'fixed'" >
+                                    <a href="" ng-click="context.position = 'fixed'; context.color = 'white'" uib-tooltip="Modalità a tutto schermo" tooltip-placement="bottom"><i class="zmdi zmdi-fullscreen-alt"></i></a>
+                                  </li>
+                                  <li ng-if="context.position == 'fixed'">
+                                    <a href="" ng-click="context.position = 'static'; context.color = context.sColor" tooltip-placement="bottom" uib-tooltip="Esci dalla modalità a tutto schermo"><i class="zmdi zmdi-fullscreen-exit"></i></a>
+                                  </li>
+                                  <li tooltip-placement="bottom">
+                                    <a href="" ng-click="importTemplate(context)" tooltip-placement="bottom" uib-tooltip="Importa questionario"><i class="zmdi zmdi-download"></i></a>
+                                  </li>
+                                  <li tooltip-placement="bottom">
+                                    <a href="" ng-click="saveAsTemplate(context)" tooltip-placement="bottom" uib-tooltip="Salva questionario"><i class="zmdi zmdi-save"></i></a>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div ng-include="'views/pages/create-form-table.html'"></div>
+                            </div>
+
                         </div>
+
                       </div>
-                    </div>
-
-                    <div ng-if="item.type == 'multiple-select'" style="z-index:10000">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                        <div class="input-group">
-                          <select chosen multiple class="w-100 localytics-chosen" ng-options="r for r in item.options" ng-model="item.value"  placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000">
-                            <option value=""></option>
-                          </select>
-                          <div style="height:250px; width: 100%"></div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div ng-if="item.type == 'textarea'">
-                      <div class="form-group">
-                        <h4>{{$index + 1}}. {{item.title}}<span ng-if="item.is_mandatory">*</span></h4>
-                        <span>{{item.description}}</span>
-                          <textarea type="text" name="Valore predefinito" class="form-control" value="{{item.default}}"  placeholder="{{item.placeholder}}">{{item.default}}</textarea>
-                      </div>
-                    </div>
-
-
-
+                    </form>
                   </td>
                   <td width="5%" class="text-right">
                     <ul class="actions">

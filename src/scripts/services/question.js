@@ -17,8 +17,10 @@
       default: '',
       placeholder: '',
       options: [],
+      subItems: [],
       is_mandatory: false
     };
+
 
     /* API */
     api.index = function(params) {

@@ -31,9 +31,15 @@
       }).catch(function(err){
         Notify.error('Error!', 'Impossibile salvare questionario');
       });
-    }
+    };
+
+    $scope.ensureDate = function(a) {
+      return new Date(a);
+    };
 
     $scope.isArray = angular.isArray;
+    $scope.isObject = angular.isObject;
+    $scope.isDate = angular.isDate;
 
 
     $scope.$watch('form.items', function() {

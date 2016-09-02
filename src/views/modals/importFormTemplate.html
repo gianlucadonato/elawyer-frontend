@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body import-matter-template">
   <div class="listview" ng-if="templates.length && !isLoading">
-    <a class="lv-item" href="" ng-click="addTemplate(t)" data-ng-repeat="t in templates">
+    <a class="lv-item" href="" ng-click="addTemplate(t, importContext)" data-ng-repeat="t in templates">
       <div class="media">
         <div class="pull-left">
           <button class="btn bgm-lightblue waves-effect">

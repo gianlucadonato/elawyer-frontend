@@ -106,7 +106,7 @@
 
     /* EDITOR */
     editor.addItem = function(items) {
-      items.push(Question.template());
+      items.push(angular.copy(Question.template()));
     };
 
     editor.removeItem = function(items, index) {

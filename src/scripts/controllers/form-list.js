@@ -23,6 +23,7 @@
       $scope.isLoading = true;
       Answer.api.index({
         is_draft: false,
+        is_template: false,
         per_page: $scope.perPage
       }).then(function(data){
         $scope.answers = data.answers;
