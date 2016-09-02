@@ -99,7 +99,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="i in invoice.matter.items">
+                  <tr ng-repeat="i in invoice.matter.items" ng-if="i.is_mandatory || i.is_selected">
                     <td width="80%">
                       <strong>{{i.title}}</strong>
                       <!-- <p class="text-muted">{{i.description}}</p> -->
@@ -132,10 +132,7 @@
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
-                    <td class="text-right">
-                      <span ng-if="invoice.matter.withholding_tax">TOTALE FATTURA</span>
-                      <span ng-if="!invoice.matter.withholding_tax"><strong>NETTO DA VERSARE</strong></span>
-                    </td>
+                    <td class="text-right">TOTALE FATTURA</td>
                     <td><strong>€ {{invoice.calc.total_price | prettyNumber}}</strong></td>
                   </tr>
                   <tr ng-if="invoice.matter.withholding_tax">
@@ -157,7 +154,9 @@
                 <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
               </p>
             </div>
-            <div class="col-sm-12">(*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.calc.withholding_tax | prettyNumber}}</div>
+            <div class="col-sm-12" ng-if="invoice.matter.withholding_tax">
+              (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.calc.withholding_tax | prettyNumber}}
+            </div>
           </div>
         </div>  <!-- END Card Body -->
 

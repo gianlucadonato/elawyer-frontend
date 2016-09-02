@@ -21,6 +21,7 @@ var config = {
     src: [
       './src/scripts/constants.js',
       './src/scripts/file-manager/**/*.js',
+      './src/scripts/google-client/*.js',
       './src/scripts/app.js',
       './src/scripts/controllers/**/*.js',
       './src/scripts/directives/*.js',

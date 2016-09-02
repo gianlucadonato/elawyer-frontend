@@ -20,16 +20,25 @@ var App = angular.module('eLawyer', [
   'FileManagerApp',
   'ui.tree',
   'angular-jwt',
-  'stripe.checkout'
+  'stripe.checkout',
+  'google-client'
 ]);
 
 // APP CONFIG
 // -----------------------------------
-App.config(function($httpProvider, StripeCheckoutProvider, ENV) {
+App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider, ENV) {
 
   StripeCheckoutProvider.defaults({
     key: ENV.stripe_key
   });
+
+  GoogleClientProvider
+    .addApi('drive', 'v3')
+    .defaults({
+      api_key: ENV.google_api_key,
+      client_id: ENV.google_client_id,
+      scopes: ['https://www.googleapis.com/auth/drive']
+    });
 
   // Auth Interceptor
   $httpProvider.interceptors.push(function($rootScope, $injector, $q) {

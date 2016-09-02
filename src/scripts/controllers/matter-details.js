@@ -8,6 +8,7 @@
 
   App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
+    $scope.readMode = false;
     $scope.showNext = false;
     $scope.invoice_type = 'full'; // full | deposit | balance
 
@@ -21,7 +22,7 @@
       Matter.api.get($stateParams.id).then(function(data) {
         $scope.matter = data;
         if(data.invoice_id || data.deposit_invoice_id )
-          $scope.showNext = true;
+          $scope.readMode = true;
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
       });

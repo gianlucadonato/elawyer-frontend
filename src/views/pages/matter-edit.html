@@ -35,7 +35,6 @@
                 <thead>
                   <tr>
                     <th>Titolo</th>
-                    <th>Intestazione</th>
                     <th>Priorità</th>
                     <th>Area</th>
                     <!-- <th>Stato</th> -->
@@ -46,11 +45,6 @@
                     <td>
                       <div class="form-group">
                         <input type="text" name="Title" class="form-control" placeholder="Inserisci Titolo" ng-model="matter.title">
-                      </div>
-                    </td>
-                    <td>
-                      <div class="form-group">
-                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="matter.description"></textarea>
                       </div>
                     </td>
                     <td>
@@ -78,6 +72,20 @@
                         </select>
                       </div>
                     </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead><tr><th>Intestazione</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="matter.description"></textarea>
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
               </table>

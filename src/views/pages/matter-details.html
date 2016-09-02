@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class="row" ng-if="!showNext">
+  <div class="row" ng-if="!showNext && !readMode">
     <div class="col-sm-8">
       <div class="card m-t-25 invoice-letter">
         <div class="card-header">
@@ -169,7 +169,7 @@
                 <td>&nbsp;</td>
               </tr>
               <tr>
-                <th width="75%">Netto da Versare:</th>
+                <th width="75%">Importo servizi:</th>
                 <th>€ {{ invoice.full.total_services | prettyNumber}}</th>
               </tr>
             </tbody>
@@ -180,7 +180,7 @@
   </div>
 
   <!-- NEXT PAGE -->
-  <div class="row" ng-show="showNext">
+  <div class="row" ng-show="showNext && !readMode">
     <div class="col-sm-12">
       <div class="card m-t-25 invoice-letter">
         <div class="card-header">
@@ -218,8 +218,7 @@
 
         </div>
 
-        <div class="card-footer card-padding"
-          ng-hide="matter.invoice_id || matter.deposit_invoice_id">
+        <div class="card-footer card-padding">
           <div class="pull-right">
             <button class="btn waves-effect" ng-click="showNext = false">
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
@@ -234,6 +233,82 @@
             </span>
           </div>
           <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- READ MODE -->
+  <div class="row" ng-if="readMode">
+    <div class="col-sm-12">
+      <div class="card m-t-25 invoice-letter">
+        <div class="card-header">
+          <div class="invoice-letter-header">
+            <img src="images/logo.png" alt="">
+            <div class="pull-right text-right">
+              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <p>
+                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
+                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
+                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <p>
+                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
+                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
+                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+              </p>
+            </div>
+            <div class="col-sm-6 text-right"></div>
+          </div>
+
+          <h3>Lettera di incarico</h3>
+          <hr/>
+          <p ng-if="matter.description">{{matter.description}}</p>
+          <p ng-if="!matter.description">
+            Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’Incarico).<br/><br/>
+            Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.
+          </p>
+          <p>
+            <h4>Oggetto dell’Incarico</h4>
+            L'incarico avrà per oggetto le seguenti attività:
+          </p>
+          <div class="row">
+            <div class="col-sm-12 invoice-letter-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Servizi</th>
+                    <th>Importo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="i in matter.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
+                    <td width="85%">
+                      <strong>{{i.title}}</strong>
+                      <p>{{i.description}}</p>
+                    </td>
+                    <td>€ {{i.price | prettyNumber}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer card-padding">
+          <hr>
+          <ul class="list-inline text-center list-unstyled">
+            <li class="m-l-5 m-r-5"><small>Via Mazzini n. 10 - 20123 Milano, Italia</small></li>
+            <li class="m-l-5 m-r-5"><small>Phone: +39 049 8758955 - Fax: +39 049 8759252</small></li>
+            <li class="m-l-5 m-r-5"><small>Email: <a href="mailto:info@crclex.com">info@crclex.com</a></small></li>
+          </ul>
         </div>
       </div>
     </div>
