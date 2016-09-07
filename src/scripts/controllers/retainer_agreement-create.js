@@ -47,7 +47,7 @@
     }
 
     function getAreaOfInterest() {
-      MattRetainerAgreementer.api.areas().then(function(data) {
+      RetainerAgreement.api.areas().then(function(data) {
         $scope.areas = data;
       }).catch(function(err) {
         Notify.error('Error!', 'Unable to load areas');
