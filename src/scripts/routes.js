@@ -90,53 +90,53 @@
         abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
-      .state('page.matter-list', {
-        url: '/matters/list',
-        title: 'Matter List',
+      .state('page.retainer_agreement-list', {
+        url: '/retainer_agreement/list',
+        title: 'Retainer Agreement List',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-list.html'),
-        controller: 'MatterListCtrl'
+        templateUrl: helper.pagesPath('retainer_agreement-list.html'),
+        controller: 'RetainerAgreementListCtrl'
       })
-      .state('page.matter-draft', {
-        url: '/matters/draft',
-        title: 'Matter Draft',
+      .state('page.retainer_agreement-draft', {
+        url: '/retainer_agreement/draft',
+        title: 'Retainer Agreement Draft',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-draft.html'),
-        controller: 'MatterDraftCtrl',
+        templateUrl: helper.pagesPath('retainer_agreement-draft.html'),
+        controller: 'RetainerAgreementDraftCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']
           }
         }
       })
-      .state('page.matter-create', {
-        url: '/matters/create',
-        title: 'Create Matter',
+      .state('page.retainer_agreement-create', {
+        url: '/retainer_agreement/create',
+        title: 'Create Retainer Agreement',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-create.html'),
-        controller: 'MatterCreateCtrl',
+        templateUrl: helper.pagesPath('retainer_agreement-create.html'),
+        controller: 'RetainerAgreementCreateCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']
           }
         }
       })
-      .state('page.matter-details', {
-        url: '/matters/:id',
-        title: 'Matter Details',
+      .state('page.retainer_agreement-details', {
+        url: '/retainer_agreement/:id',
+        title: 'Retainer Agreement Details',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-details.html'),
-        controller: 'MatterDetailsCtrl',
+        templateUrl: helper.pagesPath('retainer_agreement-details.html'),
+        controller: 'RetainerAgreementDetailsCtrl',
         resolve: {
           stripe: StripeCheckoutProvider.load
         }
       })
-      .state('page.matter-edit', {
-        url: '/matters/:id/edit',
-        title: 'Edit Matter',
+      .state('page.retainer_agreement-edit', {
+        url: '/retainer_agreement/:id/edit',
+        title: 'Edit Retainer Agreement',
         requireLogin: true,
-        templateUrl: helper.pagesPath('matter-edit.html'),
-        controller: 'MatterCreateCtrl',
+        templateUrl: helper.pagesPath('retainer_agreement-edit.html'),
+        controller: 'RetainerAgreementCreateCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']

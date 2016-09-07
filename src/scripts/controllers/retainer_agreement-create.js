@@ -2,11 +2,11 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-create.js
-  * Create New Matter
+  * File: retainer_agreement-create.js
+  * Create New RetainerAgreement
   =========================================================*/
 
-  App.controller('MatterCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, User, Notify) {
+  App.controller('RetainerAgreementCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Matter, Service, User, Notify) {
 
     var self = this;
     var timeout = null;
