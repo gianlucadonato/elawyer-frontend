@@ -2,11 +2,11 @@
   'use strict';
 
   /**=========================================================
-  * File: matter.js
-  * Matter Service
+  * File: retainer_agreement.js
+  * retainer_agreement Service
   =========================================================*/
 
-  App.factory('Matter', function ($rootScope, $q, $http, API, Service) {
+  App.factory('RetainerAgreement', function ($rootScope, $q, $http, API, Service) {
 
     var api = {};
     var editor = {};
@@ -25,7 +25,7 @@
     api.index = function(params) {
       var deferred = $q.defer();
       $http
-        .get(API.host + '/api/matters', {
+        .get(API.host + '/api/retainer_agreement', {
           params: params
         })
         .then(function(res){
@@ -40,7 +40,7 @@
     api.get = function(id) {
       var deferred = $q.defer();
       $http
-        .get(API.host + '/api/matters/' + id)
+        .get(API.host + '/api/retainer_agreement/' + id)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -53,7 +53,7 @@
     api.create = function(obj) {
       var deferred = $q.defer();
       $http
-        .post(API.host + '/api/matters', obj)
+        .post(API.host + '/api/retainer_agreement', obj)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -66,7 +66,7 @@
     api.update = function(obj) {
       var deferred = $q.defer();
       $http
-        .put(API.host + '/api/matters/' + obj.id, obj)
+        .put(API.host + '/api/retainer_agreement/' + obj.id, obj)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -83,7 +83,7 @@
     api.send = function(obj) {
       var deferred = $q.defer();
       $http
-        .post(API.host + '/api/matters/'+obj.id+'/send', obj)
+        .post(API.host + '/api/retainer_agreement/'+obj.id+'/send', obj)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -96,7 +96,7 @@
     api.pay = function(obj, opt) {
       var deferred = $q.defer();
       $http
-        .post(API.host + '/api/matters/'+obj.id+'/pay', opt)
+        .post(API.host + '/api/retainer_agreement/'+obj.id+'/pay', opt)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -109,7 +109,7 @@
     api.delete = function(obj) {
       var deferred = $q.defer();
       $http
-        .delete(API.host + '/api/matters/' + obj.id)
+        .delete(API.host + '/api/retainer_agreement/' + obj.id)
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -122,7 +122,7 @@
     api.areas = function(id) {
       var deferred = $q.defer();
       $http
-        .get(API.host + '/api/matters/areas')
+        .get(API.host + '/api/retainer_agreement/areas')
         .then(function(res){
           deferred.resolve(res.data);
         })
@@ -142,19 +142,19 @@
     };
 
     /* CALCULATE INVOICE */
-    function calcInvoice(matter, count_all) {
+    function calcInvoice(retainer_agreement, count_all) {
       var total_services = 0;
-      matter.items.forEach(function(item) {
+      retainer_agreement.items.forEach(function(item) {
         if (count_all || item.is_mandatory || item.is_selected)
           total_services += parseFloat(item.price);
       });
 
-      var deposit_percentage = (total_services * matter.deposit)/100;
-      var balance_percentage = (total_services * (100 - matter.deposit))/100;
+      var deposit_percentage = (total_services * retainer_agreement.deposit)/100;
+      var balance_percentage = (total_services * (100 - retainer_agreement.deposit))/100;
       var invoice = {
-        full: calcTotal(total_services, matter.withholding_tax),
-        deposit: calcTotal(deposit_percentage, matter.withholding_tax),
-        balance: calcTotal(balance_percentage, matter.withholding_tax)
+        full: calcTotal(total_services, retainer_agreement.withholding_tax),
+        deposit: calcTotal(deposit_percentage, retainer_agreement.withholding_tax),
+        balance: calcTotal(balance_percentage, retainer_agreement.withholding_tax)
       };
       return invoice;
     }

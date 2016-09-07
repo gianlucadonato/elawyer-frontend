@@ -2,7 +2,7 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-list.js
+  * File: invoice-list.js
   * InvoicesList Controller
   =========================================================*/
 
@@ -34,7 +34,7 @@
     }
 
     function initTable() {
-      $scope.mattersTable = new ngTableParams({
+      $scope.retainer_agreementsTable = new ngTableParams({
         page: 1,
         count: $scope.perPage
       }, {
@@ -48,7 +48,7 @@
             $scope.invoices = params.sorting() ? $filter('orderBy')(data.invoices, params.orderBy()) : data.invoices;
             $defer.resolve($scope.invoices);
           }).catch(function(err){
-            Notify.error('Error!', "Unable to fetch matters");
+            Notify.error('Error!', "Unable to fetch retainer_agreements");
           });
         }
       });

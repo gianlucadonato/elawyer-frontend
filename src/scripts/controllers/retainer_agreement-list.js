@@ -6,26 +6,26 @@
   * RetainerAgreementListCtrl Controller
   =========================================================*/
 
-  App.controller('RetainerAgreementListCtrl', function($scope, $filter, Matter, Notify, ngTableParams) {
+  App.controller('RetainerAgreementListCtrl', function($scope, $filter, RetainerAgreement, Notify, ngTableParams) {
 
-    $scope.matters = [];
+    $scope.retainer_agreements = [];
     $scope.isLoading = false;
     $scope.perPage = 15;
     $scope.totalItems = 0;
 
     function activate() {
-      getMatters();
+      getRetainerAgreements();
     }
 
     activate();
 
-    function getMatters() {
+    function getRetainerAgreements() {
       $scope.isLoading = true;
-      Matter.api.index({
+      RetainerAgreement.api.index({
         is_draft: false,
         per_page: $scope.perPage
       }).then(function(data){
-        $scope.matters = data.matters;
+        $scope.retainer_agreements = data.retainer_agreements;
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
         initTable();
@@ -35,28 +35,28 @@
     }
 
     function initTable() {
-      $scope.mattersTable = new ngTableParams({
+      $scope.retainer_agreementsTable = new ngTableParams({
         page: 1,
         count: $scope.perPage
       }, {
         total: $scope.totalItems,
         getData: function($defer, params) {
-          Matter.api.index({
+          RetainerAgreement.api.index({
             is_draft: false,
             page: params.page() - 1,
             per_page: params.count()
           }).then(function(data){
             $scope.totalItems = data.total_items;
-            $scope.matters = params.sorting() ? $filter('orderBy')(data.matters, params.orderBy()) : data.matters;
-            $defer.resolve($scope.matters);
+            $scope.retainer_agreements = params.sorting() ? $filter('orderBy')(data.retainer_agreements, params.orderBy()) : data.retainer_agreements;
+            $defer.resolve($scope.retainer_agreements);
           }).catch(function(err){
-            Notify.error('Error!', "Unable to fetch matters");
+            Notify.error('Error!', "Unable to fetch Retainer Agreements");
           });
         }
       });
     }
 
-    $scope.deleteMatter = function(m) {
+    $scope.deleteRetainerAgreement = function(m) {
       swal({
         title: "Are you sure?",
         text: "La lettera di incarico verrà eliminata permanentemente.",
@@ -69,9 +69,9 @@
         closeOnCancel: true
       }, function(isConfirm){
         if (isConfirm) {
-          Matter.api.delete(m).then(function(data){
-            var index = $scope.matters.indexOf(m);
-            $scope.matters.splice(index, 1);
+          RetainerAgreement.api.delete(m).then(function(data){
+            var index = $scope.retainer_agreements.indexOf(m);
+            $scope.retainer_agreements.splice(index, 1);
             Notify.success('OK!', "Selected item deleted successfully!");
           }).catch(function(err){
             Notify.error('Error!', "Unable to delete selected item");

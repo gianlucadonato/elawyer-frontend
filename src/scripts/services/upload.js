@@ -2,8 +2,8 @@
   'use strict';
 
   /**=========================================================
-  * File: matter.js
-  * Matter Service
+  * File: upload.js
+  * Upload Service
   =========================================================*/
 
   App.factory('Uploader', function ($rootScope, $q, $http, API, Service, Upload) {
@@ -37,4 +37,3 @@
   });
 
 })();
-

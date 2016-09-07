@@ -6,7 +6,7 @@
   * InvoiceDetails Controller
   =========================================================*/
 
-  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, Matter, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, RetainerAgreement, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.invoice = {};
 
@@ -19,7 +19,7 @@
     function getInvoice() {
       return Invoice.api.get($stateParams.id).then(function(data) {
         $scope.invoice = data;
-        $scope.invoice.calc = Matter.calcInvoice(data.matter)[data.invoice_type];
+        $scope.invoice.calc = RetainerAgreement.calcInvoice(data.retainer_agreement)[data.invoice_type];
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load invoice');
       });
@@ -81,7 +81,7 @@
       })
       .then(function(result) {
         options.stripe_token = result[0].id;
-        Matter.api.pay($scope.invoice.matter, options).then(function(res) {
+        RetainerAgreement.api.pay($scope.invoice.retainer_agreement, options).then(function(res) {
           swal({
             title: "OK!",
             text: "La lettera d'incarico è stata pagata correttamente.",
@@ -109,7 +109,7 @@
     $scope.payWithBankTransfer = function(data) {
       Uploader.upload(data.files)
         .then(function(data) {
-          Matter.api.pay($scope.invoice.matter, {
+          RetainerAgreement.api.pay($scope.invoice.retainer_agreement, {
             invoice_type: $scope.invoice.invoice_type,
             payment_method: 'bank_transfer'
           }).then(function(res) {

@@ -2,8 +2,8 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-details.js
-  * MatterDetails Controller
+  * File: form-details.js
+  * FormDetails Controller
   =========================================================*/
 
   App.controller('FormAnswerCtrl', function($scope, $stateParams, $state, Answer, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
@@ -21,7 +21,7 @@
       Answer.api.get($stateParams.id).then(function(data) {
         $scope.form = data;
       }).catch(function(err){
-        Notify.error('Error!', 'Unable to load matter');
+        Notify.error('Error!', 'Unable to load form');
       });
     }
 

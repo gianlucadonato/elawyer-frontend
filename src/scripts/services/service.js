@@ -3,7 +3,7 @@
 
   /**=========================================================
   * File: service.js
-  * Matter Service
+  * Retainer Agreement Service
   =========================================================*/
 
   App.factory('Service', function ($rootScope, $q, $http, API) {

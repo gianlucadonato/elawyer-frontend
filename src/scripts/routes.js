@@ -84,7 +84,7 @@
         templateUrl: 'views/demos/profile-connections.html'
       })
       //------------------------------
-      // MATTERS
+      // Retainer Agreement
       //------------------------------
       .state ('page', {
         abstract: true,

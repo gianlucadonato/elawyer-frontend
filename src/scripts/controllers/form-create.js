@@ -8,7 +8,6 @@
 
   App.controller('FormCreateCtrl', function($rootScope, $scope, $stateParams, $state, $timeout, $uibModal, Form, Question, User, Notify) {
 
-
     $scope.form = Form.template();
     $scope.editor = Form.editor();
     var modal;
@@ -234,15 +233,15 @@
       self.addTemplateModal.dismiss();
     }
 
-    $scope.saveAsTemplate = function(matter) {
-      var matter = angular.copy(matter);
+    $scope.saveAsTemplate = function(retainer_agreement) {
+      var retainer_agreement = angular.copy(retainer_agreement);
 
-      delete matter.title;
+      delete retainer_agreement.title;
 
-      matter.is_template = true;
+      retainer_agreement.is_template = true;
       if(false) {
         // Update Form. Don't do that !!
-        Form.api.update(matter).then(function(data){
+        Form.api.update(retainer_agreement).then(function(data){
           Notify.success('OK!','Saved Successfully!');
         }).catch(function(err){
           try {
@@ -256,23 +255,23 @@
           }
         });
       } else {
-        delete matter.id;
-        if (matter.subItems) {
-          matter.items = angular.copy(matter.subItems);
-          delete matter.subItems;
+        delete retainer_agreement.id;
+        if (retainer_agreement.subItems) {
+          retainer_agreement.items = angular.copy(retainer_agreement.subItems);
+          delete retainer_agreement.subItems;
         }
 
-        if (!matter.title) {
+        if (!retainer_agreement.title) {
           var person = prompt("Dai un nome a questo template prima di salvarlo");
           if (person)
-            matter.title = person;
+            retainer_agreement.title = person;
           else {
             Notify.error('Error!', 'Impossibile salvare un template senza nome ! :(');
             return;
           }
         }
         // Create New Form
-        Form.api.create(matter).then(function(data){
+        Form.api.create(retainer_agreement).then(function(data){
           Notify.success('OK!','Saved Successfully!');
         }).catch(function(err){
           try {

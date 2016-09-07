@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="i in matter.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
+        <tr ng-repeat="i in retainer_agreement.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
           <td><strong>{{i.title}}</strong></td>
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
@@ -39,13 +39,13 @@
           <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.full.total_price | prettyNumber }}</strong></td>
         </tr>
-        <tr ng-if="matter.withholding_tax">
+        <tr ng-if="retainer_agreement.withholding_tax">
           <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
           <td><strong>€ {{ invoice.full.final_price | prettyNumber}}</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="row" ng-if="matter.withholding_tax">
+    <div class="row" ng-if="retainer_agreement.withholding_tax">
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.full.withholding_tax | prettyNumber}}
       </div>
@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div class="row" ng-if="matter.deposit > 0">
+<div class="row" ng-if="retainer_agreement.deposit > 0">
   <div class="col-sm-12">
     <!-- ACCONTO -->
     <h4 class="m-t-25">Acconto</h4>
@@ -66,7 +66,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="i in matter.items">
+        <tr ng-repeat="i in retainer_agreement.items">
           <td><strong>{{i.title}}</strong></td>
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
@@ -94,13 +94,13 @@
           <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.deposit.total_price | prettyNumber }}</strong></td>
         </tr>
-        <tr ng-if="matter.withholding_tax">
+        <tr ng-if="retainer_agreement.withholding_tax">
           <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
           <td><strong>€ {{ invoice.deposit.final_price | prettyNumber}}</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="row" ng-if="matter.withholding_tax">
+    <div class="row" ng-if="retainer_agreement.withholding_tax">
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.deposit.withholding_tax | prettyNumber}}
       </div>
@@ -117,7 +117,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="i in matter.items">
+        <tr ng-repeat="i in retainer_agreement.items">
           <td><strong>{{i.title}}</strong></td>
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
@@ -145,13 +145,13 @@
           <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.balance.total_price | prettyNumber }}</strong></td>
         </tr>
-        <tr ng-if="matter.withholding_tax">
+        <tr ng-if="retainer_agreement.withholding_tax">
           <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
           <td><strong>€ {{ invoice.balance.final_price | prettyNumber}}</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="row" ng-if="matter.withholding_tax">
+    <div class="row" ng-if="retainer_agreement.withholding_tax">
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.balance.withholding_tax | prettyNumber}}
       </div>
