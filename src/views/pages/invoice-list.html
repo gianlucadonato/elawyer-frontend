@@ -8,10 +8,16 @@
     <!-- CUSTOMER ONLY -->
     <div class="card-body" permission permission-only="['CUSTOMER']">
       <div class="table-responsive" ng-if="invoices.length && !isLoading">
-        <table ng-table="mattersTable" class="table table-striped table-vmiddle">
+        <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in invoices">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.invoice-details({id: m.id})"> {{ m.matter.title }}</a>
+            <td data-title="''">
+              <a ui-sref="page.invoice-details({id: m.id})" style="font-size:20px;"
+                tooltip-placement="bottom" uib-tooltip="Visualizza">
+                <i class="zmdi zmdi-file-text"></i>
+              </a>
+            </td>
+            <td data-title="'Pratica'">
+              <a ui-sref="page.matter-details({id: m.id})"> {{ m.retainer_agreement.matter.title }}</a>
               <span ng-if="m.invoice_type === 'deposit'"> (Acconto)</span>
               <span ng-if="m.invoice_type === 'balance'"> (Saldo)</span>
             </td>
@@ -37,10 +43,16 @@
     <!-- Lawyer ONLY -->
     <div class="card-body" permission permission-only="['LAWYER']">
       <div class="table-responsive" ng-if="invoices.length && !isLoading">
-        <table ng-table="mattersTable" class="table table-striped table-vmiddle">
+        <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in invoices">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
+            <td data-title="''">
+              <a ui-sref="page.invoice-details({id: m.id})" style="font-size:20px;"
+                tooltip-placement="bottom" uib-tooltip="Visualizza">
+                <i class="zmdi zmdi-file-text"></i>
+              </a>
+            </td>
+            <td data-title="'Pratica'">
+              <a ui-sref="page.matter-details({id: m.id})">{{ m.retainer_agreement.matter.title }}</a>
               <span ng-if="m.invoice_type === 'deposit'"> (Acconto)</span>
               <span ng-if="m.invoice_type === 'balance'"> (Saldo)</span>
             </td>
@@ -70,10 +82,16 @@
     <!-- Admin ONLY -->
     <div class="card-body" permission permission-only="['ADMIN']">
       <div class="table-responsive" ng-if="invoices.length && !isLoading">
-        <table ng-table="mattersTable" class="table table-striped table-vmiddle">
+        <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in invoices">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.invoice-details({id: m.id})">{{ m.matter.title }}</a>
+            <td data-title="''">
+              <a ui-sref="page.invoice-details({id: m.id})" style="font-size:20px;"
+                tooltip-placement="bottom" uib-tooltip="Visualizza">
+                <i class="zmdi zmdi-file-text"></i>
+              </a>
+            </td>
+            <td data-title="'Pratica'">
+              <a ui-sref="page.matter-details({id: m.id})">{{ m.retainer_agreement.matter.title }}</a>
               <span ng-if="m.invoice_type === 'deposit'"> (Acconto)</span>
               <span ng-if="m.invoice_type === 'balance'"> (Saldo)</span>
             </td>

@@ -1,9 +1,9 @@
-<div class="container matter matter-create">
+<div class="container retainer-agreement retainer-agreement-create">
   <div class="block-header">
     <h2>Nuova Lettera di incarico</h2>
     <ul class="actions">
       <li tooltip-placement="bottom" uib-tooltip="Save as Template">
-        <a href="" ng-click="saveAsTemplate(matter)"><i class="fa fa-floppy-o"></i></a>
+        <a href="" ng-click="saveAsTemplate(retainer_agreement)"><i class="fa fa-floppy-o"></i></a>
       </li>
       <li tooltip-placement="bottom" uib-tooltip="Import from Template">
         <a href="" ng-click="importTemplate()"><i class="zmdi zmdi-download"></i></a>
@@ -33,7 +33,8 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Titolo</th>
+                    <th>Pratica</th>
+                    <th>Cliente</th>
                     <th>Area</th>
                   </tr>
                 </thead>
@@ -41,17 +42,30 @@
                   <tr>
                     <td>
                       <div class="form-group">
-                        <input type="text" name="Title" class="form-control" placeholder="Inserisci Titolo (Per uso interno)" ng-model="matter.title">
+                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()">
+                          <span ng-if="!retainer_agreement.matter.title">SELEZIONA PRATICA</span>
+                          <span ng-if="retainer_agreement.matter.title">{{retainer_agreement.matter.title}}</span>
+                        </button>
                       </div>
                     </td>
                     <td>
                       <div class="form-group">
-                        <select class="form-control" ng-model="matter.area_of_interest" ng-value="matter.area_of_interest || 'default'" ng-show="!insertArea">
+                        <button class="btn btn-success btn-block" ng-click="openSearchUserModal()">
+                          <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
+                          <span ng-if="retainer_agreement.customer.first_name">
+                            {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
+                          </span>
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <select class="form-control" ng-model="retainer_agreement.area_of_interest" ng-value="retainer_agreement.area_of_interest || 'default'" ng-show="!insertArea">
                           <option value="" disabled selected>Seleziona Area</option>
                           <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
                           <option value="__manual__">Immetti manualmente</option>
                         </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="matter.area_of_interest">
+                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="retainer_agreement.area_of_interest">
                       </div>
                     </td>
                   </tr>
@@ -65,7 +79,7 @@
                   <tr>
                     <td>
                       <div class="form-group">
-                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="matter.description"></textarea>
+                        <textarea auto-size class="form-control" placeholder="Inserisci Intestazione" ng-model="retainer_agreement.description"></textarea>
                       </div>
                     </td>
                   </tr>
@@ -78,7 +92,7 @@
             tooltip-placement="bottom" uib-tooltip="Importa Fase">
             <i class="zmdi zmdi-plus"></i>
           </button>
-          <button class="btn bgm-blue btn-float waves-effect" ng-click="sendMatterModal()"
+          <button class="btn bgm-blue btn-float waves-effect" ng-click="sendRetainerAgreement()"
             tooltip-placement="bottom" uib-tooltip="Invia a Cliente">
             <i class="zmdi zmdi-mail-send"></i>
           </button>
@@ -86,7 +100,7 @@
 
         <div class="card-body card-padding">
           <div ui-tree>
-            <table ui-tree-nodes="" ng-model="matter.items" class="table table-bordered services">
+            <table ui-tree-nodes="" ng-model="retainer_agreement.items" class="table table-bordered services">
               <thead>
                 <tr>
                   <th>#</th>
@@ -97,7 +111,7 @@
               </thead>
               <tbody>
                 <!-- SERVICES -->
-                <tr ng-repeat="item in matter.items" ui-tree-node>
+                <tr ng-repeat="item in retainer_agreement.items" ui-tree-node>
                   <td ui-tree-handle width="3%">{{$index + 1}}</td>
                   <td width="70%">
                     <form>
@@ -160,7 +174,7 @@
                         </a>
                       </li>
                       <li>
-                        <a href="" ng-click="editor.removeItem(matter.items, $index)"
+                        <a href="" ng-click="editor.removeItem(retainer_agreement.items, $index)"
                           tooltip-placement="bottom" uib-tooltip="Remove Service">
                          <i class="zmdi zmdi-delete"></i>
                         </a>
@@ -180,7 +194,7 @@
             <span ng-if="!isSaving && !errorSaving">Saved</span>
             <a href="" ng-class="{'is-saving': (isSaving || errorSaving)}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
-          <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(matter.items)">Aggiungi Fase</button>
+          <button class="btn btn-large btn-orange waves-effect" ng-click="editor.addItem(retainer_agreement.items)">Aggiungi Fase</button>
         </div>
 
       </div>
@@ -198,18 +212,25 @@
           <form>
             <p class="c-black f-500 m-b-20">Ritenuta d'acconto</p>
             <label class="radio radio-inline m-r-20">
-              <input type="radio" name="withholding_tax" ng-value="false" ng-model="matter.withholding_tax" selected>
+              <input type="radio" name="withholding_tax" ng-value="false" ng-model="retainer_agreement.withholding_tax" selected>
               <i class="input-helper"></i> NO
             </label>
             <label class="radio radio-inline m-r-20">
-              <input type="radio" name="withholding_tax" ng-value="true" ng-model="matter.withholding_tax">
+              <input type="radio" name="withholding_tax" ng-value="true" ng-model="retainer_agreement.withholding_tax">
               <i class="input-helper"></i> SI
             </label>
+            <p class="c-black f-500 m-b-20 m-t-20">Percentuale Sconto (per pagamento unico)</p>
+            <div class="deposit-percentage">
+              <div slider class="input-slider" ng-model="retainer_agreement.discount" start="0" end="100"></div>
+              <div class="deposit-number">
+                % <input type="number" name="deposit" ng-model="retainer_agreement.discount">
+              </div>
+            </div>
             <p class="c-black f-500 m-b-20 m-t-20">Percentuale Acconto</p>
             <div class="deposit-percentage">
-              <div slider class="input-slider" ng-model="matter.deposit" start=0 end=100></div>
+              <div slider class="input-slider" ng-model="retainer_agreement.deposit" start="0" end="100"></div>
               <div class="deposit-number">
-                % <input type="number" name="deposit" ng-model="matter.deposit">
+                % <input type="number" name="deposit" ng-model="retainer_agreement.deposit">
               </div>
             </div>
           </form>
@@ -234,7 +255,7 @@
 
   <div class="row m-b-25">
     <div class="col-sm-12">
-      <button class="btn btn-info waves-effect pull-right" ng-click="sendMatterModal()">
+      <button class="btn btn-info waves-effect pull-right" ng-click="sendRetainerAgreement()">
         <i class="zmdi zmdi-mail-send"></i> Invia a cliente
       </button>
     </div>

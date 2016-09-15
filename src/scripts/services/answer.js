@@ -2,8 +2,8 @@
   'use strict';
 
   /**=========================================================
-  * File: matter.js
-  * Matter Service
+  * File: answer.js
+  * Answer Service
   =========================================================*/
 
   App.factory('Answer', function ($rootScope, $q, $http, API, Service) {

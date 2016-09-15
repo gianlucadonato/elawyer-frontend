@@ -6,37 +6,37 @@
   * RetainerAgreement Details Controller
   =========================================================*/
 
-  App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
-    $scope.showNext = false;
-    $scope.invoice_type = 'full'; // full | deposit | balance
+    $scope.showNext = true;
+    $scope.invoice_type = 'deposit'; // full | deposit | balance
+    $scope.showFullInvoice = false;
 
     function activate() {
-      getMatter();
+      getRetainerAgreement();
     }
 
     activate();
 
-    function getMatter() {
-      Matter.api.get($stateParams.id).then(function(data) {
-        $scope.matter = data;
+    function getRetainerAgreement() {
+      RetainerAgreement.api.get($stateParams.id).then(function(data) {
+        $scope.retainer_agreement = data;
         if(data.invoice_id || data.deposit_invoice_id )
           $scope.readMode = true;
       }).catch(function(err){
-        Notify.error('Error!', 'Unable to load matter');
+        Notify.error('Error!', 'Unable to load retainer_agreement');
       });
     }
 
-    $scope.$watch('matter', function(newValue, oldValue) {
+    $scope.$watch('retainer_agreement', function(newValue, oldValue) {
       if(!angular.equals(newValue, oldValue))
-        $scope.invoice = Matter.calcInvoice(newValue);
+        $scope.invoice = RetainerAgreement.calcInvoice(newValue);
     }, true);
-
 
     $scope.next = function() {
       // Update selected services and show next
-      Matter.api.update($scope.matter).then(function(data) {
+      RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
         $scope.showNext = true;
         $window.scrollTo(0, 0);
       });
@@ -47,9 +47,19 @@
       $window.scrollTo(0, 0);
     };
 
+    $scope.checkDiscount = function(value) {
+      $scope.showFullInvoice = value;
+      if(value) {
+        $scope.invoice_type = 'full';
+      } else if($scope.retainer_agreement.deposit_invoice_id){
+        $scope.invoice_type = 'balance';
+      } else {
+        $scope.invoice_type = 'deposit';
+      }
+    };
+
     var choosePaymentModal;
-    $scope.openPaymentModal = function(invoiceType) {
-      $scope.invoice_type = invoiceType;
+    $scope.openPaymentModal = function() {
       choosePaymentModal = $uibModal.open({
         animation: false,
         size: '',
@@ -68,7 +78,7 @@
         paying: parseInt(total) * 100,
         invoice_type: $scope.invoice_type,
         payment_method: 'stripe',
-        email: $scope.matter.customer.email
+        email: $scope.retainer_agreement.customer.email
       };
       stripe.open({
         amount: options.paying,
@@ -77,7 +87,7 @@
       })
       .then(function(result) {
         options.stripe_token = result[0].id;
-        Matter.api.pay($scope.matter, options).then(function(res) {
+        RetainerAgreement.api.pay($scope.retainer_agreement, options).then(function(res) {
           swal({
             title: "Paid!",
             text: "La lettera d'incarico è stata pagata correttamente.",
@@ -105,7 +115,7 @@
       choosePaymentModal.dismiss();
       Uploader.upload(data.files)
         .then(function(data) {
-          Matter.api.pay($scope.matter, {
+          RetainerAgreement.api.pay($scope.retainer_agreement, {
             invoice_type: $scope.invoice_type,
             payment_method: 'bank_transfer'
           }).then(function(res) {

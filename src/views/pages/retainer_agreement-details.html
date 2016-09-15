@@ -1,4 +1,4 @@
-<div class="container matter matter-details">
+<div class="container retainer-agreement retainer-agreement-details">
   <div class="card m-t-25">
     <div class="card-header">
       <h2>Lettera di incarico</h2>
@@ -9,9 +9,8 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Titolo</th>
+              <th>Pratica</th>
               <th>Area</th>
-              <!-- <th>Stato</th> -->
               <th permission permission-only="['LAWYER', 'ADMIN']">Cliente</th>
               <th permission permission-only="['CUSTOMER', 'ADMIN']">Avvocato</th>
               <th>Data di Apertura</th>
@@ -19,20 +18,22 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{matter.title}}</td>
-              <td>{{matter.area_of_interest}}</td>
+              <td>
+                <a ui-sref="page.matter-details(retainer_agreement.matter)">{{retainer_agreement.matter.title}}</a>
+              </td>
+              <td>{{retainer_agreement.area_of_interest}}</td>
               <!-- <td>
-                <div class="flag flag-success" ng-if="matter.status == 'success'">Open</div>
-                <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
-                <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
+                <div class="flag flag-success" ng-if="retainer_agreement.status == 'success'">Open</div>
+                <div class="flag flag-pending" ng-if="retainer_agreement.status == 'pending'">Pending</div>
+                <div class="flag flag-closed" ng-if="retainer_agreement.status == 'closed'">Closed</div>
               </td> -->
               <td permission permission-only="['LAWYER', 'ADMIN']">
-                <a ui-sref="profile.details(matter.customer)">{{matter.customer.first_name}} {{matter.customer.last_name}}</a>
+                <a ui-sref="profile.details(retainer_agreement.customer)">{{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</a>
               </td>
               <td permission permission-only="['CUSTOMER', 'ADMIN']">
-                <a ui-sref="profile.details(matter.customer)">{{matter.owner.first_name}} {{matter.owner.last_name}}</a>
+                <a ui-sref="profile.details(retainer_agreement.customer)">{{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</a>
               </td>
-              <td>{{matter.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+              <td>{{retainer_agreement.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
             </tr>
           </tbody>
         </table>
@@ -47,11 +48,11 @@
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
             <div class="pull-right text-right">
-              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
-                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
-                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
+                <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -60,11 +61,11 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
               <p>
-                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
-                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
-                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
+                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
               </p>
             </div>
             <div class="col-sm-6 text-right"></div>
@@ -72,8 +73,8 @@
 
           <h3>Lettera di incarico</h3>
           <hr/>
-          <p ng-if="matter.description">{{matter.description}}</p>
-          <p ng-if="!matter.description">
+          <p ng-if="retainer_agreement.description">{{retainer_agreement.description}}</p>
+          <p ng-if="!retainer_agreement.description">
             Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’Incarico).<br/><br/>
             Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.
           </p>
@@ -83,7 +84,7 @@
           </p>
 
           <div ui-tree>
-            <table ui-tree-nodes="" ng-model="matter.items" class="table table-bordered services">
+            <table ui-tree-nodes="" ng-model="retainer_agreement.items" class="table table-bordered services">
               <thead>
                 <tr>
                   <th></th>
@@ -93,7 +94,7 @@
               </thead>
               <tbody>
                 <!-- SERVICES -->
-                <tr ng-repeat="item in matter.items" ui-tree-node>
+                <tr ng-repeat="item in retainer_agreement.items" ui-tree-node>
                   <td width="5%">
                     <div class="checkbox">
                       <label ng-if="!item.is_mandatory">
@@ -128,11 +129,37 @@
               </tbody>
             </table>
           </div>
-        </div>
-        <div class="card-footer card-padding card-actions">
-          <button class="btn btn-orange btn-icon-text waves-effect" ng-click="next()">
-            <span>Avanti </span><i class="zmdi zmdi-arrow-forward"></i>
-          </button>
+
+          <div class="m-t-25">
+            <h4>Note e Assumptions</h4>
+            <hr/>
+            <p>
+              L’Incarico viene conferito e accettato sul presupposto che le attività descritte nella presente lettera di
+              Incarico non eccedano per complessità e quantità i livelli prevedibili sulla base delle informazioni forniteci e,
+              comunque, normalmente prevedibili per incarichi di natura simile. <br><br>
+              Le regole di deontologia professionale impongono in capo ai professionisti dello Studio un obbligo di
+              riservatezza sulle informazioni ricevute in esecuzione dell’incarico. <br><br>
+              Nel ringraziarVi nuovamente, restiamo a Vostra disposizione per ogni ulteriore chiarimento od occorrenza in
+              relazione alla presente offerta. <br><br>
+              <br>
+              Con i migliori saluti, <br>
+              Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}
+            </p>
+          </div>
+          <div class="m-t-25 m-b-25">
+            <form ng-submit="next()" class="p-t-25">
+              <div class="checkbox m-b-15">
+                <label><input type="checkbox" required><i class="input-helper"></i>
+                  Il/la sottoscritto/a dichiara di accettare espressamente, ai sensi degli Articoli 1341 e 1342 C.C. le seguenti clausole: Dati Tecnici, Compensi Professionali e Estensione dell’Incarico.
+                </label>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-orange btn-block btn-icon-text waves-effect">
+                  <span>Accetta e Conferma</span>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -145,7 +172,7 @@
         <div class="card-body card-padding">
           <table width="100%">
             <tbody>
-              <tr ng-repeat="srv in matter.items">
+              <tr ng-repeat="srv in retainer_agreement.items">
                 <td width="75%">
                   <div class="checkbox">
                     <label ng-if="!srv.is_mandatory">
@@ -187,11 +214,11 @@
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
             <div class="pull-right text-right">
-              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
-                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
-                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
+                <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -200,11 +227,11 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
               <p>
-                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
-                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
-                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
+                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
               </p>
             </div>
             <div class="col-sm-6 text-right"></div>
@@ -223,12 +250,9 @@
             <button class="btn waves-effect" ng-click="showNext = false">
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
             </button>
-            <span ng-if="current_user.id == matter.customer.id">
-              <button class="btn btn-info waves-effect" ng-click="openPaymentModal('deposit')" ng-if="matter.deposit>0">
-                Paga acconto
-              </button>
-              <button class="btn btn-primary waves-effect" ng-click="openPaymentModal('full')">
-                Paga Fattura <span ng-if="matter.deposit>0"> Complessiva</span>
+            <span ng-if="current_user.id == retainer_agreement.customer.id">
+              <button class="btn btn-primary waves-effect" ng-click="openPaymentModal()">
+                <span>Effettua Pagamento</span>
               </button>
             </span>
           </div>
@@ -246,11 +270,11 @@
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
             <div class="pull-right text-right">
-              <h4>Spett.le {{matter.customer.first_name}} {{matter.customer.last_name}}</h4>
+              <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
-                <span ng-if="matter.customer.address">{{matter.customer.address}}</span><br/>
-                <span ng-if="matter.customer.fiscal_code">C.F. {{matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="matter.customer.vat_number">P.I. {{matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
+                <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -259,11 +283,11 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{matter.owner.first_name}} {{matter.owner.last_name}}</h4>
+              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
               <p>
-                <span ng-if="matter.owner.address">{{matter.owner.address}}</span><br/>
-                <span ng-if="matter.owner.fiscal_code">C.F. {{matter.owner.fiscal_code}}</span><br/>
-                <span ng-if="matter.owner.vat_number">P.I. {{matter.owner.vat_number}}</span>
+                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
+                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
               </p>
             </div>
             <div class="col-sm-6 text-right"></div>
@@ -271,8 +295,8 @@
 
           <h3>Lettera di incarico</h3>
           <hr/>
-          <p ng-if="matter.description">{{matter.description}}</p>
-          <p ng-if="!matter.description">
+          <p ng-if="retainer_agreement.description">{{retainer_agreement.description}}</p>
+          <p ng-if="!retainer_agreement.description">
             Il presente documento costituisce il preventivo e la lettera di incarico per l’attività di consulenza e assistenza legale richiesta (l’Incarico).<br/><br/>
             Le Condizioni Generali e l’Informativa in calce al presente documento costituiscono parte integrante e sostanziale dello stesso.
           </p>
@@ -290,7 +314,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="i in matter.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
+                  <tr ng-repeat="i in retainer_agreement.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
                     <td width="85%">
                       <strong>{{i.title}}</strong>
                       <p>{{i.description}}</p>
@@ -300,6 +324,22 @@
                 </tbody>
               </table>
             </div>
+          </div>
+          <div class="m-t-25">
+            <h4>Note e Assumptions</h4>
+            <hr/>
+            <p>
+              L’Incarico viene conferito e accettato sul presupposto che le attività descritte nella presente lettera di
+              Incarico non eccedano per complessità e quantità i livelli prevedibili sulla base delle informazioni forniteci e,
+              comunque, normalmente prevedibili per incarichi di natura simile. <br><br>
+              Le regole di deontologia professionale impongono in capo ai professionisti dello Studio un obbligo di
+              riservatezza sulle informazioni ricevute in esecuzione dell’incarico. <br><br>
+              Nel ringraziarVi nuovamente, restiamo a Vostra disposizione per ogni ulteriore chiarimento od occorrenza in
+              relazione alla presente offerta. <br><br>
+              <br>
+              Con i migliori saluti, <br>
+              Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}
+            </p>
           </div>
         </div>
         <div class="card-footer card-padding">

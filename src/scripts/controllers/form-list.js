@@ -2,8 +2,8 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-list.js
-  * MatterList Controller
+  * File: form-list.js
+  * FormList Controller
   =========================================================*/
 
   App.controller('FormListCtrl', function($scope, $filter, Answer, Notify, ngTableParams) {
@@ -36,7 +36,7 @@
     }
 
     function initTable() {
-      $scope.mattersTable = new ngTableParams({
+      $scope.retainer_agreementsTable = new ngTableParams({
         page: 1,
         count: $scope.perPage
       }, {

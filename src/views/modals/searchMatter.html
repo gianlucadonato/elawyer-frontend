@@ -1,0 +1,14 @@
+<div class="modal-header pb-23">
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> CERCA PRATICA</h4>
+</div>
+<div class="modal-body send-retainer-agreement-template">
+  <form ng-submit="closeSearchMatterModal(m)">
+    <div class="form-group">
+      <input type="text" ng-model="m" placeholder="Seleziona Pratica" class="form-control"
+             uib-typeahead="u as u.title for u in searchMatter($viewValue)">
+    </div>
+    <div class="form-group m-t-10">
+      <button type="submit" class="btn btn-orange btn-block waves-effect">CONFERMA</button>
+    </div>
+  </form>
+</div>

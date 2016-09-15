@@ -1,4 +1,4 @@
-<div class="container m-t-25 matter matter-list">
+<div class="container m-t-25 retainer-agreement retainer-agreement-list">
 
   <div class="card">
     <div class="card-header">
@@ -15,7 +15,7 @@
     <!-- LAWYER ONLY -->
     <div class="card-body" permission permission-only="['LAWYER']">
       <div class="table-responsive" ng-if="forms.length && !isLoading">
-        <table ng-table="mattersTable" class="table table-striped table-vmiddle">
+        <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in forms">
             <td data-title="'Title'" sortable="'title'">
               {{ m.title }}

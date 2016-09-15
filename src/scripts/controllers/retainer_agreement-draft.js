@@ -6,7 +6,7 @@
   * RetainerAgreementDraft Controller
   =========================================================*/
 
-  App.controller('RetainerAgreementDraftCtrl', function($scope, $filter, Matter, Notify, ngTableParams) {
+  App.controller('RetainerAgreementDraftCtrl', function($scope, $filter, RetainerAgreement, Notify, ngTableParams) {
 
     $scope.drafts = [];
     $scope.isLoading = false;
@@ -21,13 +21,14 @@
 
     function getDrafts() {
       $scope.isLoading = true;
-      Matter.api.index({
+      RetainerAgreement.api.index({
         is_draft: true,
         per_page: $scope.perPage
       }).then(function(data){
-        $scope.drafts = data.matters;
+        $scope.drafts = data.retainer_agreements;
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
+        console.log('drafts', data.retainer_agreements);
         initTable();
       }).catch(function(err){
         $scope.isLoading = false;
@@ -35,28 +36,28 @@
     }
 
     function initTable() {
-      $scope.mattersTable = new ngTableParams({
+      $scope.retainer_agreementsTable = new ngTableParams({
         page: 1,
         count: $scope.perPage
       }, {
         total: $scope.totalItems,
         getData: function($defer, params) {
-          Matter.api.index({
+          RetainerAgreement.api.index({
             is_draft: true,
             page: params.page() - 1,
             per_page: params.count()
           }).then(function(data){
             $scope.totalItems = data.total_items;
-            $scope.drafts = params.sorting() ? $filter('orderBy')(data.matters, params.orderBy()) : data.matters;
+            $scope.drafts = params.sorting() ? $filter('orderBy')(data.retainer_agreements, params.orderBy()) : data.retainer_agreements;
             $defer.resolve($scope.drafts);
           }).catch(function(err){
-            Notify.error('Error!', "Unable to fetch matters");
+            Notify.error('Error!', "Unable to fetch retainer_agreements");
           });
         }
       });
     }
 
-    $scope.deleteMatter = function(m) {
+    $scope.deleteRetainerAgreement = function(m) {
       swal({
         title: "Are you sure?",
         text: "La lettera di incarico verrà eliminata permanentemente.",
@@ -69,7 +70,7 @@
         closeOnCancel: true
       }, function(isConfirm){
         if (isConfirm) {
-          Matter.api.delete(m).then(function(data){
+          RetainerAgreement.api.delete(m).then(function(data){
             var index = $scope.drafts.indexOf(m);
             $scope.drafts.splice(index, 1);
             Notify.success('OK!', "Selected item deleted successfully!");
