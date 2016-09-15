@@ -1,7 +1,7 @@
 <div class="container matter matter-edit">
   <div class="block-header flex">
     <h2>MODIFICA LETTERA DI INCARICO:</h2>
-    <a ui-sref="page.matter-details(matter)">{{matter.title}}</a>
+    <a ui-sref="page.retainer_agreement-details(matter)">{{matter.title}}</a>
     <ul class="actions">
       <li tooltip-placement="bottom" uib-tooltip="Save as Template">
         <a href="" ng-click="saveAsTemplate(matter)"><i class="fa fa-floppy-o"></i></a>
@@ -235,6 +235,7 @@
         </div>
       </div>
     </div>
+  </div>
 
   <!-- INVOICE PREVIEW -->
   <div class="row">
@@ -257,5 +258,4 @@
       </button>
     </div>
   </div>
-
 </div>

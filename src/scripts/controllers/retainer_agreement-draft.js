@@ -2,30 +2,30 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-list.js
-  * MatterList Controller
+  * File: retainer_agreement-draft.js
+  * RetainerAgreementDraft Controller
   =========================================================*/
 
-  App.controller('MatterListCtrl', function($scope, $filter, Matter, Notify, ngTableParams) {
+  App.controller('RetainerAgreementDraftCtrl', function($scope, $filter, Matter, Notify, ngTableParams) {
 
-    $scope.matters = [];
+    $scope.drafts = [];
     $scope.isLoading = false;
-    $scope.perPage = 15;
+    $scope.perPage = 14;
     $scope.totalItems = 0;
 
     function activate() {
-      getMatters();
+      getDrafts();
     }
 
     activate();
 
-    function getMatters() {
+    function getDrafts() {
       $scope.isLoading = true;
       Matter.api.index({
-        is_draft: false,
+        is_draft: true,
         per_page: $scope.perPage
       }).then(function(data){
-        $scope.matters = data.matters;
+        $scope.drafts = data.matters;
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
         initTable();
@@ -42,13 +42,13 @@
         total: $scope.totalItems,
         getData: function($defer, params) {
           Matter.api.index({
-            is_draft: false,
+            is_draft: true,
             page: params.page() - 1,
             per_page: params.count()
           }).then(function(data){
             $scope.totalItems = data.total_items;
-            $scope.matters = params.sorting() ? $filter('orderBy')(data.matters, params.orderBy()) : data.matters;
-            $defer.resolve($scope.matters);
+            $scope.drafts = params.sorting() ? $filter('orderBy')(data.matters, params.orderBy()) : data.matters;
+            $defer.resolve($scope.drafts);
           }).catch(function(err){
             Notify.error('Error!', "Unable to fetch matters");
           });
@@ -70,8 +70,8 @@
       }, function(isConfirm){
         if (isConfirm) {
           Matter.api.delete(m).then(function(data){
-            var index = $scope.matters.indexOf(m);
-            $scope.matters.splice(index, 1);
+            var index = $scope.drafts.indexOf(m);
+            $scope.drafts.splice(index, 1);
             Notify.success('OK!', "Selected item deleted successfully!");
           }).catch(function(err){
             Notify.error('Error!', "Unable to delete selected item");

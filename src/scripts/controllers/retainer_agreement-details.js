@@ -2,11 +2,11 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-details.js
-  * MatterDetails Controller
+  * File: retainer_agreement-details.js
+  * RetainerAgreement Details Controller
   =========================================================*/
 
-  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, Matter, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
     $scope.showNext = false;
