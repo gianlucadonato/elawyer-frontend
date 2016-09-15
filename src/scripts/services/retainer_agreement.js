@@ -16,6 +16,7 @@
       area_of_interest: '',
       withholding_tax: false,
       deposit: 0,
+      discount: 5,
       is_draft: true,
       is_template: false,
       items: [Service.template()]

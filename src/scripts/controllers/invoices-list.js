@@ -25,6 +25,7 @@
         per_page: $scope.perPage
       }).then(function(data){
         $scope.invoices = data.invoices;
+        console.log('invoices', data.invoices);
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
         initTable();

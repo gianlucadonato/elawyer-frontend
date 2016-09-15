@@ -1,5 +1,5 @@
 <div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> New Customer</h4>
+  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Nuovo Cliente</h4>
 </div>
 <div class="modal-body">
   <form name="newCustomer" ng-submit="createUser(form)">
@@ -7,14 +7,14 @@
       <div class="col-sm-6">
         <div class="form-group">
           <div class="fg-line">
-            <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="First Name" required>
+            <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="Nome" required>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group">
           <div class="fg-line">
-            <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Last Name" required>
+            <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Cognome" required>
           </div>
         </div>
       </div>
@@ -34,9 +34,9 @@
         <div class="form-group">
           <div class="fg-line">
             <select name="gender" class="form-control input-sm" ng-model="form.gender">
-              <option value="" disabled>Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="" disabled>Sesso</option>
+              <option value="male">Uomo</option>
+              <option value="female">Donna</option>
             </select>
           </div>
         </div>
@@ -46,20 +46,20 @@
       <div class="col-sm-6">
         <div class="form-group">
           <div class="fg-line">
-            <input type='text' class="form-control input-sm" data-input-mask="{mask: '00/00/0000'}" placeholder="Birthday eg.08/06/1990" ng-model="form.birthday">
+            <input type='text' class="form-control input-sm" data-input-mask="{mask: '00/00/0000'}" placeholder="Data di Nascita eg.08/06/1990" ng-model="form.birthday">
           </div>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group">
           <div class="fg-line">
-            <input type="text" class="form-control input-sm" data-input-mask="{mask: '000 0000000'}" placeholder="Phone eg.340 1231986" data-ng-model="form.phone">
+            <input type="text" class="form-control input-sm" data-input-mask="{mask: '000 0000000'}" placeholder="Tel. eg.340 1231986" data-ng-model="form.phone">
           </div>
         </div>
       </div>
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block waves-effect">SAVE</button>
+      <button type="submit" class="btn btn-primary btn-block waves-effect">SALVA</button>
     </div>
   </form>
 </div>

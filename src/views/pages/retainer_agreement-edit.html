@@ -34,7 +34,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Titolo</th>
+                    <th>Pratica</th>
                     <th>Priorità</th>
                     <th>Area</th>
                     <!-- <th>Stato</th> -->
@@ -44,12 +44,20 @@
                   <tr>
                     <td>
                       <div class="form-group">
-                        <input type="text" name="Title" class="form-control" placeholder="Inserisci Titolo" ng-model="retainer_agreement.title">
+                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()">
+                          <span ng-if="!retainer_agreement.matter.title">SELEZIONA PRATICA</span>
+                          <span ng-if="retainer_agreement.matter.title">{{retainer_agreement.matter.title}}</span>
+                        </button>
                       </div>
                     </td>
                     <td>
                       <div class="form-group">
-                        <input type="number" class="form-control" placeholder="0/100" ng-model="retainer_agreement.priority">
+                        <button class="btn btn-success btn-block" ng-click="openSearchUserModal()">
+                          <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
+                          <span ng-if="retainer_agreement.customer.first_name">
+                            {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
+                          </span>
+                        </button>
                       </div>
                     </td>
                     <td>
@@ -62,16 +70,6 @@
                         <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="retainer_agreement.area_of_interest">
                       </div>
                     </td>
-                    <!-- <td>
-                      <div class="form-group">
-                        <select class="form-control" ng-model="retainer_agreement.status">
-                          <option value="" disabled selected>Status</option>
-                          <option value="open">Open</option>
-                          <option value="pending">Pending</option>
-                          <option value="closed">Closed</option>
-                        </select>
-                      </div>
-                    </td> -->
                   </tr>
                 </tbody>
               </table>
@@ -96,7 +94,7 @@
             tooltip-placement="bottom" uib-tooltip="Importa Fase">
             <i class="zmdi zmdi-plus"></i>
           </button>
-          <button class="btn bgm-blue btn-float waves-effect" ng-click="sendRetainerAgreementModal()"
+          <button class="btn bgm-blue btn-float waves-effect" ng-click="sendRetainerAgreement()"
             tooltip-placement="bottom" uib-tooltip="Invia a Cliente">
             <i class="zmdi zmdi-mail-send"></i>
           </button>
@@ -224,9 +222,16 @@
               <input type="radio" name="withholding_tax" ng-value="true" ng-model="retainer_agreement.withholding_tax">
               <i class="input-helper"></i> SI
             </label>
+            <p class="c-black f-500 m-b-20 m-t-20">Percentuale Sconto (per pagamento unico)</p>
+            <div class="deposit-percentage">
+              <div slider class="input-slider" ng-model="retainer_agreement.discount" start="0" end="100"></div>
+              <div class="deposit-number">
+                % <input type="number" name="deposit" ng-model="retainer_agreement.discount">
+              </div>
+            </div>
             <p class="c-black f-500 m-b-20 m-t-20">Percentuale Acconto</p>
             <div class="deposit-percentage">
-              <div slider class="input-slider" ng-model="retainer_agreement.deposit" start=0 end=100></div>
+              <div slider class="input-slider" ng-model="retainer_agreement.deposit" start="0" end="100"></div>
               <div class="deposit-number">
                 % <input type="number" name="deposit" ng-model="retainer_agreement.deposit">
               </div>
@@ -253,7 +258,7 @@
 
   <div class="row m-b-25">
     <div class="col-sm-12">
-      <button class="btn btn-info waves-effect pull-right" ng-click="sendRetainerAgreementModal()">
+      <button class="btn btn-info waves-effect pull-right" ng-click="sendRetainerAgreement()">
         <i class="zmdi zmdi-mail-send"></i> Invia a cliente
       </button>
     </div>

@@ -33,7 +33,7 @@
         size: '',
         backdrop: true,
         keyboard: true,
-        templateUrl: 'views/modals/newCustomer.html',
+        templateUrl: 'views/modals/newUser.html',
         resolve: {
           customers: function () {
             return $scope.customers;

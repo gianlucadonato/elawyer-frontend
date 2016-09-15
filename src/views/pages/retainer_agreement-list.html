@@ -14,8 +14,8 @@
       <div class="table-responsive" ng-if="retainer_agreements.length && !isLoading">
         <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in retainer_agreements">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.retainer_agreement-details(m)">{{ m.title }}</a>
+            <td data-title="'Pratica'" sortable="'title'">
+              <a ui-sref="page.matter-details(m.matter)">{{ m.matter.title }}</a>
             </td>
             <td data-title="'Area'" sortable="'area_of_interest'">
               {{ m.area_of_interest }}
@@ -36,10 +36,18 @@
               <div ng-if="m.balance_invoice_id.is_paid || m.invoice_id" class="flag flag-success">Pagato</div>
               <div ng-if="!m.balance_invoice_id.is_paid && !m.invoice_id" class="flag flag-closed">Non pagato</div>
             </td>
-
-
             <td data-title="'Data di Creazione'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
+            </td>
+            <td data-title="'Azioni'">
+              <ul class="actions">
+                <li>
+                  <a ui-sref="page.retainer_agreement-details(m)"
+                    tooltip-placement="bottom" uib-tooltip="Visualizza">
+                   <i class="zmdi zmdi-eye"></i>
+                  </a>
+                </li>
+              </ul>
             </td>
           </tr>
         </table>
@@ -51,8 +59,8 @@
       <div class="table-responsive" ng-if="retainer_agreements.length && !isLoading">
         <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in retainer_agreements">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.retainer_agreement-details(m)">{{ m.title }}</a>
+            <td data-title="'Pratica'" sortable="'matter.title'">
+              <a ui-sref="page.matter-details(m.matter)">{{ m.matter.title }}</a>
             </td>
             <td data-title="'Area'" sortable="'area_of_interest'">
               {{ m.area_of_interest }}
@@ -73,6 +81,12 @@
             </td>
             <td data-title="'Azioni'">
               <ul class="actions" ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
+                <li>
+                  <a ui-sref="page.retainer_agreement-details(m)"
+                    tooltip-placement="bottom" uib-tooltip="Visualizza">
+                   <i class="zmdi zmdi-eye"></i>
+                  </a>
+                </li>
                 <li>
                   <a ui-sref="page.retainer_agreement-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Modifica">
@@ -97,8 +111,8 @@
       <div class="table-responsive" ng-if="retainer_agreements.length && !isLoading">
         <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in retainer_agreements">
-            <td data-title="'Titolo'" sortable="'title'">
-              <a ui-sref="page.retainer_agreement-details(m)">{{ m.title }}</a>
+            <td data-title="'Pratica'" sortable="'title'">
+              <a ui-sref="page.matter-details(m.matter)">{{ m.matter.title }}</a>
             </td>
             <td data-title="'Area'" sortable="'area_of_interest'">
               {{ m.area_of_interest }}
@@ -114,6 +128,12 @@
             </td>
             <td data-title="'Azioni'">
               <ul class="actions">
+                <li>
+                  <a ui-sref="page.retainer_agreement-details(m)"
+                    tooltip-placement="bottom" uib-tooltip="Visualizza">
+                   <i class="zmdi zmdi-eye"></i>
+                  </a>
+                </li>
                 <li>
                   <a ui-sref="page.retainer_agreement-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Edit">

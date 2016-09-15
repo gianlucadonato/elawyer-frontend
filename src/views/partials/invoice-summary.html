@@ -1,5 +1,5 @@
 <!-- GENERAL INVOICE -->
-<div class="row">
+<div class="row" ng-if="!retainer_agreement.deposit || showFullInvoice">
   <div class="col-sm-12">
     <h4>Totale Fattura</h4>
     <hr>
@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div class="row" ng-if="retainer_agreement.deposit > 0">
+<div class="row" ng-if="!!retainer_agreement.deposit && !showFullInvoice">
   <div class="col-sm-12">
     <!-- ACCONTO -->
     <h4 class="m-t-25">Acconto</h4>
@@ -66,12 +66,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="i in retainer_agreement.items">
+        <tr ng-repeat="i in retainer_agreement.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
           <td><strong>{{i.title}}</strong></td>
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
         <tr>
-          <td class="text-right"><strong>PRESTAZIONI (Acconto)</strong></td>
+          <td class="text-right"><strong>PRESTAZIONI (Acconto {{retainer_agreement.deposit}}% del totale)</strong></td>
           <td><strong>€ {{ invoice.deposit.total_services | prettyNumber }}</strong></td>
         </tr>
         <tr>
@@ -105,7 +105,11 @@
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.deposit.withholding_tax | prettyNumber}}
       </div>
     </div>
+  </div>
+</div>
 
+<div class="row" ng-if="!!retainer_agreement.deposit && showBalance">
+  <div class="col-sm-12">
     <!-- SALDO -->
     <h4 class="m-t-25">Saldo</h4>
     <hr>
@@ -117,12 +121,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="i in retainer_agreement.items">
+        <tr ng-repeat="i in retainer_agreement.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
           <td><strong>{{i.title}}</strong></td>
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
         <tr>
-          <td class="text-right"><strong>PRESTAZIONI (Saldo)</strong></td>
+          <td class="text-right"><strong>PRESTAZIONI (Saldo {{ 100 - retainer_agreement.deposit}}% del totale)</strong></td>
           <td><strong>€ {{ invoice.balance.total_services | prettyNumber }}</strong></td>
         </tr>
         <tr>
@@ -155,6 +159,17 @@
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.balance.withholding_tax | prettyNumber}}
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 m-t-5">
+    <div class="checkbox m-b-15">
+      <label>
+        <input type="checkbox" ng-model="isChecked" ng-true-value="true" ng-false-value="false" ng-change="checkDiscount(isChecked)">
+        <i class="input-helper"></i> Ottieni sconto del {{retainer_agreement.discount}}% pagando in un unica soluzione
+      </label>
     </div>
   </div>
 </div>

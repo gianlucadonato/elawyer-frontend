@@ -9,8 +9,9 @@
   App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
-    $scope.showNext = false;
-    $scope.invoice_type = 'full'; // full | deposit | balance
+    $scope.showNext = true;
+    $scope.invoice_type = 'deposit'; // full | deposit | balance
+    $scope.showFullInvoice = false;
 
     function activate() {
       getRetainerAgreement();
@@ -33,7 +34,6 @@
         $scope.invoice = RetainerAgreement.calcInvoice(newValue);
     }, true);
 
-
     $scope.next = function() {
       // Update selected services and show next
       RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
@@ -47,9 +47,19 @@
       $window.scrollTo(0, 0);
     };
 
+    $scope.checkDiscount = function(value) {
+      $scope.showFullInvoice = value;
+      if(value) {
+        $scope.invoice_type = 'full';
+      } else if($scope.retainer_agreement.deposit_invoice_id){
+        $scope.invoice_type = 'balance';
+      } else {
+        $scope.invoice_type = 'deposit';
+      }
+    };
+
     var choosePaymentModal;
-    $scope.openPaymentModal = function(invoiceType) {
-      $scope.invoice_type = invoiceType;
+    $scope.openPaymentModal = function() {
       choosePaymentModal = $uibModal.open({
         animation: false,
         size: '',

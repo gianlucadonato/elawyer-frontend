@@ -28,6 +28,7 @@
         $scope.drafts = data.retainer_agreements;
         $scope.totalItems = data.total_items;
         $scope.isLoading = false;
+        console.log('drafts', data.retainer_agreements);
         initTable();
       }).catch(function(err){
         $scope.isLoading = false;
