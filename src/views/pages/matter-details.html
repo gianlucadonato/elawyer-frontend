@@ -1,0 +1,58 @@
+<div class="container matter matter-details">
+
+  <div class="card m-t-25">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Pratica</th>
+              <th>Stato</th>
+              <th>Data di Apertura</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{matter.title}}</td>
+              <td>
+                <div class="flag flag-success" ng-if="matter.status == 'open'">Open</div>
+                <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
+                <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
+              </td>
+              <td>{{matter.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card m-t-25">
+    <div class="card-header">
+      <h2>Lettere di Incarico</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Lettera di Incarico</th>
+              <th>Data di Apertura</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="ra in matter.retainer_agreements">
+                <td>
+                  <a ui-sref="page.retainer_agreement-details({id: ra._id})">
+                    {{ra.description}}
+                  </a>
+                </td>
+                <td>{{ra.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

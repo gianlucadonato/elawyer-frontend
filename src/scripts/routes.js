@@ -89,14 +89,12 @@
       .state ('company', {
         abstract:true,
         templateUrl: helper.partialsPath('common.html')
-        // resolve: helper.resolveFor('lightgallery')
       })
       .state ('company.details', {
         url: '/company/:id',
         controller: 'company',
         requireLogin: true,
         templateUrl: helper.pagesPath('company.html')
-        // resolve: helper.resolveFor('lightgallery')
       })
       .state ('company.index', {
         controller: 'companyIndex',
@@ -105,7 +103,7 @@
         templateUrl: helper.pagesPath('company-list.html')
       })
       //------------------------------
-      // MATTERS
+      // Retainer Agreements (Lettere di incarico)
       //------------------------------
       .state ('page', {
         abstract: true,
@@ -158,6 +156,47 @@
         requireLogin: true,
         templateUrl: helper.pagesPath('retainer_agreement-edit.html'),
         controller: 'RetainerAgreementCreateCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
+      })
+      //------------------------------
+      // MATTERS
+      //------------------------------
+      .state('page.matter-list', {
+        url: '/matters/list',
+        title: 'Retainer Agreement List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-list.html'),
+        controller: 'MatterListCtrl'
+      })
+      .state('page.matter-create', {
+        url: '/matters/create',
+        title: 'Create Retainer Agreement',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-create.html'),
+        controller: 'MatterCreateCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
+      })
+      .state('page.matter-details', {
+        url: '/matters/:id',
+        title: 'Retainer Agreement Details',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-details.html'),
+        controller: 'MatterDetailsCtrl'
+      })
+      .state('page.matter-edit', {
+        url: '/matters/:id/edit',
+        title: 'Edit Retainer Agreement',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('matter-edit.html'),
+        controller: 'MatterCreateCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']

@@ -341,14 +341,14 @@
     };
 
     // Create New Client
-    $scope.openNewCustomerModal = function() {
+    $scope.openNewUser = function() {
       self.newCustomerModal = $uibModal.open({
         animation: false,
         size: '',
         backdrop: true,
         keyboard: true,
         templateUrl: 'views/modals/newUser.html',
-        controller: function($scope, $uibModalInstance, retainer_agreement){
+        controller: function($scope, $uibModalInstance){
           $scope.createUser = function(data) {
             if(data.birthday) {
               // Transform data in ms

@@ -1,0 +1,55 @@
+<div class="container m-t-25 matter matter-list">
+  <div class="card">
+    <div class="card-header ch-alt m-b-25">
+      <h2>PRATICHE <small>Lista pratiche</small></h2>
+      <button class="btn bgm-blue btn-float waves-effect" ng-click="openNewMatterModal()"
+        permission permission-only="['LAWYER', 'ADMIN']"
+        tooltip-placement="bottom" uib-tooltip="Nuova Pratica">
+        <i class="zmdi zmdi-plus"></i>
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Pratica</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="matter in matters">
+              <td>{{$index + 1}}</td>
+              <td><a ui-sref="page.matter-details(matter)">{{matter.title}}</a></td>
+              <td>
+                <div class="flag flag-success" ng-if="matter.status == 'open'">Open</div>
+                <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
+                <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-body card-padding" ng-if="matters.length == 0 && !isLoading">
+      <div class="alert alert-danger" permission permission-only="['CUSTOMER']">
+        Non ci sono pratiche aperte.
+      </div>
+      <div class="alert alert-danger" permission permission-only="['LAWYER', 'ADMIN']">
+        Non ci sono pratiche aperte! Creane una nuova.
+      </div>
+    </div>
+
+    <div class="isLoading" ng-if="isLoading">
+      <div class="loader">
+        <div class="loader-inner ball-pulse-sync">
+          <div ng-repeat="i in [1,2,3]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

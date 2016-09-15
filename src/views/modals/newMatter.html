@@ -1,15 +1,18 @@
 <div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> CERCA CLIENTE</h4>
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> NUOVA PRATICA</h4>
   <button class="btn bgm-blue btn-float waves-effect" ng-click="openNewUser()"
     tooltip-placement="bottom" uib-tooltip="Crea Nuovo Cliente" style="right: 25px;top: 15px;z-index: 999;">
     <i class="zmdi zmdi-account-add"></i>
   </button>
 </div>
 <div class="modal-body send-retainer-agreement-template">
-  <form ng-submit="closeSearchUserModal(m)">
+  <form ng-submit="createMatter(matter)">
     <div class="form-group">
-      <input type="text" ng-model="m" placeholder="Seleziona Cliente" class="form-control"
-             uib-typeahead="u as u.name for u in searchUser($viewValue)">
+      <input type="text" ng-model="matter.title" placeholder="Titolo" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="text" ng-model="matter.customer_id" placeholder="Seleziona Cliente" class="form-control"
+          uib-typeahead="u as u.name for u in searchUser($viewValue)" required>
     </div>
     <div class="form-group m-t-10">
       <button type="submit" class="btn btn-orange btn-block waves-effect">CONFERMA</button>
