@@ -83,6 +83,22 @@
       });
     };
 
+    $scope.update = function(m) {
+      Form.api.update(m).then(function(data){
+        Notify.success('OK!','Saved Successfully!');
+      }).catch(function(err){
+        try {
+          var msg = '';
+          for(var key in err.data.data.errors) {
+            msg += key + ' is required! ';
+          }
+          Notify.error('Error on saving', msg);
+        } catch(err) {
+          Notify.error('Error!', 'Something went wrong :(');
+        }
+      });
+    }
+
         /* Send Form to Customer
      * ======================*/
     $scope.sendFormModal = function(selecton) {

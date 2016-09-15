@@ -84,7 +84,28 @@
         templateUrl: 'views/demos/profile-connections.html'
       })
       //------------------------------
-      // Retainer Agreement
+      // Company
+      //------------------------------
+      .state ('company', {
+        abstract:true,
+        templateUrl: helper.partialsPath('common.html')
+        // resolve: helper.resolveFor('lightgallery')
+      })
+      .state ('company.details', {
+        url: '/company/:id',
+        controller: 'company',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('company.html')
+        // resolve: helper.resolveFor('lightgallery')
+      })
+      .state ('company.index', {
+        controller: 'companyIndex',
+        url: '/companies',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('company-list.html')
+      })
+      //------------------------------
+      // MATTERS
       //------------------------------
       .state ('page', {
         abstract: true,
