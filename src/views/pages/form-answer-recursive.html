@@ -59,7 +59,7 @@
       </div>
 
 
-      <div ng-repeat="q in n.options track by $index" ng-if="n.value == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+      <div ng-repeat="q in n.options track by $index" ng-if="n.value == q.title" ng-include="'views/pages/form-answer-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{n.color}}" ng-init="n.color=getClass();"></div>
 
     </div>
 
@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <div ng-repeat="q in n.options track by $index" ng-if="n.value.title == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+      <div ng-repeat="q in n.options track by $index" ng-if="n.value.title == q.title" ng-include="'views/pages/form-answer-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{n.color}}" ng-init="n.color=getClass();"></div>
 
     </div>
 

@@ -8,7 +8,7 @@
           permission permission-only="['LAWYER', 'ADMIN']">
           <i class="zmdi zmdi-plus"></i> New
         </button>
-        QUESTIONARI <small>Il questionario è uno strumento sfruttato nella ricerca sociale (psicologia, sociologia, economia, studi di mercato, indagini di opinione) che serve per raccogliere informazioni in modo standardizzato e su campioni più o meno grandi, tali per cui è possibile poi costruire una matrice dati, ed effettuare poi analisi di tipo matematico/statistico.</small>
+        QUESTIONARI <small><p style="max-width: 80%; text-align: justified">Il questionario è uno strumento sfruttato nella ricerca sociale (psicologia, sociologia, economia, studi di mercato, indagini di opinione) che serve per raccogliere informazioni in modo standardizzato e su campioni più o meno grandi, tali per cui è possibile poi costruire una matrice dati, ed effettuare poi analisi di tipo matematico/statistico.</p></small>
       </h2>
     </div>
 
@@ -17,19 +17,24 @@
       <div class="table-responsive" ng-if="answers.length && !isLoading">
         <table ng-table="mattersTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in answers">
-            <td data-title="'Title'" sortable="'title'">
+            <td data-title="'Titolo'" sortable="'title'">
               <a ui-sref="page.form-answer({id: m.id})">{{ m.title }}</a>
             </td>
-            <td data-title="'Progress'" sortable="'items.length'">
-              {{ m.items | withval }} / {{m.items.length}}
+            <td data-title="'Stato'" sortable="'m.total'">
+              <span ng-if="m.answered && m.answered/m.total !=1"><i class="zmdi zmdi-assignment" style="color: #F44336"></i> {{ m.answered }} / {{m.total}}</span>
+              <span ng-if="!m.answered"><i class="zmdi zmdi-alert-circle-o" style="color: #F44336"></i> Non iniziato</span>
+              <span ng-if="m.answered && m.answered/m.total == 1"><i class="zmdi zmdi-check-all"></i> Completato</span>
             </td>
-            <td data-title="'Avvocato'" sortable="'owner'">
+            <td data-title="'Avvocato'" sortable="'owner.last_name'">
               <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>
             </td>
-            <td data-title="'Open Date'" sortable="'created_at'">
-              {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
+            <td data-title="'Data Ricezione'" sortable="'created_at'">
+             {{m.created_at | amDateFormat: "[Il] DD MMMM YYYY" }}
             </td>
-            <td data-title="'Actions'">
+            <td data-title="'Ultimo aggiornamento'" sortable="'updated_at'">
+              {{m.updated_at | amDateFormat: "[Il] DD MMMM YYYY [alle] hh:mm" }}
+            </td>
+            <td data-title="'Azione'">
               <ul class="actions">
                 <li>
                   <a href="" ng-click="deleteForm(m)"
@@ -49,19 +54,26 @@
       <div class="table-responsive" ng-if="answers.length && !isLoading">
         <table ng-table="mattersTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in answers">
-            <td data-title="'Title'" sortable="'title'">
-              <a ui-sref="page.form-answer({id: m.id})">{{ m.title }}</a>
+            <td data-title="'Titolo'" sortable="'title'">
+              <a ui-sref="page.form-answer({id: m.id})" ng-if="m.answered">{{ m.title }}</a>
+              <span ng-if="!m.answered">{{ m.title }}</span>
             </td>
-            <td data-title="'Progress'" sortable="'items.length'">
-              {{ m.items | withval }} / {{m.items.length}}
+            <td data-title="'Progress'" sortable="'m.answered'">
+              <span ng-if="m.answered && m.answered/m.total !=1"><i class="zmdi zmdi-assignment" style="color: #F44336"></i> {{ m.answered }} / {{m.total}}</span>
+              <span ng-if="!m.answered"><i class="zmdi zmdi-time"></i> Attendi..</span>
+              <span ng-if="m.answered && m.answered/m.total == 1"><i class="zmdi zmdi-check-all" style="color: #4CAF50
+"></i> Completato</span>
             </td>
-            <td data-title="'Cliente'" sortable="'customer'">
+            <td data-title="'Cliente'" sortable="'customer.last_name'">
               <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
             </td>
-            <td data-title="'Open Date'" sortable="'created_at'">
-              {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
+            <td data-title="'Data Invio'" sortable="'created_at'">
+              {{m.created_at | amDateFormat: "[Il] DD MMMM YYYY" }}
             </td>
-            <td data-title="'Actions'">
+            <td data-title="'Ultimo aggiornamento'" sortable="'updated_at'">
+              {{m.updated_at | amDateFormat: "[Il] DD MMMM YYYY [alle] hh:mm" }}
+            </td>
+            <td data-title="'Azioni'">
               <ul class="actions">
                 <li>
                   <a href="" ng-click="deleteForm(m)"

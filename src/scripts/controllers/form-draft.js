@@ -130,11 +130,13 @@
     };
 
     $scope.sendFormTo = function(user) {
+
+      console.log(user);
+
       if($scope.form.id)
         Answer.api.create({
           id: $scope.form.id,
-          customer_id: user.id,
-          email: user.email
+          customer_id: user.id
         }).then(function(data){
           self.sendFormModal.dismiss();
           swal({

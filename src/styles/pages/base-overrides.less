@@ -271,3 +271,47 @@
     width: 896px !important;
   }
 }
+
+.fixed-top {
+  position: fixed;
+  top: 5px;
+  width: 400px !important;
+
+
+  @media (max-width: 768px) {
+    width: 100%;
+    position: static;
+  }
+
+  @media (max-width: 1200px) {
+    margin-left: 200px;
+  }
+
+
+}
+
+#progress-box {
+
+
+  height: 60px;
+  padding-top: 5px;
+  padding-right: 0;
+
+  z-index:9999;
+  background: rgba(255,255,255,0.99) !important;
+
+  h2 {
+    margin-top: 5px;
+  }
+
+}
+
+.fade-me.ng-enter {
+  transition:0.5s easeIn all;
+  opacity:0;
+}
+
+/* The finishing CSS styles for the enter animation */
+.fade-me.ng-enter.ng-enter-active {
+  opacity:1;
+}
