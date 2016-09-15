@@ -8,7 +8,7 @@
           permission permission-only="['LAWYER', 'ADMIN']">
           <i class="zmdi zmdi-plus"></i> New
         </button>
-        QUESTIONARI - BOZZE <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+        QUESTIONARI - BOZZE <small>Il questionario è uno strumento sfruttato nella ricerca sociale (psicologia, sociologia, economia, studi di mercato, indagini di opinione) che serve per raccogliere informazioni in modo standardizzato e su campioni più o meno grandi, tali per cui è possibile poi costruire una matrice dati, ed effettuare poi analisi di tipo matematico/statistico.</small>
       </h2>
     </div>
 
@@ -28,30 +28,43 @@
             </td>
             <td data-title="'Actions'">
               <ul class="actions">
-                <li>
+                <li ng-if="current_user.id == m.owner.id">
                   <a ui-sref="page.form-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Edit">
                     <i class="zmdi zmdi-edit"></i>
                   </a>
                 </li>
                 <li>
-                  <a ng-click="sendFormModal(m)"
+                  <a ng-click="sendFormModal(m)" href="javascript:void(0)"
                     tooltip-placement="bottom" uib-tooltip="Invia a cliente">
                     <i class="zmdi zmdi-mail-send"></i>
                   </a>
                 </li>
                 <li>
-                  <a href="" ng-click="deleteForm(m)"
+                  <a href="javascript:void(0)" ng-click="deleteForm(m)" ng-if="current_user.id == m.owner.id"
                     tooltip-placement="bottom" uib-tooltip="Delete">
                    <i class="zmdi zmdi-delete"></i>
                   </a>
                 </li>
               </ul>
             </td>
+            <td data-title="'Public'">
+              <div class="toggle-switch" data-ts-color="green" ng-if="current_user.id == m.owner.id">
+                <input id="{{m.id}}" type="checkbox" hidden="hidden" ng-model="m.public" ng-change="update(m)">
+                <label for="{{m.id}}" class="ts-helper"></label>
+              </div>
+              <div ng-if="current_user.id != m.owner.id">SI</div>
+            </td>
+            <td data-title="'Owner'" sortable="'owner'">
+              <a ui-sref="profile.details({id: m.owner.id})" ng-if="current_user.id != m.owner.id">{{m.owner.first_name}} {{m.owner.last_name}}</a>
+              <div ng-if="current_user.id == m.owner.id">Tu</div>
+            </td>
           </tr>
         </table>
       </div>
     </div>
+
+    {{m.owner.id}}
 
     <div class="alert alert-danger" ng-if="forms.length == 0 && !isLoading">
       Drafts Empty! Create a New Form.
