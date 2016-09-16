@@ -56,10 +56,10 @@
       });
     }
 
-    $scope.deleteRetainerAgreement = function(m) {
+    $scope.deleteForm = function(m) {
       swal({
         title: "Are you sure?",
-        text: "Sei sicuro di volere eliminare questo questionario ? il tuo avvocato non potrà più consultarne le risposte.",
+        text: "Sei sicuro di volere eliminare questo questionario ?.",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F44336",
@@ -72,9 +72,9 @@
           Answer.api.delete(m).then(function(data){
             var index = $scope.answers.indexOf(m);
             $scope.answers.splice(index, 1);
-            Notify.success('OK!', "Selected item deleted successfully!");
+            Notify.success('OK!', "Questionario eliminato con successo!");
           }).catch(function(err){
-            Notify.error('Error!', "Unable to delete selected item");
+            Notify.error('Error!', "Non è stato possibile eliminare questo questionario");
           });
         } else {
           return false;

@@ -145,6 +145,7 @@
     };
 
     // Sticky Summary
+    //bisognerebbe usare una direttiva qua
     $(window).scroll(function(){
       if ($(this).scrollTop() > 230) {
         $("#summary-box").addClass("fixed-top");

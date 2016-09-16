@@ -4,74 +4,89 @@
   <div class="card">
     <div class="card-header">
       <h1>
-        {{form.title}} <small>{{form.description}}</small>
+        {{form.title}} <br/><small>{{form.description}}</small>
       </h1>
       <hr/>
     </div>
 
 
+
+
     <div class="card-body card-padding" ng-if="review">
       <div class="question" ng-repeat="i in form.items">
 
-          <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
+        <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
 
-          <div>
-            <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}</h4>
-              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
-                <span ng-if="isObject(r)">{{r.title}}</span>
-                <span ng-if="!isObject(r)">{{r}}</span>,
-              </span>
-              <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
-              <span ng-if="isObject(i.value)">{{i.value.title}}</span>
-              <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
-            </div>
-
-
-            <span ng-if="i.type == 'select'">
-              <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+        <div>
+          <div class="form-group">
+            <h4>{{$index + 1}}. {{i.title}}</h4>
+            <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
+              <span ng-if="isObject(r)">{{r.title}}</span>
+              <span ng-if="!isObject(r)">{{r}}</span>,
             </span>
-
-            <span ng-if="i.type == 'radio'">
-              <div ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
-            </span>
-
+            <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
+            <span ng-if="isObject(i.value)">{{i.value.title}}</span>
+            <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
           </div>
+
+
+          <span ng-if="i.type == 'select'" style="padding-top: 25px">
+            <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();"></div>
+          </span>
+
+          <span ng-if="i.type == 'radio'" style="padding-top: 25px">
+            <div style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();" ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+          </span>
+
+        </div>
       </div>
     </div>
 
     <div class="card-body card-padding" permission permission-only="['LAWYER']">
       <div class="question" ng-repeat="i in form.items">
 
-          <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
+        <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>
 
-          <div>
-            <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}</h4>
-              <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
-                <span ng-if="isObject(r)">{{r.title}}</span>
-                <span ng-if="!isObject(r)">{{r}}</span>,
-              </span>
-              <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
-              <span ng-if="isObject(i.value)">{{i.value.title}}</span>
-              <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
-            </div>
-
-
-             <span ng-if="i.type == 'select'">
-              <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
+        <div>
+          <div class="form-group">
+            <h4>{{$index + 1}}. {{i.title}}</h4>
+            <span ng-if="isArray(i.value)" ng-repeat="r in i.value track by $index">
+              <span ng-if="isObject(r)">{{r.title}}</span>
+              <span ng-if="!isObject(r)">{{r}}</span>,
             </span>
-
-            <span ng-if="i.type == 'radio'">
-              <div ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'"></div>
-            </span>
-
+            <span ng-if="isDate(i.value)">{{i.value | amDateFormat: "DD MMMM YYYY"}}</span>
+            <span ng-if="isObject(i.value)">{{i.value.title}}</span>
+            <span ng-if="!isArray(i.value) && !isObject(i.value)">{{i.value}}</span>
           </div>
+
+          <span ng-if="i.type == 'select'" style="margin-top: 25px">
+            <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-review-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();" ></div>
+          </span>
+
+          <span ng-if="i.type == 'radio'" style="margin-top: 25px">
+            <div ng-repeat="q in i.options" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-review-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();" ></div>
+          </span>
+
+        </div>
       </div>
     </div>
 
 
-    <div class="card-body card-padding" permission permission-only="['CUSTOMER']" ng-if="!review">
+
+    <div class="card-body card-padding p-t-0" permission permission-only="['CUSTOMER']" ng-show="!review">
+
+
+      <div id="progress-box" class="m-b-15">
+        <span class="fade-me" ng-show="form.answered/form.total == 1" ng-show="!review">
+          <h4 style="margin-top: 5px; margin-bottom: 0px;">Hai terminato. il questionario</h4>
+          <button style="margin-top: 5px;" class="btn btn-primary btn-xs" ng-click="review = true">Visualizza sommario</button>
+        </span>
+        <span ng-hide="form.answered/form.total == 1">
+          <h4>Hai risposto a {{form.answered}} domand<span ng-show="form.answered == 1">a</span><span ng-show="form.answered != 1">e</span> su un totale di {{form.total}}</h4>
+          <uib-progressbar class="progress-striped m-t-10" value="form.answered/form.total*100" type="success"></uib-progressbar>
+        </span>
+      </div>
+
       <form>
         <div class="question" ng-repeat="i in form.items">
 
@@ -81,7 +96,7 @@
               <span>{{i.description}}</span><br/>
               <div class="dd-block">
                 <div class="date-picker">
-                    <uib-datepicker show-weeks="false" ng-model="i.value" ng-value="i.value" min-date="minDate" class="dp-inline"></uib-datepicker>
+                  <uib-datepicker show-weeks="false" ng-model="i.value" ng-value="i.value" min-date="minDate" class="dp-inline"></uib-datepicker>
                 </div>
               </div>
             </div>
@@ -92,10 +107,10 @@
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <span>{{i.description}}</span>
               <div class="input-group">
-                  <span class="input-group-addon" ng-show="i.icon"><i class="zmdi zmdi-{{i.icon}}"></i></span>
-                  <div class="fg-line">
-                    <input type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-value="i.value" ng-model="i.value">
-                  </div>
+                <span class="input-group-addon" ng-show="i.icon"><i class="zmdi zmdi-{{i.icon}}"></i></span>
+                <div class="fg-line">
+                  <input type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-value="i.value" ng-model="i.value">
+                </div>
               </div>
             </div>
           </div>
@@ -107,9 +122,9 @@
               <div class="input-group">
                 <div class="checkbox m-b-15">
                   <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="r in i.options track by $index">
-                      <input type="checkbox" value="{{r.title}}" checklist-model="i.value" checklist-value="r.title">
-                      <i class="input-helper"></i>
-                      {{r.title}}
+                    <input type="checkbox" value="{{r.title}}" checklist-model="i.value" checklist-value="r.title">
+                    <i class="input-helper"></i>
+                    {{r.title}}
                   </label>
                 </div>
               </div>
@@ -122,16 +137,16 @@
               <span>{{i.description}}</span>
               <div class="input-group">
                 <div class="radio m-b-15" ng-repeat="r in i.options track by $index">
-                    <label>
-                        <input type="radio" value="{{r.title}}" ng-model="i.value">
-                        <i class="input-helper"></i>
-                        {{r.title}}
-                    </label>
+                  <label>
+                    <input type="radio" value="{{r.title}}" ng-model="i.value">
+                    <i class="input-helper"></i>
+                    {{r.title}}
+                  </label>
                 </div>
               </div>
             </div>
 
-            <div ng-repeat="q in i.options track by $index" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+            <div ng-repeat="q in i.options track by $index" ng-if="i.value == q.title" ng-include="'views/pages/form-answer-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();"></div>
 
           </div>
 
@@ -146,7 +161,7 @@
                   <option value=""></option>
                 </select>
 
-                <div ng-repeat="q in i.options" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
+                <div ng-repeat="q in i.options" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();" ng-if="i.value.title == q.title" ng-include="'views/pages/form-answer-recursive.html'"></div>
 
               </div>
             </div>
@@ -170,7 +185,7 @@
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory">*</span></h4>
               <span>{{i.description}}</span>
-                <textarea type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-model="i.value" ng-value="i.value" style="max-width: 400px">{{i.default}}</textarea>
+              <textarea type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-model="i.value" ng-value="i.value" style="max-width: 400px">{{i.default}}</textarea>
             </div>
           </div>
         </div>

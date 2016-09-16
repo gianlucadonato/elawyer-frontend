@@ -23,10 +23,10 @@
             <td data-title="'Domande'" sortable="'items.length'">
               {{ m.items.length }}
             </td>
-            <td data-title="'Open Date'" sortable="'created_at'">
+            <td data-title="'Data'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
-            <td data-title="'Actions'">
+            <td data-title="'Azioni'">
               <ul class="actions">
                 <li ng-if="current_user.id == m.owner.id">
                   <a ui-sref="page.form-edit(m)"
@@ -55,7 +55,7 @@
               </div>
               <div ng-if="current_user.id != m.owner.id">SI</div>
             </td>
-            <td data-title="'Owner'" sortable="'owner'">
+            <td data-title="'Proprietario'" sortable="'owner'">
               <a ui-sref="profile.details({id: m.owner.id})" ng-if="current_user.id != m.owner.id">{{m.owner.first_name}} {{m.owner.last_name}}</a>
               <div ng-if="current_user.id == m.owner.id">Tu</div>
             </td>
@@ -63,8 +63,6 @@
         </table>
       </div>
     </div>
-
-    {{m.owner.id}}
 
     <div class="alert alert-danger" ng-if="forms.length == 0 && !isLoading">
       Drafts Empty! Create a New Form.
