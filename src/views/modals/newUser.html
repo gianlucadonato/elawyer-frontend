@@ -59,7 +59,9 @@
       </div>
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block waves-effect">SALVA</button>
+      <button type="submit" class="btn btn-orange btn-block waves-effect" ng-if="!success">Conferma</button>
+      <div class="alert alert-success" ng-if="success" role="alert">Utente creato con successo. Torna indietro e ricercalo per continuare</div>
+      <div class="alert alert-danger" ng-if="wrong" role="alert">Errore nella creazione dell'utente, controlla i campi.</div>
     </div>
   </form>
 </div>

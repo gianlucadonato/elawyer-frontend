@@ -38,6 +38,21 @@
       return deferred.promise;
     };
 
+    api.search = function(query) {
+      var deferred = $q.defer();
+      $http
+        .get(API.host + '/api/companies/search', {
+          params: query
+        })
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     api.get = function(id) {
       var deferred = $q.defer();
       $http
