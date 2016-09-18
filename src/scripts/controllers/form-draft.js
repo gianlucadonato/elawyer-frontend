@@ -97,48 +97,16 @@
           Notify.error('Error!', 'Something went wrong :(');
         }
       });
-    }
-
-        /* Send Form to Customer
-     * ======================*/
-    $scope.sendFormModal = function(selecton) {
-
-      $scope.form = selecton;
-
-      self.sendFormModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/sendForm.html',
-        scope: $scope
-      });
     };
 
-    $scope.searchUser = function(query) {
-      return User.search({
-        q: query
-      }).then(function(results){
-        return results.map(function(user){
-          return {
-            id: user.id,
-            name: user.first_name + ' ' + user.last_name,
-            email: user.email
-          };
-        });
-      });
-    };
 
-    $scope.sendFormTo = function(user) {
+    $scope.setUser = function(user, formRef) {
 
-      console.log(user);
-
-      if($scope.form.id)
+      if(formRef.id)
         Answer.api.create({
-          id: $scope.form.id,
+          id: formRef.id,
           customer_id: user.id
         }).then(function(data){
-          self.sendFormModal.dismiss();
           swal({
             title: "Sent!",
             text: "Il questionario è stato inviato correttamente.",

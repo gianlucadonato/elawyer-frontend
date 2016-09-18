@@ -36,7 +36,7 @@
     }
 
     function initTable() {
-      $scope.mattersTable = new ngTableParams({
+      $scope.companyTable = new ngTableParams({
         page: 1,
         count: $scope.perPage
       }, {
@@ -46,6 +46,7 @@
             page: params.page() - 1,
             per_page: params.count()
           }).then(function(data){
+            console.log(data)
             $scope.totalItems = data.total_items;
             $scope.companies = params.sorting() ? $filter('orderBy')(data.companies, params.orderBy()) : data.companies;
             $defer.resolve($scope.companies);

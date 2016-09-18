@@ -306,38 +306,9 @@
       });
     };
 
-    /* Search Client
-     * ======================*/
-    $scope.openSearchUserModal = function() {
-      self.openSearchUserModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/searchUser.html',
-        scope: $scope
-      });
-    };
 
-    $scope.closeSearchUserModal = function(user) {
+    $scope.setUser = function(user) {
       $scope.retainer_agreement.customer = user;
-      self.openSearchUserModal.close();
-    };
-
-    $scope.searchUser = function(query) {
-      return User.search({
-        q: query
-      }).then(function(results){
-        return results.map(function(user){
-          return {
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            name: user.first_name + " " + user.last_name,
-            email: user.email
-          };
-        });
-      });
     };
 
     // Create New Client

@@ -20,20 +20,26 @@
     activate();
 
     $scope.findWithAttr = function(array, attr, value) {
+      if (array)
+        for(var i = 0; i < array.length; i += 1) {
+            if(array[i][attr] === value) {
+                return i;
+            }
+        }
+      return -1;
+    };
 
-    if (array)
-      for(var i = 0; i < array.length; i += 1) {
-          if(array[i][attr] === value) {
-              return i;
-          }
-      }
-
-    return -1;
-}
+    $scope.clearAndCreate = function() {
+      $timeout(function() {
+        $scope.company = {};
+        $scope.company = Company.template();
+        $scope.company.owners.push($scope.me);
+        $scope.creating = true;
+      }, 0);
+    };
 
     function getCompany(companyId) {
-
-      if (companyId)
+      if (companyId && !$scope.creating)
         Company.api
           .get(companyId)
           .then(function(company){
@@ -43,6 +49,7 @@
             Notify.error('Error!','Unable to fetch user');
           });
       else {
+        $scope.company = {};
         $scope.company = Company.template();
         $scope.company.owners.push($scope.me);
         $scope.creating = true;
@@ -67,23 +74,16 @@
     };
 
 
-    $scope.addToSet = function(item) {
-      $scope.referenceArray.push(item);
-    }
-
-    $scope.addUser = function(ref) {
-
-      $scope.referenceArray = ref;
-
-      self.sendFormModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/addUserToCompany.html',
-        scope: $scope
-      });
+    $scope.addUser = function(item) {
+      console.log(item)
+      $scope.company.users.push(item);
     };
+
+    $scope.addAdmin = function(item) {
+      console.log(item)
+      $scope.company.owners.push(item);
+    };
+
 
     $scope.removeAdmin = function(index) {
       if ($scope.company.owners.length > 1)
