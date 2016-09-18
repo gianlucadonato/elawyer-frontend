@@ -78,7 +78,7 @@
         paying: parseInt(total) * 100,
         invoice_type: $scope.invoice_type,
         payment_method: 'stripe',
-        email: $scope.retainer_agreement.customer.email
+        email: $scope.retainer_agreement.customer ? $scope.retainer_agreement.customer.email : $scope.retainer_agreement.company.email
       };
       stripe.open({
         amount: options.paying,

@@ -21,7 +21,8 @@
               {{ d.area_of_interest }}
             </td>
             <td data-title="'Cliente'" sortable="'customer.first_name'">
-              <a ui-sref="profile.details({id: d.customer.id})">{{d.customer.first_name}} {{d.customer.last_name}}</a>
+              <a ui-sref="profile.details({id: d.customer.id})" ng-if="d.customer.id">{{d.customer.first_name}} {{d.customer.last_name}}</a>
+              <a ui-sref="company.details({id: d.company.id})" ng-if="d.company.id">{{d.company.name}}</a>
             </td>
             <td data-title="'Data di Creazione'" sortable="'created_at'">
               {{d.created_at | amDateFormat: "DD MMMM YYYY" }}

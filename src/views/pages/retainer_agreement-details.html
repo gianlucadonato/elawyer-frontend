@@ -28,10 +28,11 @@
                 <div class="flag flag-closed" ng-if="retainer_agreement.status == 'closed'">Closed</div>
               </td> -->
               <td permission permission-only="['LAWYER', 'ADMIN']">
-                <a ui-sref="profile.details(retainer_agreement.customer)">{{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</a>
+                <a ui-sref="profile.details(retainer_agreement.customer)" ng-if="retainer_agreement.customer.id">{{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</a>
+                <a ui-sref="company.details(retainer_agreement.company)" ng-if="retainer_agreement.company.id">{{retainer_agreement.company.name}}</a>
               </td>
               <td permission permission-only="['CUSTOMER', 'ADMIN']">
-                <a ui-sref="profile.details(retainer_agreement.customer)">{{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</a>
+                <a ui-sref="profile.details(retainer_agreement.owner)">{{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</a>
               </td>
               <td>{{retainer_agreement.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
             </tr>
@@ -47,12 +48,19 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right">
+            <div class="pull-right text-right" ng-if="retainer_agreement.customer.id">
               <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
                 <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="pull-right text-right" ng-if="retainer_agreement.company.id">
+              <h4>All'attenzione di {{retainer_agreement.company.name}}</h4>
+              <p>
+                <span ng-if="retainer_agreement.company.address">{{retainer_agreement.company.address}}</span><br/>
+                <span ng-if="retainer_agreement.company.vat">P.I. {{retainer_agreement.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -213,12 +221,19 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right">
+            <div class="pull-right text-right" ng-if="retainer_agreement.customer.id">
               <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
                 <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="pull-right text-right" ng-if="retainer_agreement.company.id">
+              <h4>All'attenzione di {{retainer_agreement.company.name}}</h4>
+              <p>
+                <span ng-if="retainer_agreement.company.address">{{retainer_agreement.company.address}}</span><br/>
+                <span ng-if="retainer_agreement.company.vat">P.I. {{retainer_agreement.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -250,7 +265,7 @@
             <button class="btn waves-effect" ng-click="showNext = false">
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
             </button>
-            <span ng-if="current_user.id == retainer_agreement.customer.id">
+            <span ng-if="current_user.id != retainer_agreement.owner.id">
               <button class="btn btn-primary waves-effect" ng-click="openPaymentModal()">
                 <span>Effettua Pagamento</span>
               </button>
@@ -269,12 +284,19 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right">
+            <div class="pull-right text-right" ng-if="retainer_agreement.customer.id">
               <h4>Spett.le {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</h4>
               <p>
                 <span ng-if="retainer_agreement.customer.address">{{retainer_agreement.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.customer.fiscal_code">C.F. {{retainer_agreement.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.customer.vat_number">P.I. {{retainer_agreement.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="pull-right text-right" ng-if="retainer_agreement.company.id">
+              <h4>All'attenzione di {{retainer_agreement.company.name}}</h4>
+              <p>
+                <span ng-if="retainer_agreement.company.address">{{retainer_agreement.company.address}}</span><br/>
+                <span ng-if="retainer_agreement.company.vat">P.I. {{retainer_agreement.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>

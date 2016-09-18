@@ -102,11 +102,15 @@
 
     $scope.setUser = function(user, formRef) {
 
+      var query = {id: formRef.id,};
+
+      if (user.type == 'user')
+        query.customer_id = user.id;
+      else if (user.type == 'company')
+        query.company_id = user.id;
+
       if(formRef.id)
-        Answer.api.create({
-          id: formRef.id,
-          customer_id: user.id
-        }).then(function(data){
+        Answer.api.create(query).then(function(data){
           swal({
             title: "Sent!",
             text: "Il questionario è stato inviato correttamente.",

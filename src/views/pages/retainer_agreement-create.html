@@ -51,9 +51,12 @@
                     <td>
                       <div class="form-group">
                         <button class="btn btn-success btn-block" user-search searchcompany="true" callback="setUser">
-                          <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
+                          <span ng-if="!retainer_agreement.customer.first_name && !retainer_agreement.company">SELEZIONA CLIENTE</span>
                           <span ng-if="retainer_agreement.customer.first_name">
                             {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
+                          </span>
+                          <span ng-if="retainer_agreement.company.name">
+                            {{retainer_agreement.company.name}}
                           </span>
                         </button>
                       </div>

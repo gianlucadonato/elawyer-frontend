@@ -69,7 +69,8 @@
               <div class="flag flag-success" ng-if="m.invoice_number">Inserito</div>
             </td>
             <td data-title="'Cliente'" sortable="'m.customer.first_name'">
-              <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+              <a ui-sref="profile.details({id: m.customer.id})" ng-if="m.customer.id">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+              <a ui-sref="company.details({id: m.company.id})" ng-if="m.company.id">{{m.company.name}}</a>
             </td>
             <td data-title="'Data di Creazione'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
