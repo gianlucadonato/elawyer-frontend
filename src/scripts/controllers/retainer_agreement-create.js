@@ -44,7 +44,7 @@
         preventSave = true;
         $scope.retainer_agreement = data;
         $scope.invoice = RetainerAgreement.calcInvoice(data, true);
-      }).catch(function(err){
+    }).catch(function(err){
         Notify.error('Error!', 'Unable to load retainer_agreement');
       });
     }
