@@ -72,7 +72,7 @@
         paying: parseInt(total) * 100,
         invoice_type: $scope.invoice.invoice_type,
         payment_method: 'stripe',
-        email: $scope.invoice.customer.email
+        email: ($scope.invoice.customer || $scope.invoice.company).email
       };
       stripe.open({
         amount: options.paying,

@@ -65,7 +65,8 @@
 "></i> Completato</span>
             </td>
             <td data-title="'Cliente'" sortable="'customer.last_name'">
-              <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+              <a ui-sref="profile.details({id: m.customer.id})" ng-if="m.customer.id">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+              <a ui-sref="company.details({id: m.company.id})" ng-if="m.company.id">{{m.company.name}}</a>
             </td>
             <td data-title="'Data Invio'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "[Il] DD MMMM YYYY" }}

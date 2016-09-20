@@ -40,28 +40,14 @@
                 <tbody>
                   <tr>
                     <td>
-                      <div class="form-group">
-                        <a ui-sref="page.matter-details(retainer_agreement.matter)"><strong>{{retainer_agreement.matter.title}}</strong></a>
-                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()"
-                          ng-if="!retainer_agreement.matter">
-                          <span ng-if="!retainer_agreement.mattermatter.title">SELEZIONA PRATICA</span>
-                          <span ng-if="retainer_agreement.matter.title">{{retainer_agreement.matter.title}}</span>
-                        </button>
-                      </div>
+                      <a ui-sref="page.matter-details(retainer_agreement.matter)">
+                        <strong>{{retainer_agreement.matter.title}}</strong>
+                      </a>
                     </td>
                     <td>
-                      <div class="form-group">
-                        <a ui-sref="profile.details(retainer_agreement.customer)">
-                          <strong>{{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</strong>
-                        </a>
-                        <button class="btn btn-success btn-block" user-search="setUser" search-company="true"
-                          ng-if="!retainer_agreement.customer">
-                          <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
-                          <span ng-if="retainer_agreement.customer.first_name">
-                            {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
-                          </span>
-                        </button>
-                      </div>
+                      <a ui-sref="profile.details(retainer_agreement.matter.customer)">
+                        <strong>{{retainer_agreement.matter.customer.full_name}}</strong>
+                      </a>
                     </td>
                   </tr>
                 </tbody>

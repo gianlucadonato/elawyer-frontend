@@ -303,7 +303,16 @@
     };
 
     $scope.setUser = function(user) {
-      $scope.retainer_agreement.customer = user;
+      if (user.type == 'user') {
+        $scope.retainer_agreement.customer = user;
+        delete $scope.retainer_agreement.company;
+      }
+
+      else if (user.type == 'company') {
+        $scope.retainer_agreement.company = user;
+        delete $scope.retainer_agreement.customer;
+      }
+
     };
 
     // Create New Client
@@ -338,7 +347,7 @@
     /* Send Retainer Agreement to Customer
      * ======================*/
     $scope.sendRetainerAgreement = function() {
-      if(($scope.retainer_agreement.customer || {}).id) {
+      if(($scope.retainer_agreement.customer || {}).id || ($scope.retainer_agreement.company || {}).id) {
         swal({
           title: "Inviare la lettera di incarico?",
           text: "Cliccando conferma, il cliente verrà notificato via email",

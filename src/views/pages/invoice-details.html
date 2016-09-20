@@ -2,7 +2,7 @@
 
   <div ng-if="!invoice.is_paid" class="alert alert-danger top-alert" role="alert">
     <span>Questa fattura non è ancora stata pagata</span>
-    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()" ng-if="current_user.id == invoice.customer.id">
+    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()" ng-if="current_user.id != invoice.owner.id">
       Paga saldo di €
       <span ng-if="!invoice.retainer_agreement.withholding_tax">{{ invoice.calc.total_price | prettyNumber}}</span>
       <span ng-if="invoice.retainer_agreement.withholding_tax">{{ invoice.calc.final_price | prettyNumber}}</span>
@@ -34,12 +34,19 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-left">
+            <div class="pull-left" ng-if="invoice.customer.id">
               <h4>Spett.le {{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
               <p>
                 <span ng-if="invoice.customer.address">{{invoice.customer.address}}</span><br/>
                 <span ng-if="invoice.customer.fiscal_code">C.F. {{invoice.customer.fiscal_code}}</span><br/>
                 <span ng-if="invoice.customer.vat_number">P.I. {{invoice.customer.vat_number}}</span>
+              </p>
+            </div>
+            <div class="pull-left" ng-if="invoice.company.id">
+              <h4>All'attenzione di {{invoice.company.name}}</h4>
+              <p>
+                <span ng-if="invoice.company.address">{{invoice.company.address}}</span><br/>
+                <span ng-if="invoice.company.vat">P.I. {{invoice.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>
