@@ -7,19 +7,44 @@
           <thead>
             <tr>
               <th>Pratica</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Cliente</th>
+              <th permission permission-only="['CUSTOMER', 'ADMIN']">Avvocato</th>
               <th>Stato</th>
               <th>Data di Apertura</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Azioni</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{matter.title}}</td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <a ui-sref="profile.details(matter.customer)">{{matter.customer.first_name}} {{matter.customer.last_name}}</a>
+              </td>
+              <td permission permission-only="['CUSTOMER', 'ADMIN']">
+                <a ui-sref="profile.details(matter.owner)">{{matter.owner.first_name}} {{matter.owner.last_name}}</a>
+              </td>
               <td>
                 <div class="flag flag-success" ng-if="matter.status == 'open'">Open</div>
                 <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
                 <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
               </td>
               <td>{{matter.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <ul class="actions">
+                  <li>
+                    <a href="" edit-matter="matter"
+                      tooltip-placement="bottom" uib-tooltip="Modifica">
+                      <i class="zmdi zmdi-edit"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a ng-click="deleteMatter(matter)"
+                      tooltip-placement="bottom" uib-tooltip="Elimina">
+                      <i class="zmdi zmdi-delete"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -28,29 +53,83 @@
   </div>
 
   <div class="card m-t-25">
-    <div class="card-header">
+    <div class="card-header ch-alt m-b-25">
       <h2>Lettere di Incarico</h2>
+      <button class="btn bgm-blue btn-float waves-effect"
+        ui-sref="page.retainer_agreement-create({matter:matter})"
+        permission permission-only="['LAWYER', 'ADMIN']"
+        tooltip-placement="bottom" uib-tooltip="Nuova Lettera di Incarico">
+        <i class="zmdi zmdi-plus"></i>
+      </button>
     </div>
-    <div class="card-body">
+    <div class="card-body" ng-if="matter.retainer_agreements.length">
       <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table">
           <thead>
             <tr>
+              <th>#</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Stato</th>
               <th>Lettera di Incarico</th>
+              <th>Acconto</th>
+              <th>Saldo</th>
               <th>Data di Apertura</th>
             </tr>
           </thead>
           <tbody>
-              <tr ng-repeat="ra in matter.retainer_agreements">
-                <td>
-                  <a ui-sref="page.retainer_agreement-details({id: ra._id})">
-                    {{ra.description}}
-                  </a>
-                </td>
-                <td>{{ra.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
-              </tr>
+            <tr ng-repeat="ra in matter.retainer_agreements">
+              <td>{{$index+1}}</td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <div ng-if="ra.is_draft" class="flag flag-closed">Bozza</div>
+                <div ng-if="!ra.is_draft" class="flag flag-info">Inviata</div>
+              </td>
+              <td>
+                <ul class="actions">
+                  <li>
+                    <a ui-sref="page.retainer_agreement-details({id:ra._id})"
+                      tooltip-placement="bottom" uib-tooltip="Visualizza">
+                    <i class="zmdi zmdi-eye"></i>
+                    </a>
+                  </li>
+                  <li ng-if="!ra.invoice_id && !ra.deposit_invoice_id && !ra.balance_invoice_id"
+                    permission permission-only="['LAWYER', 'ADMIN']">
+                    <a ui-sref="page.retainer_agreement-edit({id:ra._id})"
+                      tooltip-placement="bottom" uib-tooltip="Modifica">
+                      <i class="zmdi zmdi-edit"></i>
+                    </a>
+                  </li>
+                  <li ng-if="!ra.invoice_id && !ra.deposit_invoice_id && !ra.balance_invoice_id"
+                    permission permission-only="['LAWYER', 'ADMIN']">
+                    <a href="" ng-click="deleteRetainerAgreement({id:ra._id})"
+                      tooltip-placement="bottom" uib-tooltip="Elimina">
+                    <i class="zmdi zmdi-delete"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <div ng-if="ra.deposit_invoice_id.is_paid || ra.invoice_id" class="flag flag-success">Pagato</div>
+                <div ng-if="!ra.deposit_invoice_id.is_paid && !ra.invoice_id" class="flag flag-closed">Non Pagato</div>
+              </td>
+              <td>
+                <div ng-if="ra.balance_invoice_id.is_paid || ra.invoice_id" class="flag flag-success">Pagato</div>
+                <div ng-if="!ra.balance_invoice_id.is_paid && !ra.invoice_id" class="flag flag-closed">Non Pagato</div>
+              </td>
+              <td>{{ra.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+            </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="card-body card-padding" ng-if="!matter.retainer_agreements.length">
+      <div class="alert alert-danger text-center" permission permission-only="['CUSTOMER']">
+        Non ci sono lettere di incarico.
+      </div>
+      <div class="text-center" permission permission-only="['LAWYER', 'ADMIN']">
+        <h4>Nessuna Lettera di Incarico?</h4>
+        <a ui-sref="page.retainer_agreement-create({matter:matter})" class="btn btn-warning waves-effect">
+          <i class="zmdi zmdi-plus"></i>
+          Crea una nuova lettera di incarico
+        </a>
       </div>
     </div>
   </div>

@@ -75,20 +75,20 @@
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
             </td>
             <td data-title="'Azioni'">
-              <ul class="actions" ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
+              <ul class="actions">
                 <li>
                   <a ui-sref="page.retainer_agreement-details(m)"
                     tooltip-placement="bottom" uib-tooltip="Visualizza">
                    <i class="zmdi zmdi-eye"></i>
                   </a>
                 </li>
-                <li>
+                <li ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
                   <a ui-sref="page.retainer_agreement-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Modifica">
                     <i class="zmdi zmdi-edit"></i>
                   </a>
                 </li>
-                <li>
+                <li ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
                   <a href="" ng-click="deleteRetainerAgreement(m)"
                     tooltip-placement="bottom" uib-tooltip="Elimina">
                    <i class="zmdi zmdi-delete"></i>

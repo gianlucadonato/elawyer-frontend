@@ -31,7 +31,10 @@
       if($stateParams.id) { // Edit Page
         getRetainerAgreement();
       }
-      getAreaOfInterest();
+      if($stateParams.matter) {
+        $scope.retainer_agreement.matter = $stateParams.matter;
+        $scope.retainer_agreement.customer = $stateParams.matter.customer;
+      }
     }
 
     activate();
@@ -41,17 +44,8 @@
         preventSave = true;
         $scope.retainer_agreement = data;
         $scope.invoice = RetainerAgreement.calcInvoice(data, true);
-        console.log('data', data);
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load retainer_agreement');
-      });
-    }
-
-    function getAreaOfInterest() {
-      RetainerAgreement.api.areas().then(function(data) {
-        $scope.areas = data;
-      }).catch(function(err) {
-        Notify.error('Error!', 'Unable to load areas');
       });
     }
 
@@ -78,10 +72,6 @@
             console.log('Unable to save Retainer Agreement', err);
           });
         }, 1000);
-        if ($scope.retainer_agreement.area_of_interest === '__manual__') {
-          $scope.retainer_agreement.area_of_interest = '';
-          $scope.insertArea = true;
-        }
       } else {
         preventSave = false;
       }
@@ -136,37 +126,43 @@
     }
 
     $scope.saveAsTemplate = function(retainer_agreement) {
-      retainer_agreement.is_template = true;
-      if(retainer_agreement.id) {
-        // Update Retainer Agreement
-        RetainerAgreement.api.update(retainer_agreement).then(function(data){
-          Notify.success('OK!','Saved Successfully!');
-        }).catch(function(err){
-          try {
-            var msg = '';
-            for(var key in err.data.data.errors) {
-              msg += key + ' is required! ';
+      var title = prompt('Inserisci Titolo Template', '');
+      if(!!title) {
+        retainer_agreement.title = title;
+        retainer_agreement.is_template = true;
+        if(retainer_agreement.id) {
+          // Update Retainer Agreement
+          RetainerAgreement.api.update(retainer_agreement).then(function(data){
+            Notify.success('OK!','Saved Successfully!');
+          }).catch(function(err){
+            try {
+              var msg = '';
+              for(var key in err.data.data.errors) {
+                msg += key + ' is required! ';
+              }
+              Notify.error('Error on saving', msg);
+            } catch(err) {
+              Notify.error('Error!', 'Something went wrong :(');
             }
-            Notify.error('Error on saving', msg);
-          } catch(err) {
-            Notify.error('Error!', 'Something went wrong :(');
-          }
-        });
+          });
+        } else {
+          // Create New Retainer Agreement
+          RetainerAgreement.api.create(retainer_agreement).then(function(data){
+            Notify.success('OK!','Saved Successfully!');
+          }).catch(function(err){
+            try {
+              var msg = '';
+              for(var key in err.data.data.errors) {
+                msg += key + ' is required! ';
+              }
+              Notify.error('Error on saving', msg);
+            } catch(err) {
+              Notify.error('Error!', 'Something went wrong :(');
+            }
+          });
+        }
       } else {
-        // Create New Retainer Agreement
-        RetainerAgreement.api.create(retainer_agreement).then(function(data){
-          Notify.success('OK!','Saved Successfully!');
-        }).catch(function(err){
-          try {
-            var msg = '';
-            for(var key in err.data.data.errors) {
-              msg += key + ' is required! ';
-            }
-            Notify.error('Error on saving', msg);
-          } catch(err) {
-            Notify.error('Error!', 'Something went wrong :(');
-          }
-        });
+        Notify.error('Errore', 'Template non salvato :(');
       }
     };
 
@@ -305,7 +301,6 @@
         });
       });
     };
-
 
     $scope.setUser = function(user) {
       $scope.retainer_agreement.customer = user;

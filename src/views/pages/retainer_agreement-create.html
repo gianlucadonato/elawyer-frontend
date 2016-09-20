@@ -35,37 +35,32 @@
                   <tr>
                     <th>Pratica</th>
                     <th>Cliente</th>
-                    <th>Area</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
                       <div class="form-group">
-                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()">
-                          <span ng-if="!retainer_agreement.matter.title">SELEZIONA PRATICA</span>
+                        <a ui-sref="page.matter-details(retainer_agreement.matter)"><strong>{{retainer_agreement.matter.title}}</strong></a>
+                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()"
+                          ng-if="!retainer_agreement.matter">
+                          <span ng-if="!retainer_agreement.mattermatter.title">SELEZIONA PRATICA</span>
                           <span ng-if="retainer_agreement.matter.title">{{retainer_agreement.matter.title}}</span>
                         </button>
                       </div>
                     </td>
                     <td>
                       <div class="form-group">
-                        <button class="btn btn-success btn-block" user-search searchcompany="true" callback="setUser">
+                        <a ui-sref="profile.details(retainer_agreement.customer)">
+                          <strong>{{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}</strong>
+                        </a>
+                        <button class="btn btn-success btn-block" user-search="setUser" search-company="true"
+                          ng-if="!retainer_agreement.customer">
                           <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
                           <span ng-if="retainer_agreement.customer.first_name">
                             {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
                           </span>
                         </button>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="form-group">
-                        <select class="form-control" ng-model="retainer_agreement.area_of_interest" ng-value="retainer_agreement.area_of_interest || 'default'" ng-show="!insertArea">
-                          <option value="" disabled selected>Seleziona Area</option>
-                          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
-                          <option value="__manual__">Immetti manualmente</option>
-                        </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="retainer_agreement.area_of_interest">
                       </div>
                     </td>
                   </tr>
@@ -204,7 +199,7 @@
   <!-- PAYMENT SETTINGS -->
   <div class="row">
     <div class="col-sm-12">
-      <div id="summary-box" class="card m-t-25">
+      <div class="card m-t-25">
         <div class="card-header ch-alt">
           <h2>Impostazioni di pagamento</h2>
         </div>

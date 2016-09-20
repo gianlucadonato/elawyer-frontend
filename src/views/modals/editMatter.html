@@ -1,8 +1,8 @@
 <div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> NUOVA PRATICA</h4>
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> MODIFICA PRATICA</h4>
 </div>
 <div class="modal-body send-retainer-agreement-template">
-  <form ng-submit="createMatter(matter)">
+  <form ng-submit="updateMatter(matter)">
     <dl class="dl-horizontal">
       <dt class="p-t-10">Titolo</dt>
       <dd>
@@ -25,12 +25,22 @@
         </div>
       </dd>
     </dl>
-    <dl class="dl-horizontal">
+    <!--<dl class="dl-horizontal">
       <dt class="p-t-10">Cliente</dt>
       <dd>
         <div class="fg-line">
           <input type="text" ng-model="matter.customer.full_name" user-search="setUser" search-company="true" placeholder="Seleziona Cliente" class="form-control" required>
         </div>
+      </dd>
+    </dl>-->
+    <dl class="dl-horizontal">
+      <dt class="p-t-10">Stato</dt>
+      <dd>
+        <select class="form-control" ng-model="matter.status" required>
+          <option value="open">Open</option>
+          <option value="pending">Pending</option>
+          <option value="closed">Closed</option>
+        </select>
       </dd>
     </dl>
     <div class="form-group m-t-10">

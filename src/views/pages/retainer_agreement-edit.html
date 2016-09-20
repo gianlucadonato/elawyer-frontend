@@ -36,7 +36,6 @@
                   <tr>
                     <th>Pratica</th>
                     <th>Cliente</th>
-                    <th>Area</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -51,22 +50,12 @@
                     </td>
                     <td>
                       <div class="form-group">
-                        <button class="btn btn-success btn-block" user-search searchcompany="true" callback="setUser">
+                        <button class="btn btn-success btn-block" user-search="setUser" search-company="true">
                           <span ng-if="!retainer_agreement.customer.first_name">SELEZIONA CLIENTE</span>
                           <span ng-if="retainer_agreement.customer.first_name">
                             {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
                           </span>
                         </button>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="form-group">
-                        <select class="form-control" ng-model="retainer_agreement.area_of_interest" ng-value="retainer_agreement.area_of_interest || 'default'" ng-show="!insertArea">
-                          <option value="" disabled selected>Seleziona Area</option>
-                          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
-                          <option value="__manual__">Immetti manualmente</option>
-                        </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="retainer_agreement.area_of_interest">
                       </div>
                     </td>
                   </tr>
@@ -206,7 +195,7 @@
   <!-- PAYMENT SETTINGS -->
   <div class="row">
     <div class="col-sm-12">
-      <div id="summary-box" class="card m-t-25">
+      <div class="card m-t-25">
         <div class="card-header ch-alt">
           <h2>Impostazioni di pagamento</h2>
         </div>

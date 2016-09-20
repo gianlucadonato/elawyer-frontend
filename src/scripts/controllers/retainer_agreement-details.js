@@ -9,7 +9,7 @@
   App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
-    $scope.showNext = true;
+    $scope.showNext = false;
     $scope.invoice_type = 'deposit'; // full | deposit | balance
     $scope.showFullInvoice = false;
 
@@ -35,11 +35,22 @@
     }, true);
 
     $scope.next = function() {
-      // Update selected services and show next
-      RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
-        $scope.showNext = true;
-        $window.scrollTo(0, 0);
-      });
+      var atLeastOneSelected = false;
+      for(var i=0; i<$scope.retainer_agreement.items.length && !atLeastOneSelected; i++) {
+        if($scope.retainer_agreement.items[i].is_selected ||
+          $scope.retainer_agreement.items[i].is_selected) {
+            atLeastOneSelected = true;
+          }
+      }
+      if(atLeastOneSelected) {
+        // Update selected services and show next
+        RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
+          $scope.showNext = true;
+          $window.scrollTo(0, 0);
+        });
+      } else {
+        Notify.error('Errore', 'Seleziona almeno un servizio');
+      }
     };
 
     $scope.previous = function() {

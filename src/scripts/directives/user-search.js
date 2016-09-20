@@ -1,24 +1,31 @@
-App.directive('userSearch', ['$uibModal', 'User', 'Company', function($uibModal, User, Company) {
+(function() {
+  'use strict';
+
+  /**=========================================================
+  * File: user-search.js
+  * Open User Search Modal
+  =========================================================*/
+
+  App.directive('userSearch', ['$uibModal', 'User', 'Company', function($uibModal, User, Company) {
     return {
       restrict: 'A',
       scope: {
-          callback: '=',
-          query: '@',
-          searchcompany: '@',
-          param: '='
+        userSearch: '=',
+        query: '@',
+        searchCompany: '@',
+        param: '='
       },
       // object is passed while making the call
       replace: true,
-      link: function(scope, elm, attrs) {
+      link: function(scope, element, attrs) {
 
-        var callback = attrs.callback;
         scope.searchForm = {};
 
-        scope.companySearch = attrs.searchcompany == 'false' ? false : true;
+        scope.companySearch = attrs.searchCompany === 'false' ? false : true;
 
         scope.return = function(doc, type) {
           doc.type = type;
-          scope.callback(doc, scope.param);
+          scope.userSearch(doc, scope.param);
           scope.currentModal.dismiss();
         };
 
@@ -39,16 +46,18 @@ App.directive('userSearch', ['$uibModal', 'User', 'Company', function($uibModal,
           scope.currentCursor = item;
         };
 
-        $(elm).click(function() {
+        $(element).click(function() {
           scope.currentModal = $uibModal.open({
             animation: false,
             size: 'lg',
             backdrop: true,
             keyboard: true,
-            templateUrl: 'views/modals/search-user-directive.html',
+            templateUrl: 'views/modals/searchUser.html',
             scope: scope
           });
         });
       }
     };
-}]);
+  }]);
+
+})();

@@ -2,31 +2,62 @@
   <div class="card">
     <div class="card-header ch-alt m-b-25">
       <h2>PRATICHE <small>Lista pratiche</small></h2>
-      <button class="btn bgm-blue btn-float waves-effect" ng-click="openNewMatterModal()"
+      <button class="btn bgm-blue btn-float waves-effect" new-matter new-matter-cb="afterCreateMatter"
         permission permission-only="['LAWYER', 'ADMIN']"
         tooltip-placement="bottom" uib-tooltip="Nuova Pratica">
         <i class="zmdi zmdi-plus"></i>
       </button>
     </div>
 
-    <div class="card-body">
+    <div class="card-body" ng-if="matters.length">
       <div class="table-responsive">
         <table class="table table-hover">
           <thead>
             <tr>
               <th>#</th>
               <th>Pratica</th>
+              <th>Area</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Cliente</th>
+              <th permission permission-only="['CUSTOMER', 'ADMIN']">Avvocato</th>
               <th>Stato</th>
+              <th>Data Creazione</th>
+              <th permission permission-only="['LAWYER', 'ADMIN']">Azioni</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="matter in matters">
               <td>{{$index + 1}}</td>
               <td><a ui-sref="page.matter-details(matter)">{{matter.title}}</a></td>
+              <td>{{matter.practice_area}}</td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <a ui-sref="profile.details(matter.customer)">{{matter.customer.first_name}} {{matter.customer.last_name}}</a>
+              </td>
+              <td permission permission-only="['CUSTOMER', 'ADMIN']">
+                <a ui-sref="profile.details(matter.owner)">{{matter.owner.first_name}} {{matter.owner.last_name}}</a>
+              </td>
               <td>
                 <div class="flag flag-success" ng-if="matter.status == 'open'">Open</div>
                 <div class="flag flag-pending" ng-if="matter.status == 'pending'">Pending</div>
                 <div class="flag flag-closed" ng-if="matter.status == 'closed'">Closed</div>
+              </td>
+              <td>
+                {{matter.created_at | amDateFormat: "DD MMMM YYYY" }}
+              </td>
+              <td permission permission-only="['LAWYER', 'ADMIN']">
+                <ul class="actions">
+                  <li>
+                    <a href="" edit-matter="matter"
+                      tooltip-placement="bottom" uib-tooltip="Modifica">
+                      <i class="zmdi zmdi-edit"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a ng-click="deleteMatter(matter)"
+                      tooltip-placement="bottom" uib-tooltip="Elimina">
+                      <i class="zmdi zmdi-delete"></i>
+                    </a>
+                  </li>
+                </ul>
               </td>
             </tr>
           </tbody>
@@ -34,12 +65,16 @@
       </div>
     </div>
 
-    <div class="card-body card-padding" ng-if="matters.length == 0 && !isLoading">
-      <div class="alert alert-danger" permission permission-only="['CUSTOMER']">
+    <div class="card-body card-padding" ng-if="!matters.length && !isLoading">
+      <div class="alert alert-danger text-center" permission permission-only="['CUSTOMER']">
         Non ci sono pratiche aperte.
       </div>
-      <div class="alert alert-danger" permission permission-only="['LAWYER', 'ADMIN']">
-        Non ci sono pratiche aperte! Creane una nuova.
+      <div class="text-center" permission permission-only="['LAWYER', 'ADMIN']">
+        <h4>Nessuna Pratica?</h4>
+        <a class="btn btn-warning waves-effect" new-matter new-matter-cb="afterCreateMatter">
+          <i class="zmdi zmdi-plus"></i>
+          Crea una nuova pratica
+        </a>
       </div>
     </div>
 

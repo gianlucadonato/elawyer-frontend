@@ -116,21 +116,12 @@
         templateUrl: helper.pagesPath('retainer_agreement-list.html'),
         controller: 'RetainerAgreementListCtrl'
       })
-      .state('page.retainer_agreement-draft', {
-        url: '/retainer_agreement/draft',
-        title: 'Retainer Agreement Draft',
-        requireLogin: true,
-        templateUrl: helper.pagesPath('retainer_agreement-draft.html'),
-        controller: 'RetainerAgreementDraftCtrl',
-        data: {
-          permissions: {
-            only: ['LAWYER', 'ADMIN']
-          }
-        }
-      })
       .state('page.retainer_agreement-create', {
         url: '/retainer_agreement/create',
         title: 'Create Retainer Agreement',
+        params: {
+          matter: null,
+        },
         requireLogin: true,
         templateUrl: helper.pagesPath('retainer_agreement-create.html'),
         controller: 'RetainerAgreementCreateCtrl',
