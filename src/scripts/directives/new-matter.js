@@ -36,6 +36,7 @@
         });
 
         scope.setUser = function(user) {
+          console.log('setUser', user);
           scope.matter.customer = user;
         };
 

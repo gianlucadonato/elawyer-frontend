@@ -21,16 +21,27 @@
 
         scope.searchForm = {};
 
-        scope.companySearch = attrs.searchCompany === 'false' ? false : true;
+        $(element).click(function() {
+          scope.currentModal = $uibModal.open({
+            animation: false,
+            size: 'lg',
+            backdrop: true,
+            keyboard: true,
+            templateUrl: 'views/modals/searchUser.html',
+            scope: scope
+          });
+        });
+
+        scope.companySearch = (attrs.searchCompany === 'true');
 
         scope.return = function(doc, type) {
           doc.type = type;
-          scope.userSearch(doc, scope.param);
+          if(scope.userSearch)
+            scope.userSearch(doc, scope.param);
           scope.currentModal.dismiss();
         };
 
         scope.search = function() {
-
           Company.api.search({q: scope.searchForm.query}).then(function(results) {
             scope.companies = results;
             scope.currentCursor= null;
@@ -46,16 +57,6 @@
           scope.currentCursor = item;
         };
 
-        $(element).click(function() {
-          scope.currentModal = $uibModal.open({
-            animation: false,
-            size: 'lg',
-            backdrop: true,
-            keyboard: true,
-            templateUrl: 'views/modals/searchUser.html',
-            scope: scope
-          });
-        });
       }
     };
   }]);

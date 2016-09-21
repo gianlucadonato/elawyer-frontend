@@ -14,9 +14,10 @@
       title: '',
       description: '',
       area_of_interest: '',
-      withholding_tax: false,
       deposit: 0,
       discount: 5,
+      apply_discount: false,
+      apply_withholding_tax: false,
       is_draft: true,
       is_template: false,
       items: [Service.template()]
@@ -137,17 +138,25 @@
           total_services += parseFloat(item.price);
       });
 
+      var total_discounted = total_services;
+      if(retainer_agreement.apply_discount)
+        total_discounted -= (total_services * retainer_agreement.discount)/100;
+
       var deposit_percentage = (total_services * retainer_agreement.deposit)/100;
       var balance_percentage = (total_services * (100 - retainer_agreement.deposit))/100;
       var invoice = {
-        full: calcTotal(total_services, retainer_agreement.withholding_tax),
-        deposit: calcTotal(deposit_percentage, retainer_agreement.withholding_tax),
-        balance: calcTotal(balance_percentage, retainer_agreement.withholding_tax)
+        full: calcTotal(total_discounted, retainer_agreement.apply_withholding_tax),
+        deposit: calcTotal(deposit_percentage, retainer_agreement.apply_withholding_tax),
+        balance: calcTotal(balance_percentage, retainer_agreement.apply_withholding_tax)
       };
+
+      if(retainer_agreement.apply_discount)
+        invoice.full.total_services = total_services;
+
       return invoice;
     }
 
-    function calcTotal(total_services, is_withholding_tax) {
+    function calcTotal(total_services, apply_withholding_tax) {
       var expenses_refund = (total_services * 15)/100;
       var social_taxes = ((total_services + expenses_refund) * 4)/100;
       var vat = ((total_services + expenses_refund + social_taxes) * 22)/100;
@@ -155,7 +164,7 @@
       var withholding_tax = (total_price * 20)/100;
       var final_price = total_price;
 
-      if(is_withholding_tax)
+      if(apply_withholding_tax)
         final_price = total_price - withholding_tax;
 
       return {
