@@ -17,9 +17,8 @@
     activate();
 
     function getInvoice() {
-      return Invoice.api.get($stateParams.id).then(function(data) {
+      return Invoice.get($stateParams.id).then(function(data) {
         $scope.invoice = data;
-        $scope.invoice.calc = RetainerAgreement.calcInvoice(data.retainer_agreement)[data.invoice_type];
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load invoice');
       });
@@ -44,11 +43,10 @@
 
     // Update Invoice Number
     $scope.update = function() {
-      Invoice.api.update($scope.invoice).then(function(data) {
-        $scope.invoice.id = data.id;
+      Invoice.update($scope.invoice).then(function(data) {
         Notify.success('Success!', 'Invoice edited succesfully');
       }).catch(function(err){
-        Notify.error('Error!', 'Unable to update invoice');
+        Notify.error('Error!', err.data.message);
       });
     };
 

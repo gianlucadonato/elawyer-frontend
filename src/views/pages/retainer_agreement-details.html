@@ -271,7 +271,7 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
+              <h4>Avv. {{retainer_agreement.owner.name}}</h4>
               <p>
                 <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
                 <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
@@ -326,7 +326,7 @@
               relazione alla presente offerta. <br><br>
               <br>
               Con i migliori saluti, <br>
-              Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}
+              Avv. {{retainer_agreement.owner.name}}
             </p>
           </div>
         </div>

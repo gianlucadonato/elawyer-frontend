@@ -2,10 +2,10 @@
 
   <div ng-if="!invoice.is_paid" class="alert alert-danger top-alert" role="alert">
     <span>Questa fattura non è ancora stata pagata</span>
-    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()" ng-if="current_user.id != invoice.owner.id">
+    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()" ng-if="current_user.id === invoice.matter.customer.id">
       Paga saldo di €
-      <span ng-if="!invoice.retainer_agreement.withholding_tax">{{ invoice.calc.total_price | prettyNumber}}</span>
-      <span ng-if="invoice.retainer_agreement.withholding_tax">{{ invoice.calc.final_price | prettyNumber}}</span>
+      <span ng-if="!invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.total_price | prettyNumber}}</span>
+      <span ng-if="invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.final_price | prettyNumber}}</span>
     </button>
   </div>
 
@@ -14,12 +14,12 @@
     <span>Questa fattura è stata pagata tramite bonifico. Conferma la ricezione del denaro</span>
     <button class="btn btn-success waves-effect" ng-click="confirmPayment()">
       Ho Ricevuto €
-      <span ng-if="!invoice.retainer_agreement.withholding_tax">{{ invoice.calc.total_price | prettyNumber}}</span>
-      <span ng-if="invoice.retainer_agreement.withholding_tax">{{ invoice.calc.final_price | prettyNumber}}</span>
+      <span ng-if="!invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.total_price | prettyNumber}}</span>
+      <span ng-if="invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.final_price | prettyNumber}}</span>
     </button>
   </div>
 
-  <div ng-if="!invoice.invoice_number" class="alert alert-danger" permission permission-only="['CUSTOMER', 'ADMIN']">
+  <div ng-if="!invoice.invoice_number" class="alert alert-danger" permission permission-only="['CUSTOMER']">
     Questa fattura non ha ancora validità legale. Perfavore aspetta che il mittente inserisca il numero di fatturazione.
   </div>
 
@@ -34,19 +34,12 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-left" ng-if="invoice.customer.id">
-              <h4>Spett.le {{invoice.customer.first_name}} {{invoice.customer.last_name}}</h4>
+            <div class="pull-left">
+              <h4>Spett.le {{invoice.matter.customer.name}}</h4>
               <p>
-                <span ng-if="invoice.customer.address">{{invoice.customer.address}}</span><br/>
-                <span ng-if="invoice.customer.fiscal_code">C.F. {{invoice.customer.fiscal_code}}</span><br/>
-                <span ng-if="invoice.customer.vat_number">P.I. {{invoice.customer.vat_number}}</span>
-              </p>
-            </div>
-            <div class="pull-left" ng-if="invoice.company.id">
-              <h4>All'attenzione di {{invoice.company.name}}</h4>
-              <p>
-                <span ng-if="invoice.company.address">{{invoice.company.address}}</span><br/>
-                <span ng-if="invoice.company.vat">P.I. {{invoice.company.vat}}</span><br/>
+                <span ng-if="invoice.matter.customer.address">{{invoice.matter.customer.address}}</span><br/>
+                <span ng-if="invoice.matter.customer.fiscal_code">C.F. {{invoice.matter.customer.fiscal_code}}</span><br/>
+                <span ng-if="invoice.matter.customer.vat_number">P.I. {{invoice.matter.customer.vat_number}}</span>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -63,11 +56,11 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{invoice.owner.first_name}} {{invoice.owner.last_name}}</h4>
+              <h4>Avv. {{invoice.matter.owner.name}}</h4>
               <p>
-                <span ng-if="invoice.owner.address">{{invoice.owner.address}}</span><br/>
-                <span ng-if="invoice.owner.fiscal_code">C.F. {{invoice.owner.fiscal_code}}</span><br/>
-                <span ng-if="invoice.owner.vat_number">P.I. {{invoice.owner.vat_number}}</span>
+                <span ng-if="invoice.matter.owner.address">{{invoice.matter.owner.address}}</span><br/>
+                <span ng-if="invoice.matter.owner.fiscal_code">C.F. {{invoice.matter.owner.fiscal_code}}</span><br/>
+                <span ng-if="invoice.matter.owner.vat_number">P.I. {{invoice.matter.owner.vat_number}}</span>
               </p>
             </div>
             <div class="col-sm-6 text-right">
@@ -120,19 +113,23 @@
                         <span ng-if="invoice.invoice_type === 'balance'">(Saldo)</span>
                       </strong>
                     </td>
-                    <td><strong>€ {{invoice.calc.total_services | prettyNumber}}</strong></td>
+                    <td><strong>€ {{invoice.info.total_services | prettyNumber}}</strong></td>
+                  </tr>
+                  <tr ng-if="invoice.retainer_agreement.apply_discount">
+                    <td class="text-right"><strong>Sconto Applicato ({{invoice.retainer_agreement.discount}}%)</strong></td>
+                    <td><strong>- € {{ (invoice.info.total_services * invoice.retainer_agreement.discount)/100 | prettyNumber }}</strong></td>
                   </tr>
                   <tr>
                     <td class="text-right">Spese generali (15%)</td>
-                    <td>€ {{invoice.calc.expenses_refund | prettyNumber}}</td>
+                    <td>€ {{invoice.info.expenses_refund | prettyNumber}}</td>
                   </tr>
                   <tr>
                     <td class="text-right">Contrib. previd. ob. (4%)</td>
-                    <td>€ {{invoice.calc.social_taxes | prettyNumber}}</td>
+                    <td>€ {{invoice.info.social_taxes | prettyNumber}}</td>
                   </tr>
                   <tr>
                     <td class="text-right">IVA (22%)</td>
-                    <td>€ {{invoice.calc.vat | prettyNumber}}</td>
+                    <td>€ {{invoice.info.vat | prettyNumber}}</td>
                   </tr>
                   <tr>
                     <td class="text-right">Spese sostenute in nome e per conto del cliente ex art. 15 DPR 633/72</td>
@@ -140,11 +137,11 @@
                   </tr>
                   <tr>
                     <td class="text-right">TOTALE FATTURA</td>
-                    <td><strong>€ {{invoice.calc.total_price | prettyNumber}}</strong></td>
+                    <td><strong>€ {{invoice.info.total_price | prettyNumber}}</strong></td>
                   </tr>
-                  <tr ng-if="invoice.retainer_agreement.withholding_tax">
+                  <tr ng-if="invoice.retainer_agreement.apply_withholding_tax">
                     <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
-                    <td><strong>€ {{invoice.calc.final_price | prettyNumber}}</strong></td>
+                    <td><strong>€ {{invoice.info.final_price | prettyNumber}}</strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -161,8 +158,8 @@
                 <strong>Termini di pagamento</strong>: 10 giorni data fattura<br/><br/>
               </p>
             </div>
-            <div class="col-sm-12" ng-if="invoice.retainer_agreement.withholding_tax">
-              (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.calc.withholding_tax | prettyNumber}}
+            <div class="col-sm-12" ng-if="invoice.retainer_agreement.apply_withholding_tax">
+              (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.info.withholding_tax | prettyNumber}}
             </div>
           </div>
         </div>  <!-- END Card Body -->

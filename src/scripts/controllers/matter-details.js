@@ -6,7 +6,9 @@
   * Matter Details Controller
   =========================================================*/
 
-  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, RetainerAgreement, Notify) {
+  App.controller('MatterDetailsCtrl', function($scope, $stateParams, $state, Matter, RetainerAgreement, Invoice, Notify) {
+
+    $scope.invoices = [];
 
     function activate() {
       getMatter();
@@ -17,7 +19,9 @@
     function getMatter() {
       Matter.get($stateParams.id).then(function(data) {
         $scope.matter = data;
-        console.log('matter',data);
+        data.retainer_agreements.forEach(function(item){
+          $scope.invoices = $scope.invoices.concat(item.invoices);
+        });
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load matter');
       });

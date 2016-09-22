@@ -70,9 +70,7 @@
               <th>#</th>
               <th permission permission-only="['LAWYER', 'ADMIN']">Stato</th>
               <th>Lettera di Incarico</th>
-              <th>Acconto</th>
-              <th>Saldo</th>
-              <th>Data di Apertura</th>
+              <th>Data di Creazione</th>
             </tr>
           </thead>
           <tbody>
@@ -83,36 +81,30 @@
                 <div ng-if="!ra.is_draft" class="flag flag-info">Inviata</div>
               </td>
               <td>
-                <ul class="actions">
+                <ul class="actions" permission permission-only="['LAWYER', 'ADMIN']">
                   <li>
                     <a ui-sref="page.retainer_agreement-details({id:ra._id})"
                       tooltip-placement="bottom" uib-tooltip="Visualizza">
                     <i class="zmdi zmdi-eye"></i>
                     </a>
                   </li>
-                  <li ng-if="!ra.invoice_id && !ra.deposit_invoice_id && !ra.balance_invoice_id"
-                    permission permission-only="['LAWYER', 'ADMIN']">
+                  <li>
                     <a ui-sref="page.retainer_agreement-edit({id:ra._id})"
                       tooltip-placement="bottom" uib-tooltip="Modifica">
                       <i class="zmdi zmdi-edit"></i>
                     </a>
                   </li>
-                  <li ng-if="!ra.invoice_id && !ra.deposit_invoice_id && !ra.balance_invoice_id"
-                    permission permission-only="['LAWYER', 'ADMIN']">
+                  <li>
                     <a href="" ng-click="deleteRetainerAgreement({id:ra._id})"
                       tooltip-placement="bottom" uib-tooltip="Elimina">
                     <i class="zmdi zmdi-delete"></i>
                     </a>
                   </li>
                 </ul>
-              </td>
-              <td>
-                <div ng-if="ra.deposit_invoice_id.is_paid || ra.invoice_id" class="flag flag-success">Pagato</div>
-                <div ng-if="!ra.deposit_invoice_id.is_paid && !ra.invoice_id" class="flag flag-closed">Non Pagato</div>
-              </td>
-              <td>
-                <div ng-if="ra.balance_invoice_id.is_paid || ra.invoice_id" class="flag flag-success">Pagato</div>
-                <div ng-if="!ra.balance_invoice_id.is_paid && !ra.invoice_id" class="flag flag-closed">Non Pagato</div>
+                <a ui-sref="page.retainer_agreement-details({id:ra._id})"
+                  permission permission-only="['CUSTOMER']">
+                  Visualizza Lettera di Incarico
+                </a>
               </td>
               <td>{{ra.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
             </tr>
@@ -130,6 +122,49 @@
           <i class="zmdi zmdi-plus"></i>
           Crea una nuova lettera di incarico
         </a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card m-t-25">
+    <div class="card-header ch-alt">
+      <h2>Fatture</h2>
+    </div>
+    <div class="card-body" ng-if="invoices.length">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Fattura</th>
+              <th>Pagato</th>
+              <th>Data di Creazione</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="invoice in invoices">
+              <td>{{$index+1}}</td>
+              <td>
+                <a ui-sref="page.invoice-details({id:invoice._id})">Visualizza
+                  <span ng-if="invoice.invoice_type === 'full'">Fattura</span>
+                  <span ng-if="invoice.invoice_type === 'deposit'">Acconto</span>
+                  <span ng-if="invoice.invoice_type === 'balance'">Saldo</span>
+                </a>
+              </td>
+              <td>
+                <div ng-if="invoice.is_paid" class="flag flag-success">Pagato</div>
+                <div ng-if="!invoice.is_paid" class="flag flag-closed">Non Pagato</div>
+              </td>
+              <td>{{invoice.created_at | amDateFormat: "DD MMMM YYYY" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-body" ng-if="!invoices.length">
+      <div class="alert alert-danger text-center">
+        Non ci sono fatture.
       </div>
     </div>
   </div>

@@ -21,11 +21,11 @@
 
     function getRetainerAgreement() {
       if(!$stateParams.id) {
-        $state.go('page.retainer_agreement-list');
+        $state.go('page.matters-list');
       } else {
         RetainerAgreement.api.get($stateParams.id).then(function(data) {
           $scope.retainer_agreement = data;
-          if(data.invoice_id || data.deposit_invoice_id )
+          if(data.invoices.length)
             $scope.readMode = true;
         }).catch(function(err){
           Notify.error('Error!', 'Unable to load retainer_agreement');
@@ -99,7 +99,9 @@
       })
       .then(function(result) {
         options.stripe_token = result[0].id;
-        RetainerAgreement.api.pay($scope.retainer_agreement, options).then(function(res) {
+        options.apply_discount = $scope.retainer_agreement.apply_discount;
+        RetainerAgreement.api.pay($scope.retainer_agreement, options)
+        .then(function(res) {
           swal({
             title: "Paid!",
             text: "La lettera d'incarico è stata pagata correttamente.",
@@ -108,7 +110,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.invoices');
+            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
           });
         }).catch(function(err) {
           swal({
@@ -129,6 +131,7 @@
         .then(function(data) {
           RetainerAgreement.api.pay($scope.retainer_agreement, {
             invoice_type: $scope.invoice_type,
+            apply_discount: $scope.retainer_agreement.apply_discount,
             payment_method: 'bank_transfer'
           }).then(function(res) {
             swal({
@@ -139,7 +142,7 @@
               confirmButtonText: "OK!",
               closeOnConfirm: true
             }, function() {
-              $state.go('page.invoices');
+              $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
             });
           }).catch(function(err) {
             Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
@@ -178,6 +181,8 @@
             showCancelButton: false,
             confirmButtonText: "OK!",
             closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
           });
         }).catch(function(err){
           Notify.error('Error!', 'Something went wrong :(');

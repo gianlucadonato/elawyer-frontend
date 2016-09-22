@@ -22,9 +22,9 @@
           <i class="zmdi zmdi-accounts"></i> Aziende
         </a>
       </li>
-      <li>
+      <!-- <li>
         <a href=""><i class="zmdi zmdi-settings"></i> Impostazioni</a>
-      </li>
+      </li> -->
       <li ng-controller="AuthenticationCtrl">
         <a href="" ng-click="logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
       </li>
@@ -67,13 +67,9 @@
       </a>
     </li>
 
-    <li data-ui-sref-active="active">
-      <a data-ui-sref="page.invoices"><i class="zmdi zmdi-card"></i> Fatture</a>
-    </li>
-
-    <li data-ui-sref-active="active">
+    <!-- <li data-ui-sref-active="active">
       <a data-ui-sref="page.documents" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment"></i> Documenti</a>
-    </li>
+    </li> -->
 
   </ul>
 </div>
