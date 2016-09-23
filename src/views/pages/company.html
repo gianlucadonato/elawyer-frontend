@@ -11,7 +11,7 @@
           <div class="pmo-pic">
             <div class="p-relative">
               <a href="">
-                <img class="img-responsive" ng-src="{{company.avatar_url}}" default-src alt="avatar">
+                <img class="img-responsive" ng-src="{{company.avatar_url || 'images/company.png'}}" alt="avatar">
               </a>
 
               <div class="pmop-edit" ng-if="findWithAttr(company.owners, 'id', me.id) != -1 && !creating">
