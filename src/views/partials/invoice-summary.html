@@ -1,5 +1,5 @@
 <!-- GENERAL INVOICE -->
-<div class="row" ng-if="!retainer_agreement.deposit || showFullInvoice">
+<div class="row" ng-if="!retainer_agreement.deposit || retainer_agreement.apply_discount">
   <div class="col-sm-12">
     <h4>Totale Fattura</h4>
     <hr>
@@ -18,6 +18,10 @@
         <tr>
           <td class="text-right"><strong>PRESTAZIONI</strong></td>
           <td><strong>€ {{ invoice.full.total_services | prettyNumber }}</strong></td>
+        </tr>
+        <tr ng-if="retainer_agreement.apply_discount">
+          <td class="text-right"><strong>Sconto Applicato ({{retainer_agreement.discount}}%)</strong></td>
+          <td><strong>- € {{ (invoice.full.total_services * retainer_agreement.discount)/100 | prettyNumber }}</strong></td>
         </tr>
         <tr>
           <td class="text-right">Spese generali (15%)</td>
@@ -39,13 +43,13 @@
           <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.full.total_price | prettyNumber }}</strong></td>
         </tr>
-        <tr ng-if="retainer_agreement.withholding_tax">
+        <tr ng-if="retainer_agreement.apply_withholding_tax">
           <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
           <td><strong>€ {{ invoice.full.final_price | prettyNumber}}</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="row" ng-if="retainer_agreement.withholding_tax">
+    <div class="row" ng-if="retainer_agreement.apply_withholding_tax">
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.full.withholding_tax | prettyNumber}}
       </div>
@@ -53,10 +57,10 @@
   </div>
 </div>
 
-<div class="row" ng-if="!!retainer_agreement.deposit && !showFullInvoice">
+<div class="row" ng-if="!!retainer_agreement.deposit && !retainer_agreement.apply_discount">
   <div class="col-sm-12">
     <!-- ACCONTO -->
-    <h4 class="m-t-25">Acconto</h4>
+    <h4 class="m-t-25">Acconto a fronte di un totale di €{{invoice.full.total_services}}</h4>
     <hr>
     <table class="table table-striped">
       <thead>
@@ -71,7 +75,7 @@
           <td>€ {{i.price | prettyNumber}}</td>
         </tr>
         <tr>
-          <td class="text-right"><strong>PRESTAZIONI (Acconto {{retainer_agreement.deposit}}% del totale)</strong></td>
+          <td class="text-right"><strong>PRESTAZIONI (Acconto {{retainer_agreement.deposit}}% del Totale)</strong></td>
           <td><strong>€ {{ invoice.deposit.total_services | prettyNumber }}</strong></td>
         </tr>
         <tr>
@@ -94,13 +98,13 @@
           <td class="text-right">TOTALE FATTURA</td>
           <td><strong>€ {{ invoice.deposit.total_price | prettyNumber }}</strong></td>
         </tr>
-        <tr ng-if="retainer_agreement.withholding_tax">
+        <tr ng-if="retainer_agreement.apply_withholding_tax">
           <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
           <td><strong>€ {{ invoice.deposit.final_price | prettyNumber}}</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="row" ng-if="retainer_agreement.withholding_tax">
+    <div class="row" ng-if="retainer_agreement.apply_withholding_tax">
       <div class="col-sm-12 m-t-10">
         (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.deposit.withholding_tax | prettyNumber}}
       </div>
@@ -108,66 +112,12 @@
   </div>
 </div>
 
-<div class="row" ng-if="!!retainer_agreement.deposit && showBalance">
-  <div class="col-sm-12">
-    <!-- SALDO -->
-    <h4 class="m-t-25">Saldo</h4>
-    <hr>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Servizio</th>
-          <th>Importo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="i in retainer_agreement.items" ng-if="showAllSrv || i.is_mandatory || i.is_selected">
-          <td><strong>{{i.title}}</strong></td>
-          <td>€ {{i.price | prettyNumber}}</td>
-        </tr>
-        <tr>
-          <td class="text-right"><strong>PRESTAZIONI (Saldo {{ 100 - retainer_agreement.deposit}}% del totale)</strong></td>
-          <td><strong>€ {{ invoice.balance.total_services | prettyNumber }}</strong></td>
-        </tr>
-        <tr>
-          <td class="text-right">Spese generali (15%)</td>
-          <td>€ {{ invoice.balance.expenses_refund | prettyNumber }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">Contrib. previd. ob. (4%)</td>
-          <td>€ {{ invoice.balance.social_taxes| prettyNumber }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">IVA (22%)</td>
-          <td>€ {{ invoice.balance.vat | prettyNumber }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">Spese sostenute in nome e per conto del cliente ex art. 15 DPR 633/72</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="text-right">TOTALE FATTURA</td>
-          <td><strong>€ {{ invoice.balance.total_price | prettyNumber }}</strong></td>
-        </tr>
-        <tr ng-if="retainer_agreement.withholding_tax">
-          <td class="text-right"><strong>NETTO DA VERSARE (*)</strong></td>
-          <td><strong>€ {{ invoice.balance.final_price | prettyNumber}}</strong></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="row" ng-if="retainer_agreement.withholding_tax">
-      <div class="col-sm-12 m-t-10">
-        (*) Ritenuta d'acconto (20% dell'imponibile) € {{ invoice.balance.withholding_tax | prettyNumber}}
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
+<div class="row" ng-if="!!retainer_agreement.deposit">
   <div class="col-sm-12 m-t-5">
     <div class="checkbox m-b-15">
       <label>
-        <input type="checkbox" ng-model="isChecked" ng-true-value="true" ng-false-value="false" ng-change="checkDiscount(isChecked)">
+        <input type="checkbox" ng-model="retainer_agreement.apply_discount" ng-true-value="true" ng-false-value="false"
+         ng-change="checkDiscount(retainer_agreement.apply_discount)">
         <i class="input-helper"></i> Ottieni sconto del {{retainer_agreement.discount}}% pagando in un unica soluzione
       </label>
     </div>

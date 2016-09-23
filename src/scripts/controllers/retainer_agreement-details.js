@@ -9,7 +9,7 @@
   App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
-    $scope.showNext = true;
+    $scope.showNext = false;
     $scope.invoice_type = 'deposit'; // full | deposit | balance
     $scope.showFullInvoice = false;
 
@@ -20,13 +20,17 @@
     activate();
 
     function getRetainerAgreement() {
-      RetainerAgreement.api.get($stateParams.id).then(function(data) {
-        $scope.retainer_agreement = data;
-        if(data.invoice_id || data.deposit_invoice_id )
-          $scope.readMode = true;
-      }).catch(function(err){
-        Notify.error('Error!', 'Unable to load retainer_agreement');
-      });
+      if(!$stateParams.id) {
+        $state.go('page.matters-list');
+      } else {
+        RetainerAgreement.api.get($stateParams.id).then(function(data) {
+          $scope.retainer_agreement = data;
+          if(data.invoices.length)
+            $scope.readMode = true;
+        }).catch(function(err){
+          Notify.error('Error!', 'Unable to load retainer_agreement');
+        });
+      }
     }
 
     $scope.$watch('retainer_agreement', function(newValue, oldValue) {
@@ -35,11 +39,22 @@
     }, true);
 
     $scope.next = function() {
-      // Update selected services and show next
-      RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
-        $scope.showNext = true;
-        $window.scrollTo(0, 0);
-      });
+      var atLeastOneSelected = false;
+      for(var i=0; i<$scope.retainer_agreement.items.length & !atLeastOneSelected; i++) {
+        if($scope.retainer_agreement.items[i].is_selected ||
+          $scope.retainer_agreement.items[i].is_mandatory) {
+            atLeastOneSelected = true;
+          }
+      }
+      if(atLeastOneSelected) {
+        // Update selected services and show next
+        RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
+          $scope.showNext = true;
+          $window.scrollTo(0, 0);
+        });
+      } else {
+        Notify.error('Errore', 'Seleziona almeno un servizio');
+      }
     };
 
     $scope.previous = function() {
@@ -48,11 +63,8 @@
     };
 
     $scope.checkDiscount = function(value) {
-      $scope.showFullInvoice = value;
       if(value) {
         $scope.invoice_type = 'full';
-      } else if($scope.retainer_agreement.deposit_invoice_id){
-        $scope.invoice_type = 'balance';
       } else {
         $scope.invoice_type = 'deposit';
       }
@@ -78,7 +90,7 @@
         paying: parseInt(total) * 100,
         invoice_type: $scope.invoice_type,
         payment_method: 'stripe',
-        email: $scope.retainer_agreement.customer ? $scope.retainer_agreement.customer.email : $scope.retainer_agreement.company.email
+        email: $scope.retainer_agreement.matter.customer.email
       };
       stripe.open({
         amount: options.paying,
@@ -87,7 +99,9 @@
       })
       .then(function(result) {
         options.stripe_token = result[0].id;
-        RetainerAgreement.api.pay($scope.retainer_agreement, options).then(function(res) {
+        options.apply_discount = $scope.retainer_agreement.apply_discount;
+        RetainerAgreement.api.pay($scope.retainer_agreement, options)
+        .then(function(res) {
           swal({
             title: "Paid!",
             text: "La lettera d'incarico è stata pagata correttamente.",
@@ -96,7 +110,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.invoices');
+            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
           });
         }).catch(function(err) {
           swal({
@@ -117,6 +131,7 @@
         .then(function(data) {
           RetainerAgreement.api.pay($scope.retainer_agreement, {
             invoice_type: $scope.invoice_type,
+            apply_discount: $scope.retainer_agreement.apply_discount,
             payment_method: 'bank_transfer'
           }).then(function(res) {
             swal({
@@ -127,7 +142,7 @@
               confirmButtonText: "OK!",
               closeOnConfirm: true
             }, function() {
-              $state.go('page.invoices');
+              $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
             });
           }).catch(function(err) {
             Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
@@ -144,8 +159,38 @@
         });
     };
 
+    /* Send Retainer Agreement to Customer
+     * ======================*/
+    $scope.sendRetainerAgreement = function() {
+      swal({
+        title: "Inviare la lettera di incarico?",
+        text: "Cliccando conferma, il cliente verrà notificato via email",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "CONFERMA",
+        closeOnConfirm: false
+      }, function() {
+        RetainerAgreement.api.send({
+          id: $scope.retainer_agreement.id
+        }).then(function(data){
+          $scope.retainer_agreement.is_draft = false;
+          swal({
+            title: "Sent!",
+            text: "La lettera d'incarico è stata inviata correttamente.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
+          });
+        }).catch(function(err){
+          Notify.error('Error!', 'Something went wrong :(');
+        });
+      });
+    };
+
     // Sticky Summary
-    //bisognerebbe usare una direttiva qua
     $(window).scroll(function(){
       if ($(this).scrollTop() > 230) {
         $("#summary-box").addClass("fixed-top");

@@ -74,7 +74,7 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
 
 // APP RUN
 // -----------------------------------
-App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $templateCache) {
+App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $window, $templateCache) {
 
   amMoment.changeLocale('it');
 
@@ -127,6 +127,10 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $templateCac
       event.preventDefault();
       $state.go('profile.details', $rootScope.current_user);
     }
+  });
+
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    $window.scrollTo(0, 0);
   });
 
   // TEMPLATE CACHE

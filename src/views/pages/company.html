@@ -149,7 +149,7 @@
                             <li data-ng-repeat="w in company.owners"><a href="javascript:void(0);"><i class="zmdi zmdi-close" ng-click="removeAdmin($index)"></i> {{ w.first_name }} {{ w.last_name }}</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-success btn-sm waves-effect" user-search searchcompany="false" callback="addAdmin">Aggiungi proprietario</button>
+                    <button class="btn btn-success btn-sm waves-effect" user-search="addAdmin" search-company="false">Aggiungi proprietario</button>
                   </dd>
                 </dl>
                 <dl class="dl-horizontal">
@@ -161,7 +161,7 @@
                             <li data-ng-repeat="w in company.users"><a href="javascript:void(0);"><i ng-click="removeUser($index)" class="zmdi zmdi-close"></i> {{ w.first_name }} {{ w.last_name }}</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-success btn-sm waves-effect" user-search searchcompany="false" callback="addUser">aggiungi collaboratore</button>
+                    <button class="btn btn-success btn-sm waves-effect" user-search="addUser" search-company="false">Aggiungi collaboratore</button>
                   </dd>
                 </dl>
                 <div class="m-t-30" ng-show="!success">

@@ -78,6 +78,19 @@
       return deferred.promise;
     };
 
+    api.get_areas = function() {
+      var deferred = $q.defer();
+      $http
+        .get(API.host + '/api/matters/practice_area')
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     return api;
 
   });

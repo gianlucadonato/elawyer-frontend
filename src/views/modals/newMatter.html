@@ -1,0 +1,40 @@
+<div class="modal-header pb-23">
+  <h4 class="modal-title"><i class="zmdi zmdi-mail-send"></i> NUOVA PRATICA</h4>
+</div>
+<div class="modal-body send-retainer-agreement-template">
+  <form ng-submit="createMatter(matter)">
+    <dl class="dl-horizontal">
+      <dt class="p-t-10">Titolo</dt>
+      <dd>
+        <div class="fg-line">
+          <input type="text" ng-model="matter.title" placeholder="Inserisci Titolo" class="form-control" required>
+        </div>
+      </dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt class="p-t-10">Area</dt>
+      <dd>
+        <select class="form-control" ng-model="matter.practice_area" required>
+          <option value="" disabled selected>Seleziona Area</option>
+          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
+        </select>
+        <a href="" ng-click="addArea()"><i class="zmdi zmdi-plus"></i> Aggiungi Area</a>
+        <div class="m-t-10" ng-if="showAddArea">
+          <input type="text" ng-model="practice_area" class="form-control input-inline" placeholder="Inserisci Area">
+          <a href="" ng-click="pushArea(practice_area)" class="btn btn-orange waves-effect">Aggiungi</a>
+        </div>
+      </dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt class="p-t-10">Cliente</dt>
+      <dd>
+        <div class="fg-line">
+          <input type="text" ng-model="matter.customer.name" user-search="setUser" search-company="true" placeholder="Seleziona Cliente" class="form-control" required>
+        </div>
+      </dd>
+    </dl>
+    <div class="form-group m-t-10">
+      <button type="submit" class="btn btn-orange btn-block waves-effect">CONFERMA</button>
+    </div>
+  </form>
+</div>

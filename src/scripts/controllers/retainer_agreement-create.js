@@ -31,7 +31,10 @@
       if($stateParams.id) { // Edit Page
         getRetainerAgreement();
       }
-      getAreaOfInterest();
+      if($stateParams.matter) {
+        $scope.retainer_agreement.matter = $stateParams.matter;
+        $scope.retainer_agreement.customer = $stateParams.matter.customer;
+      }
     }
 
     activate();
@@ -41,17 +44,8 @@
         preventSave = true;
         $scope.retainer_agreement = data;
         $scope.invoice = RetainerAgreement.calcInvoice(data, true);
-        console.log('data', data);
-      }).catch(function(err){
+    }).catch(function(err){
         Notify.error('Error!', 'Unable to load retainer_agreement');
-      });
-    }
-
-    function getAreaOfInterest() {
-      RetainerAgreement.api.areas().then(function(data) {
-        $scope.areas = data;
-      }).catch(function(err) {
-        Notify.error('Error!', 'Unable to load areas');
       });
     }
 
@@ -74,14 +68,11 @@
               $scope.errorSaving = false;
             }, 1000);
           }).catch(function(err){
+            $scope.isSaving = false;
             $scope.errorSaving = true;
             console.log('Unable to save Retainer Agreement', err);
           });
         }, 1000);
-        if ($scope.retainer_agreement.area_of_interest === '__manual__') {
-          $scope.retainer_agreement.area_of_interest = '';
-          $scope.insertArea = true;
-        }
       } else {
         preventSave = false;
       }
@@ -136,38 +127,49 @@
     }
 
     $scope.saveAsTemplate = function(retainer_agreement) {
-      retainer_agreement.is_template = true;
-      if(retainer_agreement.id) {
-        // Update Retainer Agreement
-        RetainerAgreement.api.update(retainer_agreement).then(function(data){
-          Notify.success('OK!','Saved Successfully!');
-        }).catch(function(err){
-          try {
-            var msg = '';
-            for(var key in err.data.data.errors) {
-              msg += key + ' is required! ';
+      var title = prompt('Inserisci Titolo Template', '');
+      if(!!title) {
+        retainer_agreement.title = title;
+        retainer_agreement.is_template = true;
+        if(retainer_agreement.id) {
+          // Update Retainer Agreement
+          RetainerAgreement.api.update(retainer_agreement).then(function(data){
+            Notify.success('OK!','Saved Successfully!');
+          }).catch(function(err){
+            try {
+              var msg = '';
+              for(var key in err.data.data.errors) {
+                msg += key + ' is required! ';
+              }
+              Notify.error('Error on saving', msg);
+            } catch(err) {
+              Notify.error('Error!', 'Something went wrong :(');
             }
-            Notify.error('Error on saving', msg);
-          } catch(err) {
-            Notify.error('Error!', 'Something went wrong :(');
-          }
-        });
+          });
+        } else {
+          // Create New Retainer Agreement
+          RetainerAgreement.api.create(retainer_agreement).then(function(data){
+            Notify.success('OK!','Saved Successfully!');
+          }).catch(function(err){
+            try {
+              var msg = '';
+              for(var key in err.data.data.errors) {
+                msg += key + ' is required! ';
+              }
+              Notify.error('Error on saving', msg);
+            } catch(err) {
+              Notify.error('Error!', 'Something went wrong :(');
+            }
+          });
+        }
       } else {
-        // Create New Retainer Agreement
-        RetainerAgreement.api.create(retainer_agreement).then(function(data){
-          Notify.success('OK!','Saved Successfully!');
-        }).catch(function(err){
-          try {
-            var msg = '';
-            for(var key in err.data.data.errors) {
-              msg += key + ' is required! ';
-            }
-            Notify.error('Error on saving', msg);
-          } catch(err) {
-            Notify.error('Error!', 'Something went wrong :(');
-          }
-        });
+        Notify.error('Errore', 'Template non salvato :(');
       }
+    };
+
+    $scope.nextTemplate = function(page) {
+      $scope.currentTmplPage = page-1;
+      fetchTemplates();
     };
 
     function fetchTemplates() {
@@ -186,11 +188,6 @@
         $scope.isLoading = false;
       });
     }
-
-    $scope.nextTemplate = function(page) {
-      $scope.currentTmplPage = page-1;
-      fetchTemplates();
-    };
 
     /* RetainerAgreement Services
      * ======================*/
@@ -239,6 +236,11 @@
       fetchServices(query);
     };
 
+    $scope.nextService = function(page) {
+      $scope.currentSrvPage = page-1;
+      fetchServices();
+    };
+
     function fetchServices(query) {
       $scope.isLoading = true;
       Service.api.index({
@@ -257,129 +259,46 @@
       });
     }
 
-    $scope.nextService = function(page) {
-      $scope.currentSrvPage = page-1;
-      fetchServices();
-    };
-
-    /* Search Matter
-     * ======================*/
-    $scope.openSearchMatterModal = function() {
-      self.openSearchMatterModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/searchMatter.html',
-        scope: $scope
-      });
-    };
-
-    $scope.closeSearchMatterModal = function(matter) {
-      if(!matter.id) {
-        // Create Matter
-        Matter
-          .create({title: matter})
-          .then(function(m){
-            $scope.retainer_agreement.matter = m;
-            self.openSearchMatterModal.close();
-          })
-          .catch(function(err){
-            Notify.error('Error!', 'Unable to create matter');
-          });
-      } else {
-        $scope.retainer_agreement.matter = matter;
-        self.openSearchMatterModal.close();
-      }
-    };
-
-    $scope.searchMatter = function(query) {
-      return Matter.index({
-        q: query
-      }).then(function(results){
-        return results.matters.map(function(matter){
-          return {
-            id: matter.id,
-            title: matter.title
-          };
-        });
-      });
-    };
-
+    // SET USER CB
     $scope.setUser = function(user) {
       if (user.type == 'user') {
         $scope.retainer_agreement.customer = user;
         delete $scope.retainer_agreement.company;
       }
-
       else if (user.type == 'company') {
         $scope.retainer_agreement.company = user;
         delete $scope.retainer_agreement.customer;
       }
-
-    };
-
-    // Create New Client
-    $scope.openNewCustomerModal = function() {
-      self.newCustomerModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/newUser.html',
-        controller: function($scope, $uibModalInstance, retainer_agreement){
-          $scope.createUser = function(data) {
-            if(data.birthday) {
-              // Transform data in ms
-              var bd = data.birthday.split('/');
-              data.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
-            }
-            User
-              .create(data)
-              .then(function(user){
-                $uibModalInstance.dismiss();
-                Notify.success('OK!','User created successfully!');
-              })
-              .catch(function(err){
-                Notify.error('Error!','Unable to create user');
-              });
-          };
-        }
-      });
     };
 
     /* Send Retainer Agreement to Customer
      * ======================*/
     $scope.sendRetainerAgreement = function() {
-      if(($scope.retainer_agreement.customer || {}).id || ($scope.retainer_agreement.company || {}).id) {
-        swal({
-          title: "Inviare la lettera di incarico?",
-          text: "Cliccando conferma, il cliente verrà notificato via email",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonText: "CONFERMA",
-          closeOnConfirm: false
-        }, function() {
-          RetainerAgreement.api.send({
-            id: $scope.retainer_agreement.id
-          }).then(function(data){
-            swal({
-              title: "Sent!",
-              text: "La lettera d'incarico è stata inviata correttamente.",
-              type: "success",
-              showCancelButton: false,
-              confirmButtonText: "OK!",
-              closeOnConfirm: true
-            }, function() {
-              $state.go('page.retainer_agreement-details', $scope.retainer_agreement);
-            });
-          }).catch(function(err){
-            Notify.error('Error!', 'Something went wrong :(');
+      swal({
+        title: "Inviare la lettera di incarico?",
+        text: "Cliccando conferma, il cliente verrà notificato via email",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "CONFERMA",
+        closeOnConfirm: false
+      }, function() {
+        RetainerAgreement.api.send({
+          id: $scope.retainer_agreement.id
+        }).then(function(data){
+          swal({
+            title: "Sent!",
+            text: "La lettera d'incarico è stata inviata correttamente.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonText: "OK!",
+            closeOnConfirm: true
+          }, function() {
+            $state.go('page.retainer_agreement-details', $scope.retainer_agreement);
           });
+        }).catch(function(err){
+          Notify.error('Error!', 'Something went wrong :(');
         });
-      } else {
-        Notify.error('Errore', 'Inserire Cliente');
-      }
+      });
     };
 
   });

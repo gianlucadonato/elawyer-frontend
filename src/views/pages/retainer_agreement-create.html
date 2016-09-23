@@ -35,41 +35,19 @@
                   <tr>
                     <th>Pratica</th>
                     <th>Cliente</th>
-                    <th>Area</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
-                      <div class="form-group">
-                        <button class="btn btn-info btn-block" ng-click="openSearchMatterModal()">
-                          <span ng-if="!retainer_agreement.matter.title">SELEZIONA PRATICA</span>
-                          <span ng-if="retainer_agreement.matter.title">{{retainer_agreement.matter.title}}</span>
-                        </button>
-                      </div>
+                      <a ui-sref="page.matter-details(retainer_agreement.matter)">
+                        <strong>{{retainer_agreement.matter.title}}</strong>
+                      </a>
                     </td>
                     <td>
-                      <div class="form-group">
-                        <button class="btn btn-success btn-block" user-search searchcompany="true" callback="setUser">
-                          <span ng-if="!retainer_agreement.customer.first_name && !retainer_agreement.company">SELEZIONA CLIENTE</span>
-                          <span ng-if="retainer_agreement.customer.first_name">
-                            {{retainer_agreement.customer.first_name}} {{retainer_agreement.customer.last_name}}
-                          </span>
-                          <span ng-if="retainer_agreement.company.name">
-                            {{retainer_agreement.company.name}}
-                          </span>
-                        </button>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="form-group">
-                        <select class="form-control" ng-model="retainer_agreement.area_of_interest" ng-value="retainer_agreement.area_of_interest || 'default'" ng-show="!insertArea">
-                          <option value="" disabled selected>Seleziona Area</option>
-                          <option ng-repeat="area in areas" value="{{area}}">{{area}}</option>
-                          <option value="__manual__">Immetti manualmente</option>
-                        </select>
-                        <input ng-show="insertArea" type="text" class="form-control" placeholder="Inserisci Area" ng-model="retainer_agreement.area_of_interest">
-                      </div>
+                      <a ui-sref="profile.details(retainer_agreement.matter.customer)">
+                        <strong>{{retainer_agreement.matter.customer.name}}</strong>
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -193,7 +171,7 @@
         <div class="card-footer card-padding card-actions">
           <div tooltip-placement="bottom" uib-tooltip="Save in Draft" class="save-as-draft">
             <span ng-if="isSaving">Saving...</span>
-            <span ng-if="errorSaving">Error in saving. Please insert a title</span>
+            <span ng-if="errorSaving" style="color:red;" class="m-r-5">Error in Saving!</span>
             <span ng-if="!isSaving && !errorSaving">Saved</span>
             <a href="" ng-class="{'is-saving': (isSaving || errorSaving)}"><i class="zmdi zmdi-check-all"></i></a>
           </div>
@@ -207,7 +185,7 @@
   <!-- PAYMENT SETTINGS -->
   <div class="row">
     <div class="col-sm-12">
-      <div id="summary-box" class="card m-t-25">
+      <div class="card m-t-25">
         <div class="card-header ch-alt">
           <h2>Impostazioni di pagamento</h2>
         </div>
@@ -215,11 +193,11 @@
           <form>
             <p class="c-black f-500 m-b-20">Ritenuta d'acconto</p>
             <label class="radio radio-inline m-r-20">
-              <input type="radio" name="withholding_tax" ng-value="false" ng-model="retainer_agreement.withholding_tax" selected>
+              <input type="radio" name="apply_withholding_tax" ng-value="false" ng-model="retainer_agreement.apply_withholding_tax" selected>
               <i class="input-helper"></i> NO
             </label>
             <label class="radio radio-inline m-r-20">
-              <input type="radio" name="withholding_tax" ng-value="true" ng-model="retainer_agreement.withholding_tax">
+              <input type="radio" name="apply_withholding_tax" ng-value="true" ng-model="retainer_agreement.apply_withholding_tax">
               <i class="input-helper"></i> SI
             </label>
             <p class="c-black f-500 m-b-20 m-t-20">Percentuale Sconto (per pagamento unico)</p>
@@ -242,24 +220,13 @@
     </div>
   </div>
 
-  <!-- INVOICE PREVIEW -->
-  <div class="row">
-    <div class="col-sm-12">
-      <div id="summary-box" class="card m-t-25">
-        <div class="card-header ch-alt">
-          <h2>Anteprima Fattura</h2>
-        </div>
-        <div class="card-body card-padding invoice-letter">
-          <div ng-include="'views/partials/invoice-summary.html'"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="row m-b-25">
-    <div class="col-sm-12">
-      <button class="btn btn-info waves-effect pull-right" ng-click="sendRetainerAgreement()">
-        <i class="zmdi zmdi-mail-send"></i> Invia a cliente
+    <div class="col-sm-12 flex-end">
+      <a ui-sref="page.retainer_agreement-details(retainer_agreement)" class="btn btn-info waves-effect m-r-10">
+        Visualizza Anteprima
+      </a>
+      <button class="btn btn-primary waves-effect" ng-click="sendRetainerAgreement()">
+        <i class="zmdi zmdi-mail-send"></i> Invia al Cliente
       </button>
     </div>
   </div>
