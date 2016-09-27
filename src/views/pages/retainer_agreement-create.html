@@ -45,7 +45,12 @@
                       </a>
                     </td>
                     <td>
-                      <a ui-sref="profile.details(retainer_agreement.matter.customer)">
+                      <a ui-sref="profile.details(retainer_agreement.matter.customer)"
+                        ng-if="retainer_agreement.matter.customer_type == 'User'">
+                        <strong>{{retainer_agreement.matter.customer.name}}</strong>
+                      </a>
+                      <a ui-sref="company.details(retainer_agreement.matter.customer)"
+                        ng-if="retainer_agreement.matter.customer_type == 'Company'">
                         <strong>{{retainer_agreement.matter.customer.name}}</strong>
                       </a>
                     </td>

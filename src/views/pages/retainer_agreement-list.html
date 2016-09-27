@@ -60,17 +60,9 @@
             <td data-title="'Area'" sortable="'area_of_interest'">
               {{ m.area_of_interest }}
             </td>
-            <td data-title="'Cliente'" sortable="'customer.first_name'">
-              <a ui-sref="profile.details({id: m.customer.id})" ng-if="m.customer.id">{{m.customer.first_name}} {{m.customer.last_name}}</a>
-              <a ui-sref="company.details({id: m.company.id})" ng-if="m.company.id">{{m.company.name}}</a>
-            </td>
-            <td data-title="'Acconto'" sortable="'m.deposit_invoice_id.is_paid'">
-              <div ng-if="m.deposit_invoice_id.is_paid || m.invoice_id" class="flag flag-success">Pagato</div>
-              <div ng-if="!m.deposit_invoice_id.is_paid && !m.invoice_id" class="flag flag-closed">Non Pagato</div>
-            </td>
-            <td data-title="'Saldo'" sortable="'m.balance_invoice_id.is_paid'">
-              <div ng-if="m.balance_invoice_id.is_paid || m.invoice_id" class="flag flag-success">Pagato</div>
-              <div ng-if="!m.balance_invoice_id.is_paid && !m.invoice_id" class="flag flag-closed">Non Pagato</div>
+            <td data-title="'Cliente'" sortable="'customer.name'">
+              <a ui-sref="profile.details(m.customer)" ng-if="m.customer_type == 'User'">{{m.customer.name}}</a>
+              <a ui-sref="company.details(m.customer)" ng-if="m.customer_type == 'Company'">{{m.customer.name}}</a>
             </td>
             <td data-title="'Data di Creazione'" sortable="'created_at'">
               {{m.created_at | amDateFormat: "DD MMMM YYYY" }}
@@ -83,13 +75,13 @@
                    <i class="zmdi zmdi-eye"></i>
                   </a>
                 </li>
-                <li ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
+                <li>
                   <a ui-sref="page.retainer_agreement-edit(m)"
                     tooltip-placement="bottom" uib-tooltip="Modifica">
                     <i class="zmdi zmdi-edit"></i>
                   </a>
                 </li>
-                <li ng-if="!m.invoice_id && !m.deposit_invoice_id && !m.balance_invoice_id">
+                <li>
                   <a href="" ng-click="deleteRetainerAgreement(m)"
                     tooltip-placement="bottom" uib-tooltip="Elimina">
                    <i class="zmdi zmdi-delete"></i>
@@ -113,8 +105,9 @@
             <td data-title="'Area'" sortable="'area_of_interest'">
               {{ m.area_of_interest }}
             </td>
-            <td data-title="'Cliente'" sortable="'customer.first_name'">
-              <a ui-sref="profile.details({id: m.customer.id})">{{m.customer.first_name}} {{m.customer.last_name}}</a>
+            <td data-title="'Cliente'" sortable="'customer.name'">
+              <a ui-sref="profile.details(m.customer)" ng-if="m.customer_type == 'User'">{{m.customer.name}}</a>
+              <a ui-sref="company.details(m.customer)" ng-if="m.customer_type == 'Company'">{{m.customer.name}}</a>
             </td>
             <td data-title="'Avvocato'" sortable="'owner.first_name'">
               <a ui-sref="profile.details({id: m.owner.id})">{{m.owner.first_name}} {{m.owner.last_name}}</a>

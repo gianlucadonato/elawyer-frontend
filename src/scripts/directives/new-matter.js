@@ -35,8 +35,9 @@
           });
         });
 
-        scope.setUser = function(user) {
-          scope.matter.customer = user;
+        scope.setCustomer = function(data, type) {
+          scope.matter.customer = data;
+          scope.matter.customer_type = type; // user | company
         };
 
         scope.addArea = function(){
@@ -56,7 +57,8 @@
             .create({
               title: data.title,
               practice_area: data.practice_area,
-              customer_id: data.customer.id
+              customer_id: scope.matter.customer.id,
+              customer_type: scope.matter.customer_type
             })
             .then(function(matter){
               scope.currentModal.dismiss();

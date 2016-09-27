@@ -10,7 +10,7 @@
 
     $scope.readMode = false;
     $scope.showNext = false;
-    $scope.invoice_type = 'deposit'; // full | deposit | balance
+    $scope.invoice_type = 'full'; // full | deposit
     $scope.showFullInvoice = false;
 
     function activate() {
@@ -25,6 +25,8 @@
       } else {
         RetainerAgreement.api.get($stateParams.id).then(function(data) {
           $scope.retainer_agreement = data;
+          if(data.deposit)
+            $scope.invoice_type = 'deposit';
           if(data.invoices.length)
             $scope.readMode = true;
         }).catch(function(err){

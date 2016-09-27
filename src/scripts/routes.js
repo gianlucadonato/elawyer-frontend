@@ -84,23 +84,33 @@
         templateUrl: 'views/demos/profile-connections.html'
       })
       //------------------------------
-      // Company
+      // COMPANY
       //------------------------------
       .state ('company', {
-        abstract:true,
-        templateUrl: helper.partialsPath('common.html')
-      })
-      .state ('company.details', {
         url: '/company/:id',
-        controller: 'company',
+        abstract: true,
         requireLogin: true,
         templateUrl: helper.pagesPath('company.html')
       })
-      .state ('company.index', {
-        controller: 'companyIndex',
-        url: '/companies',
+      .state ('company.details', {
+        url: '/details',
         requireLogin: true,
-        templateUrl: helper.pagesPath('company-list.html')
+        params: {
+          editMode: undefined
+        },
+        templateUrl: helper.pagesPath('company-details.html')
+      })
+      .state ('page.company-create', {
+        url: '/company/create',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('company-create.html'),
+        controller: 'CompanyCreateCtrl'
+      })
+      .state ('page.search-user', {
+        url: '/search_user',
+        requireLogin: true,
+        templateUrl: 'views/modals/searchCustomer.html',
+        controller: 'SearchUserCtrl'
       })
       //------------------------------
       // Retainer Agreements (Lettere di incarico)
@@ -267,7 +277,7 @@
       })
 
       //------------------------------
-      // ADMIN PAGES
+      // CONTACTS
       //------------------------------
       .state('page.customer-list', {
         url: '/users/customers',
@@ -275,6 +285,18 @@
         requireLogin: true,
         templateUrl: helper.pagesPath('customer-list.html'),
         controller: 'CustomerListCtrl',
+        data: {
+          permissions: {
+            only: ['LAWYER', 'ADMIN']
+          }
+        }
+      })
+      .state('page.company-list', {
+        url: '/users/companies',
+        title: 'Company List',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('company-list.html'),
+        controller: 'CompanyListCtrl',
         data: {
           permissions: {
             only: ['LAWYER', 'ADMIN']

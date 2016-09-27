@@ -2,16 +2,13 @@
   'use strict';
 
   /**=========================================================
-  * File: matter-details.js
-  * MatterDetails Controller
+  * File: company-list.js
+  * Company List Controller
   =========================================================*/
 
-  App.controller('companyIndex', function($scope, $stateParams, $state, Company, Notify, $window, $timeout, $uibModal, ngTableParams, Uploader, $filter) {
+  App.controller('CompanyListCtrl', function($scope, Company, Notify) {
 
-    $scope.answers = [];
     $scope.isLoading = false;
-    $scope.perPage = 15;
-    $scope.totalItems = 0;
 
     function activate() {
       getCompanies();
@@ -19,49 +16,43 @@
 
     activate();
 
-    function getCompanies() {
+    function getCompanies(){
       $scope.isLoading = true;
-      Company.api.index({
-        is_draft: false,
-        is_template: false,
-        per_page: $scope.perPage
-      }).then(function(data){
-        $scope.companies = data.companies;
-        $scope.totalItems = data.total_items;
+      Company.index().then(function(data){
+        $scope.companies = data;
         $scope.isLoading = false;
-        initTable();
       }).catch(function(err){
         $scope.isLoading = false;
+        Notify.error("Error!", "Unable to fetch companies");
       });
     }
 
-    function initTable() {
-      $scope.companyTable = new ngTableParams({
-        page: 1,
-        count: $scope.perPage
-      }, {
-        total: $scope.totalItems,
-        getData: function($defer, params) {
-          Company.api.index({
-            page: params.page() - 1,
-            per_page: params.count()
-          }).then(function(data){
-            console.log(data)
-            $scope.totalItems = data.total_items;
-            $scope.companies = params.sorting() ? $filter('orderBy')(data.companies, params.orderBy()) : data.companies;
-            $defer.resolve($scope.companies);
+    $scope.deleteCompany = function(item) {
+      swal({
+        title: "Are you sure?",
+        text: "L'azienda verrà eliminata definitivamente.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F44336",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function(isConfirm){
+        if (isConfirm) {
+          Company.delete(item).then(function(data){
+            var index = $scope.companies.indexOf(item);
+            $scope.companies.splice(index, 1);
+            $scope.isLoading = false;
           }).catch(function(err){
-            Notify.error('Error!', "Unable to fetch companies");
+            $scope.isLoading = false;
+            Notify.error("Error!", "Unable to fetch companies");
           });
+        } else {
+          return false;
         }
       });
-    }
-
-
-
-
-
-
+    };
 
   });
 

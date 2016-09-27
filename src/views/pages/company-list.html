@@ -1,39 +1,51 @@
-<div class="container m-t-25 matter matter-list">
+<div class="container m-t-25">
 
   <div class="card">
-    <div class="card-header">
-      <h2>
-        <button ui-sref="company.details({id: null})"
-          class="btn btn-primary btn-icon-text waves-effect pull-right">
-          <i class="zmdi zmdi-plus"></i> Crea nuova
-        </button>
-        Aziende e Persone giuridiche <small>Una persona giuridica è un ente cui l'ordinamento giuridico attribuisce la capacità giuridica, rendendolo quindi soggetto di diritto.</small>
+    <div class="card-header ch-alt m-b-25">
+      <h2>Aziende e Persone Giuridiche
+        <small>Una persona giuridica è un ente cui l'ordinamento giuridico attribuisce la capacità giuridica, rendendolo quindi soggetto di diritto.</small>
       </h2>
+      <button class="btn bgm-blue btn-float waves-effect"
+        ui-sref="page.company-create"
+        permission permission-only="['LAWYER', 'ADMIN']"
+        tooltip-placement="bottom" uib-tooltip="Crea Nuova Azienda">
+        <i class="zmdi zmdi-account-add"></i>
+      </button>
     </div>
 
-
-    <!-- LAWYER ONLY -->
     <div class="card-body">
-      <div class="table-responsive" ng-if="companies.length && !isLoading">
-        <table ng-table="companyTable" class="table table-striped table-vmiddle">
-          <tr ng-repeat="m in companies">
-            <td data-title="'Name'" sortable="'name'">
-              <a ui-sref="company.details({id: m.id})">{{ m.name }}</a>
-            </td>
-            <td data-title="'Proprietari'" sortable="'owners'">
-              <a ng-repeat="r in m.owners" ui-sref="profile.details({id: r.id})">{{r.first_name}} {{r.last_name}}<span ng-if="$index != m.owners.length - 1">,&nbsp;</span></a>
-            </td>
-            <td data-title="'Collaboratori'" sortable="'users'">
-              <a ng-repeat="r in m.users" ui-sref="profile.details({id: r.id})">{{r.first_name}} {{r.last_name}}<span ng-if="$index != m.users.length - 1">,&nbsp;</span></a>
-              <span ng-if="m.users.length == 0">Ancora nessun collaboratore</span>
+      <table class="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th permission permission-only="['ADMIN']">Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="company in companies">
+            <td><a ui-sref="company.details({id: company.id})">{{company.name}}</a></td>
+            <td>{{company.email}}</td>
+            <td permission permission-only="['LAWYER', 'ADMIN']">
+              <ul class="actions">
+                <li>
+                  <a href="" ui-sref="company.details({id:company.id, editMode:true})"
+                    tooltip-placement="bottom" uib-tooltip="Modifica">
+                    <i class="zmdi zmdi-edit"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="" ng-click="deleteCompany(company)"
+                    tooltip-placement="bottom" uib-tooltip="Elimina">
+                   <i class="zmdi zmdi-delete"></i>
+                  </a>
+                </li>
+              </ul>
             </td>
           </tr>
-        </table>
-      </div>
+        </tbody>
+      </table>
     </div>
-
-
-
   </div>
 
 </div>
