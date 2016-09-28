@@ -125,7 +125,7 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $window, $te
     }
     else if(toState.title === 'Login' && Auth.isAuthenticated()) {
       event.preventDefault();
-      $state.go('profile.details', $rootScope.current_user);
+      $state.go('page.matter-list');
     }
   });
 
