@@ -10,6 +10,7 @@
 
     $scope.editProfileInfo = !!$stateParams.editMode;
     $scope.isOwner = false;
+    $scope.showOwnerInput = false;
     $scope.ownerObj = undefined;
 
     function activate() {
@@ -61,8 +62,9 @@
     };
 
     $scope.addOwner = function(owner) {
-      if(owner) $scope.company.owners.push(owner);
-      $scope.ownerObj = undefined;
+      if(owner && owner.id)
+        $scope.company.owners.push(angular.copy(owner));
+      $scope.ownerObj = {};
     };
 
     $scope.removeOwner = function(owner) {
@@ -76,6 +78,10 @@
       return User.search({q: owner}).then(function(users){
         return users;
       });
+    };
+
+    $scope.showAddOwner = function() {
+      $scope.showOwnerInput = !$scope.showOwnerInput;
     };
 
     $scope.getLocation = function(val) {

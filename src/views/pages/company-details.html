@@ -101,15 +101,16 @@
       <dl class="dl-horizontal">
         <dt class="p-t-10">Proprietari</dt>
         <dd>
-          <div>
+          <div class="m-t-10">
             <ul style="padding-left: 15px;">
               <li ng-repeat="owner in company.owners">
                 {{owner.name}}
                 <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
               </li>
             </ul>
+            <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
           </div>
-          <div>
+          <div ng-if="showOwnerInput" class="m-t-10">
             <input type="text" ng-model="ownerObj"
             uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
             class="form-control input-inline" placeholder="Inserisci Proprietario">

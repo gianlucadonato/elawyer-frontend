@@ -41,8 +41,8 @@
             return item.id;
           });
           Company.create(company).then(function(data){
-            if(scope.searchCustomerCb)
-              scope.searchCustomerCb(company);
+            if(scope.newCompanyCb)
+              scope.newCompanyCb(company);
             scope.currentModal.dismiss();
           }).catch(function(err){
             Notify.error("Error!", "Unable to create company");

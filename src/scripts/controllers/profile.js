@@ -25,7 +25,6 @@
         .get({id: userId})
         .then(function(user){
           $scope.user = user;
-          console.log('user', user);
         })
         .catch(function(err){
           Notify.error('Error!','Unable to fetch user');
@@ -48,11 +47,7 @@
       }
     };
 
-    $scope.addCompany = function(resource, options) {
-      console.log('addCompany', resource, options);
-      if(options.action === 'actionSelect') {
-        console.log('isSelected');
-      }
+    $scope.addCompany = function(resource) {
       $scope.user.companies.push(resource);
     };
 
