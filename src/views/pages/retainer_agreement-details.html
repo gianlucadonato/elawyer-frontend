@@ -228,7 +228,8 @@
             <button class="btn waves-effect" ng-click="showNext = false">
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
             </button>
-            <span ng-if="current_user.id != retainer_agreement.owner.id">
+            <span ng-if="current_user.id == retainer_agreement.matter.customer.id ||
+              current_user.companies.indexOf(retainer_agreement.matter.customer.id)">
               <button class="btn btn-primary waves-effect" ng-click="openPaymentModal()">
                 <span>Effettua Pagamento</span>
               </button>
