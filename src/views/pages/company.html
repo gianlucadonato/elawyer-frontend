@@ -27,20 +27,9 @@
             <h2>Proprietari ({{company.owners.length || 0}})</h2>
             <div class="pmob-body">
               <div class="row">
-                <a ui-sref="profile.details({id:owner.id})" class="col-xs-2" ng-repeat="owner in company.owners">
-                  <img class="img-circle" ng-src="{{owner.avatar_url}}" default-src random="true"
-                    tooltip-placement="bottom" uib-tooltip="{{owner.name}}">
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="pmo-block pmo-items hidden-xs">
-            <h2>Collaboratori ({{company.users.length || 0}})</h2>
-            <div class="pmob-body">
-              <div class="row">
-                <a ui-sref="profile.details({id:partner.id})" class="col-xs-2" ng-repeat="partner in company.users">
-                  <img class="img-circle" ng-src="{{partner.avatar_url}}" default-src random="true"
-                    tooltip-placement="bottom" uib-tooltip="{{partner.name}}">
+                <a ui-sref="profile.details(owner)" class="col-xs-2 img-circle-block" ng-repeat="owner in company.owners"
+                  tooltip-placement="bottom" uib-tooltip="{{owner.name}}">
+                  <img class="img-circle" ng-src="{{owner.avatar_url}}" default-src random="true">
                 </a>
               </div>
             </div>

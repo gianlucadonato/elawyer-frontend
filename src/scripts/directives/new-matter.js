@@ -35,9 +35,9 @@
           });
         });
 
-        scope.setCustomer = function(data, type) {
-          scope.matter.customer = data;
-          scope.matter.customer_type = type; // user | company
+        scope.setCustomer = function(resource, options) {
+          scope.matter.customer = resource;
+          scope.matter.customer_type = options.resourceType; // user | company
         };
 
         scope.addArea = function(){

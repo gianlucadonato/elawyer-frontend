@@ -1,0 +1,91 @@
+<!-- CREATE COMPANY -->
+<div class="card">
+  <div class="card-header ch-alt">
+    <h3 style="margin:0; font-weight:300;">
+      <i class="zmdi zmdi-city m-r-5"></i> Crea Nuova Azienda
+    </h3>
+  </div>
+  <div class="card-body card-padding">
+    <form class="pmbb-edit" ng-submit="createCompany(company)">
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Ragione Sociale</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.name" type="text" class="form-control" placeholder="eg. ACME" required>
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Email</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.email" type="email" class="form-control"  placeholder="eg. acme@gmail.com">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Descrizione</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.description" type="text" class="form-control" placeholder="Inserisci Descrizione">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Sede legale</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="company.address" placeholder="Inserisci Indirizzo" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Fisso</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Cellulare</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Partita Iva</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.vat_number" type="text" class="form-control" placeholder="P.Iva">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Proprietari</dt>
+        <dd>
+          <div class="m-t-10">
+            <ul style="padding-left: 15px;">
+              <li ng-repeat="owner in company.owners">
+                {{owner.name}}
+                <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
+              </li>
+            </ul>
+            <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
+          </div>
+          <div ng-if="showOwnerInput" class="m-t-10">
+            <input type="text" ng-model="ownerObj"
+            uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
+            class="form-control input-inline" placeholder="Inserisci Proprietario">
+            <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
+          </div>
+        </dd>
+      </dl>
+      <div class="m-t-30">
+        <button type="submit" class="btn btn-primary btn-block">SALVA</button>
+      </div>
+    </form>
+  </div>
+</div>

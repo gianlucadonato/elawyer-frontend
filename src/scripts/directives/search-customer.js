@@ -6,8 +6,8 @@
   * Open Customer Search Modal
   =========================================================*/
 
-  App.directive('searchCustomer', ['$uibModal', 'User', 'Company', 'Notify', '$http',
-  function($uibModal, User, Company, Notify, $http) {
+  App.directive('searchCustomer', ['$uibModal', 'User', 'Company', 'Notify', '$http', '$localStorage',
+  function($uibModal, User, Company, Notify, $http, $localStorage) {
     return {
       restrict: 'A',
       scope: {
@@ -27,8 +27,10 @@
           });
         });
 
-        scope.tabUser = true;
-        scope.tabCompany = false;
+        scope.isTabUserActive = true;
+        scope.isTabCompanyActive = false;
+        scope.showTabUser = true;
+        scope.showTabCompany = true;
         scope.showCreateUser = false;
         scope.showCreateCompany = false;
         scope.query = '';
@@ -43,6 +45,19 @@
             scope.companies = companies;
           });
         };
+
+        if(attrs.only) {
+          switch(attrs.only) {
+            case 'user':
+              scope.showTabCompany = false;
+              scope.isTabUserActive = true;
+              break;
+            case 'company':
+              scope.showTabUser = false;
+              scope.isTabCompanyActive = true;
+              break;
+          }
+        }
 
         scope.createNewCustomer = function(type) {
           switch(type) {
@@ -60,16 +75,24 @@
           scope.showCreateCompany = false;
         };
 
-        scope.selectUser = function(user) {
+        scope.selectUser = function(user, action) {
+          if(!action) action = 'actionSelect';
           if(scope.searchCustomerCb)
-            scope.searchCustomerCb(user, 'user');
+            scope.searchCustomerCb(user, {
+              resourceType: 'user',
+              action: action
+            });
           scope.currentModal.dismiss();
           scope.goBack();
         };
 
-        scope.selectCompany = function(company) {
+        scope.selectCompany = function(company, action) {
+          if(!action) action = 'actionSelect';
           if(scope.searchCustomerCb)
-            scope.searchCustomerCb(company, 'company');
+            scope.searchCustomerCb(company, {
+              resourceType: 'company',
+              action: action
+            });
           scope.currentModal.dismiss();
           scope.goBack();
         };
@@ -84,7 +107,7 @@
           User
             .create(data)
             .then(function(user){
-              scope.selectUser(user);
+              scope.selectUser(user, 'actionCreate');
               Notify.success('OK!','User created successfully!');
             })
             .catch(function(err){
@@ -94,18 +117,19 @@
 
         // Create Company
         scope.company = Company.getTemplate();
+        scope.showOwnerInput = false;
         scope.ownerObj = undefined;
-        scope.collabObj = undefined;
 
-        scope.createCompany = function(company){
-          company.owners = company.owners.map(function(item){
-            return item.id;
-          });
-          company.users = company.users.map(function(item){
+        if($localStorage.current_user)
+          scope.company.owners.push($localStorage.current_user);
+
+        scope.createCompany = function(data){
+          var company = angular.copy(data);
+          company.owners = (company.owners || []).map(function(item){
             return item.id;
           });
           Company.create(company).then(function(data){
-            scope.selectCompany(data);
+            scope.selectCompany(data, 'actionCreate');
           }).catch(function(err){
             Notify.error("Error!", "Unable to create company");
           });
@@ -121,22 +145,16 @@
           scope.company.owners.splice(index, 1);
         };
 
-        scope.addCollab = function(collab) {
-          if(collab) scope.company.users.push(collab);
-          scope.collabObj = undefined;
-        };
-
-        scope.removeCollab = function(collab) {
-          var index = scope.company.users.indexOf(collab);
-          scope.company.users.splice(index, 1);
-        };
-
         scope.getOwners = function(owner) {
           return User.search({q: owner}).then(function(users){
             return users;
           });
         };
 
+        scope.showAddOwner = function() {
+          scope.showOwnerInput = !scope.showOwnerInput;
+        };
+        
         scope.getLocation = function(val) {
           return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
             params: {

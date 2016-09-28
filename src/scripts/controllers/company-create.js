@@ -6,24 +6,25 @@
   * Company Create Controller
   =========================================================*/
 
-  App.controller('CompanyCreateCtrl', function($scope, $state, $http, Company, User, Notify) {
+  App.controller('CompanyCreateCtrl', function($scope, $state, $http, Company, User, Notify, $localStorage) {
 
-    $scope.isLoading = false;
     $scope.company = Company.getTemplate();
+    $scope.showOwnerInput = false;
     $scope.ownerObj = undefined;
 
-    $scope.createCompany = function(company){
-      $scope.isLoading = true;
-      company.owners = company.owners.map(function(item){
+    if($localStorage.current_user)
+      $scope.company.owners.push($localStorage.current_user);
+
+    $scope.createCompany = function(data){
+      var company = angular.copy(data);
+      company.owners = (company.owners || []).map(function(item){
         return item.id;
       });
       Company.create(company).then(function(data){
-        $scope.isLoading = false;
-        $scope.company = data;
+        $scope.company.id = data.id;
         Notify.success("OK!", "Azienda creata con successo!");
         $state.go('page.company-list');
       }).catch(function(err){
-        $scope.isLoading = false;
         Notify.error("Error!", "Unable to fetch companies");
       });
     };
@@ -38,14 +39,8 @@
       $scope.company.owners.splice(index, 1);
     };
 
-    $scope.addCollab = function(collab) {
-      if(collab) $scope.company.users.push(collab);
-      $scope.callabObj = undefined;
-    };
-
-    $scope.removeCollab = function(collab) {
-      var index = $scope.company.users.indexOf(collab);
-      $scope.company.users.splice(index, 1);
+    $scope.showAddOwner = function() {
+      $scope.showOwnerInput = !$scope.showOwnerInput;
     };
 
     $scope.getOwners = function(owner) {

@@ -22,20 +22,9 @@
           <h2>Proprietari ({{company.owners.length || 0}})</h2>
           <div class="pmob-body">
             <div class="row">
-              <a ui-sref="profile.details({id:owner.id})" class="col-xs-2" ng-repeat="owner in company.owners">
-                <img class="img-circle" ng-src="{{owner.avatar_url}}" default-src random="true"
-                  tooltip-placement="bottom" uib-tooltip="{{owner.name}}">
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="pmo-block pmo-items hidden-xs">
-          <h2>Collaboratori ({{company.users.length || 0}})</h2>
-          <div class="pmob-body">
-            <div class="row">
-              <a ui-sref="profile.details({id:partner.id})" class="col-xs-2" ng-repeat="partner in company.users">
-                <img class="img-circle" ng-src="{{partner.avatar_url}}" default-src random="true"
-                  tooltip-placement="bottom" uib-tooltip="{{partner.name}}">
+              <a ui-sref="profile.details(owner)" class="col-xs-2" ng-repeat="owner in company.owners"
+                tooltip-placement="bottom" uib-tooltip="{{owner.name}}">
+                <img class="img-circle" ng-src="{{owner.avatar_url}}" default-src random="true">
               </a>
             </div>
           </div>
@@ -112,38 +101,20 @@
               <dl class="dl-horizontal">
                 <dt class="p-t-10">Proprietari</dt>
                 <dd>
-                  <div>
+                  <div class="m-t-10">
                     <ul style="padding-left: 15px;">
                       <li ng-repeat="owner in company.owners">
                         {{owner.name}}
                         <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
                       </li>
                     </ul>
+                    <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
                   </div>
-                  <div>
+                  <div ng-if="showOwnerInput" class="m-t-10">
                     <input type="text" ng-model="ownerObj"
                     uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
                     class="form-control input-inline" placeholder="Inserisci Proprietario">
                     <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
-                  </div>
-                </dd>
-              </dl>
-              <dl class="dl-horizontal">
-                <dt class="p-t-10">Collaboratori</dt>
-                <dd>
-                  <div>
-                    <ul style="padding-left: 15px;">
-                      <li ng-repeat="collab in company.users">
-                        {{collab.name}}
-                        <a href="" ng-click="removeCollab(collab)" style="margin-left:5px;color:red;">X</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <input type="text" ng-model="collabObj"
-                    uib-typeahead="collab as collab.name for collab in getOwners($viewValue)"
-                    class="form-control input-inline" placeholder="Inserisci Proprietario">
-                    <a href="" ng-click="addCollab(collabObj)" class="btn btn-orange waves-effect">Aggiungi</a>
                   </div>
                 </dd>
               </dl>

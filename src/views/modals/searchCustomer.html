@@ -1,20 +1,21 @@
-<div style="background:#FFF;">
+<div class="search-customer">
   <div class="card" ng-if="!showCreateUser && !showCreateCompany">
     <div class="card-header">
-      <h2>Ricerca Utente o Persona Giuridica
-        <small>Ricerca per nome o cognome un utente/azienda</small>
+      <h2>Ricerca
+        <span ng-if="showTabUser">Utente</span>
+        <span ng-if="showTabUser && showTabCompany">o</span>
+        <span ng-if="showTabCompany">Persona Giuridica</span>
+        <small>Ricerca e Seleziona un Utente/Azienda</small>
       </h2>
       <div class="input-group">
         <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
-        <div class="fg-line">
-          <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query" ng-change="search(query)">
-        </div>
+        <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query" ng-change="search(query)">
       </div>
     </div>
     <div class="card-body">
       <tabset justified="true" class="modal-tabs-content">
         <!-- UTENTI -->
-        <tab heading="UTENTI" active="tabUser">
+        <tab heading="UTENTI" active="isTabUserActive" ng-if="showTabUser">
           <div class="p-l-25 p-r-25">
             <div class="contacts c-profile clearfix row" ng-if="users.length">
               <div class="col-md-3 col-sm-6 col-xs-6" ng-repeat="user in users">
@@ -43,7 +44,7 @@
           </div>
         </tab>
         <!-- AZIENDE -->
-        <tab heading="AZIENDE" active="tabCompany">
+        <tab heading="AZIENDE" active="isTabCompanyActive" ng-if="showTabCompany">
           <div class="p-l-25 p-r-25">
             <div class="contacts c-profile clearfix row" ng-if="companies.length">
               <div class="col-md-3 col-sm-6 col-xs-6" ng-repeat="company in companies">
@@ -78,7 +79,7 @@
   <!-- CREATE USER -->
   <div class="card" ng-if="showCreateUser">
     <div class="card-header ch-alt">
-      <button ng-click="goBack()">
+      <button ng-click="goBack()" class="m-b-20">
         <i class="zmdi zmdi-arrow-left"></i> INDIETRO
       </button>
     </div>
@@ -113,7 +114,7 @@
           <dt class="p-t-10">Data di Nascita</dt>
           <dd>
             <div class="dtp-container dropdown fg-line">
-              <input type='text' class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
+              <input type="text" class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
             </div>
           </dd>
         </dl>
@@ -183,7 +184,7 @@
   <!-- CREATE COMPANY -->
   <div class="card" ng-if="showCreateCompany">
     <div class="card-header ch-alt">
-      <button ng-click="goBack()">
+      <button ng-click="goBack()" class="m-b-20">
         <i class="zmdi zmdi-arrow-left"></i> INDIETRO
       </button>
     </div>
@@ -249,38 +250,20 @@
         <dl class="dl-horizontal">
           <dt class="p-t-10">Proprietari</dt>
           <dd>
-            <div>
+            <div class="m-t-10">
               <ul style="padding-left: 15px;">
                 <li ng-repeat="owner in company.owners">
                   {{owner.name}}
                   <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
                 </li>
               </ul>
+              <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
             </div>
-            <div>
+            <div ng-if="showOwnerInput" class="m-t-10">
               <input type="text" ng-model="ownerObj"
               uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
               class="form-control input-inline" placeholder="Inserisci Proprietario">
               <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
-            </div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt class="p-t-10">Collaboratori</dt>
-          <dd>
-            <div>
-              <ul style="padding-left: 15px;">
-                <li ng-repeat="collab in company.users">
-                  {{collab.name}}
-                  <a href="" ng-click="removeCollab(collab)" style="margin-left:5px;color:red;">X</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <input type="text" ng-model="collabObj"
-              uib-typeahead="collab as collab.name for collab in getOwners($viewValue)"
-              class="form-control input-inline" placeholder="Inserisci Collaboratore">
-              <a href="" ng-click="addCollab(collabObj)" class="btn btn-orange waves-effect">Aggiungi</a>
             </div>
           </dd>
         </dl>
