@@ -36,14 +36,6 @@
         <dd>{{ user.domicile }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Nome Società</dt>
-        <dd>{{ user.company }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt>Sede Società</dt>
-        <dd>{{ user.company_address }}</dd>
-      </dl>
-      <dl class="dl-horizontal">
         <dt>Codice Fiscale</dt>
         <dd>{{ user.fiscal_code }}</dd>
       </dl>
@@ -52,11 +44,11 @@
         <dd>{{ user.vat_number }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Telefono</dt>
+        <dt>Telefono Fisso</dt>
         <dd>{{ user.phone }}</dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Cellulare</dt>
+        <dt>Telefono Cellulare</dt>
         <dd>{{ user.mobile_phone }}</dd>
       </dl>
     </div>
@@ -66,7 +58,7 @@
         <dt class="p-t-10">Nome</dt>
         <dd>
           <div class="fg-line">
-            <input data-ng-model="user.first_name" type="text" class="form-control" value="{{ user.first_name }}" placeholder="eg. Mario">
+            <input data-ng-model="user.first_name" type="text" class="form-control"  placeholder="eg. Mario">
           </div>
         </dd>
       </dl>
@@ -74,7 +66,7 @@
         <dt class="p-t-10">Cognome</dt>
         <dd>
           <div class="fg-line">
-            <input data-ng-model="user.last_name" type="text" class="form-control" value="{{ user.last_name }}" placeholder="eg. Rossi">
+            <input data-ng-model="user.last_name" type="text" class="form-control" placeholder="eg. Rossi">
           </div>
         </dd>
       </dl>
@@ -119,22 +111,6 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Nome Società</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.company" type="text" class="form-control" placeholder="eg. ACME ">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
-        <dt class="p-t-10">Sede Società</dt>
-        <dd>
-          <div class="fg-line">
-            <input data-ng-model="user.company_address" type="text" class="form-control">
-          </div>
-        </dd>
-      </dl>
-      <dl class="dl-horizontal">
         <dt class="p-t-10">Codice Fiscale</dt>
         <dd>
           <div class="fg-line">
@@ -150,19 +126,8 @@
           </div>
         </dd>
       </dl>
-      <!-- <dl class="dl-horizontal">
-        <dt class="p-t-10">Regime Matrimoniale</dt>
-        <dd>
-          <div class="fg-line">
-            <select class="form-control" ng-model="user.matrimonial_regime">
-              <option value="separation">Separazione dei beni</option>
-              <option value="sharing">Comunione dei beni</option>
-            </select>
-          </div>
-        </dd>
-      </dl> -->
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Telefono</dt>
+        <dt class="p-t-10">Telefono Fisso</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
@@ -170,7 +135,7 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt class="p-t-10">Cellulare</dt>
+        <dt class="p-t-10">Telefono Cellulare</dt>
         <dd>
           <div class="fg-line">
             <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">

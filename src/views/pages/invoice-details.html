@@ -2,7 +2,8 @@
 
   <div ng-if="!invoice.is_paid" class="alert alert-danger top-alert" role="alert">
     <span>Questa fattura non è ancora stata pagata</span>
-    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()" ng-if="current_user.id === invoice.matter.customer.id">
+    <button class="btn btn-success waves-effect" ng-click="openPaymentModal()"
+      ng-if="current_user.id === invoice.matter.customer.id || current_user.companies.indexOf(invoice.matter.customer.id)">
       Paga saldo di €
       <span ng-if="!invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.total_price | prettyNumber}}</span>
       <span ng-if="invoice.retainer_agreement.apply_withholding_tax">{{ invoice.info.final_price | prettyNumber}}</span>

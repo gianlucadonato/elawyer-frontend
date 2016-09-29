@@ -18,10 +18,11 @@
             <tr>
               <td>{{matter.title}}</td>
               <td permission permission-only="['LAWYER', 'ADMIN']">
-                <a ui-sref="profile.details(matter.customer)">{{matter.customer.first_name}} {{matter.customer.last_name}}</a>
+                <a ui-sref="profile.details(matter.customer)" ng-if="matter.customer_type == 'User'">{{matter.customer.name}}</a>
+                <a ui-sref="company.details(matter.customer)" ng-if="matter.customer_type == 'Company'">{{matter.customer.name}}</a>
               </td>
               <td permission permission-only="['CUSTOMER', 'ADMIN']">
-                <a ui-sref="profile.details(matter.owner)">{{matter.owner.first_name}} {{matter.owner.last_name}}</a>
+                <a ui-sref="profile.details(matter.owner)">{{matter.owner.name}}</a>
               </td>
               <td>
                 <div class="flag flag-success" ng-if="matter.status == 'open'">Open</div>

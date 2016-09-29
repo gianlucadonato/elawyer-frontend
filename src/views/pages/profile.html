@@ -34,6 +34,22 @@
               </h2> {{user.email}}
             </div>
           </div>
+          <div class="pmo-block pmo-items hidden-xs" style="padding-bottom:0;">
+            <h2 class="flex space-between">
+              <span>Aziende ({{user.companies.length || 0}})</span>
+              <a href="" class="add-btn" new-company new-company-cb="addCompany">
+                <i class="zmdi zmdi-plus"></i> Aggiungi
+              </a>
+            </h2>
+            <div class="pmob-body">
+              <div class="row">
+                <a ui-sref="company.details(company)" class="col-xs-2 img-circle-block" ng-repeat="company in user.companies">
+                  <img class="img-circle" ng-src="{{company.avatar_url}}" default-src company="true"
+                    tooltip-placement="bottom" uib-tooltip="{{company.name}}">
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="pm-body clearfix">

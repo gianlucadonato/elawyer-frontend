@@ -1,0 +1,277 @@
+<div class="search-customer">
+  <div class="card" ng-if="!showCreateUser && !showCreateCompany">
+    <div class="card-header">
+      <h2>Ricerca
+        <span ng-if="showTabUser">Utente</span>
+        <span ng-if="showTabUser && showTabCompany">o</span>
+        <span ng-if="showTabCompany">Persona Giuridica</span>
+        <small>Ricerca e Seleziona un Utente/Azienda</small>
+      </h2>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+        <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query" ng-change="search(query)">
+      </div>
+    </div>
+    <div class="card-body">
+      <tabset justified="true" class="modal-tabs-content">
+        <!-- UTENTI -->
+        <tab heading="UTENTI" active="isTabUserActive" ng-if="showTabUser">
+          <div class="p-l-25 p-r-25">
+            <div class="contacts c-profile clearfix row" ng-if="users.length">
+              <div class="col-md-3 col-sm-6 col-xs-6" ng-repeat="user in users">
+                <div class="c-item">
+                  <a href="" class="ci-avatar">
+                    <img ng-src="{{user.avatar_url || '/images/avatar/3.png'}}" alt="">
+                  </a>
+                  <div class="c-info">
+                    <strong>{{user.name}}</strong>
+                    <small>{{user.email}}</small>
+                  </div>
+                  <div class="c-footer">
+                    <button class="waves-effect" ng-click="selectUser(user)">
+                      <i class="zmdi zmdi-person-add"></i> Seleziona
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-10 text-center">
+              <h4>L'utente che stai cercando non è ancora registrato ?</h4>
+              <a class="btn btn-warning waves-effect" ng-click="createNewCustomer('user')">
+                <i class="zmdi zmdi-plus"></i> Invitalo impostando il suo account
+              </a>
+            </div>
+          </div>
+        </tab>
+        <!-- AZIENDE -->
+        <tab heading="AZIENDE" active="isTabCompanyActive" ng-if="showTabCompany">
+          <div class="p-l-25 p-r-25">
+            <div class="contacts c-profile clearfix row" ng-if="companies.length">
+              <div class="col-md-3 col-sm-6 col-xs-6" ng-repeat="company in companies">
+                <div class="c-item">
+                  <a href="" class="ci-avatar">
+                    <img ng-src="{{company.avatar_url || '/images/avatar/3.png'}}" alt="">
+                  </a>
+                  <div class="c-info">
+                    <strong>{{company.name}}</strong>
+                    <small>{{company.email}}</small>
+                  </div>
+                  <div class="c-footer">
+                    <button class="waves-effect" ng-click="selectCompany(company)">
+                      <i class="zmdi zmdi-person-add"></i> Seleziona
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-10 text-center">
+              <h4>L'azienda che stai cercando non è ancora registrata ?</h4>
+              <a class="btn btn-warning waves-effect" ng-click="createNewCustomer('company')">
+                <i class="zmdi zmdi-plus"></i> Crea Azienda
+              </a>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+
+  <!-- CREATE USER -->
+  <div class="card" ng-if="showCreateUser">
+    <div class="card-header ch-alt">
+      <button ng-click="goBack()" class="m-b-20">
+        <i class="zmdi zmdi-arrow-left"></i> INDIETRO
+      </button>
+    </div>
+    <div class="card-body card-padding">
+      <h4><i class="zmdi zmdi-account-circle m-r-5"></i> Crea Nuovo Utente</h4>
+      <form class="pmbb-edit" ng-submit="createUser(user)">
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Nome</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.first_name" type="text" class="form-control" placeholder="eg. Mario" required>
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Cognome</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.last_name" type="text" class="form-control" placeholder="eg. Rossi" required>
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Email</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.email" type="email" class="form-control"  placeholder="eg. mrossi@gmail.com" required>
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Data di Nascita</dt>
+          <dd>
+            <div class="dtp-container dropdown fg-line">
+              <input type="text" class="form-control" data-input-mask="{mask: '00/00/0000'}" placeholder="eg. 08/06/1990" ng-model="user.birthday">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Luogo di Nascita</dt>
+          <dd>
+            <div class="fg-line">
+              <input type="text" ng-model="user.birth_place" placeholder="Luogo di Nascita" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Residenza</dt>
+          <dd>
+            <div class="fg-line">
+              <input type="text" ng-model="user.residence" placeholder="Residenza" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Domicilio</dt>
+          <dd>
+            <div class="fg-line">
+              <input type="text" ng-model="user.domicile" placeholder="Domicilio" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Codice Fiscale</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.fiscal_code" type="text" class="form-control" placeholder="Codice Fiscale">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Partita Iva</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.vat_number" type="text" class="form-control" placeholder="P.Iva">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Telefono Fisso</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Telefono Cellulare</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+            </div>
+          </dd>
+        </dl>
+        <div class="m-t-30">
+          <button type="submit" class="btn btn-primary btn-block">SALVA</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE COMPANY -->
+  <div class="card" ng-if="showCreateCompany">
+    <div class="card-header ch-alt">
+      <button ng-click="goBack()" class="m-b-20">
+        <i class="zmdi zmdi-arrow-left"></i> INDIETRO
+      </button>
+    </div>
+    <div class="card-body card-padding">
+      <h4><i class="zmdi zmdi-city m-r-5"></i> Crea Nuova Azienda</h4>
+      <form class="pmbb-edit" ng-submit="createCompany(company)">
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Ragione Sociale</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.name" type="text" class="form-control" placeholder="eg. ACME" required>
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Email</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.email" type="email" class="form-control"  placeholder="eg. acme@gmail.com">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Descrizione</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.description" type="text" class="form-control" placeholder="Inserisci Descrizione">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Sede legale</dt>
+          <dd>
+            <div class="fg-line">
+              <input type="text" ng-model="company.address" placeholder="Inserisci Indirizzo" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Telefono Fisso</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Telefono Cellulare</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Partita Iva</dt>
+          <dd>
+            <div class="fg-line">
+              <input data-ng-model="company.vat_number" type="text" class="form-control" placeholder="P.Iva">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Proprietari</dt>
+          <dd>
+            <div class="m-t-10">
+              <ul style="padding-left: 15px;">
+                <li ng-repeat="owner in company.owners">
+                  {{owner.name}}
+                  <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
+                </li>
+              </ul>
+              <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
+            </div>
+            <div ng-if="showOwnerInput" class="m-t-10">
+              <input type="text" ng-model="ownerObj"
+              uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
+              class="form-control input-inline" placeholder="Inserisci Proprietario">
+              <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
+            </div>
+          </dd>
+        </dl>
+        <div class="m-t-30">
+          <button type="submit" class="btn btn-primary btn-block">SALVA</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

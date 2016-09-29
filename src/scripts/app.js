@@ -129,7 +129,7 @@ App.run(function($rootScope, $state, $stateParams, Auth, RoleStore, amMoment, $q
     },
     move: function() {
       if (this.isRoot())
-        $state.go('profile.details', $rootScope.current_user);
+        $state.go('page.matter-list');
       else
         $state.go(this.url.name, this.params);
     },
@@ -140,28 +140,25 @@ App.run(function($rootScope, $state, $stateParams, Auth, RoleStore, amMoment, $q
     }
   };
 
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
 
   // Redirect user to login page if not authenticated
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams, $window) {
 
-
-    console.log("localhost:3000/#/forms/57e92a9933dfe706308388b2/answer?t=10f7e4a4d30cd789$45e083a72a171006&e=therstion1931@rhyta.com", toState, toParams)
-
-    if(toState.requireLogin && !Auth.isAuthenticated() && toState.title != 'Comfirm') {
+    if(toState.requireLogin && !Auth.isAuthenticated() && toState.title !== 'Comfirm') {
 
       event.preventDefault();
 
       redirect.set(toState, toParams);
-
-      function getParameterByName(name, url) {
-          if (!url) url = window.location.href;
-          name = name.replace(/[\[\]]/g, "\\$&");
-          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-              results = regex.exec(url);
-          if (!results) return null;
-          if (!results[2]) return '';
-          return decodeURIComponent(results[2].replace(/\+/g, " "));
-      }
 
       if (getParameterByName('t')) {
         //window.location.hash = '#/change_password?t='+ getParameterByName('t') + "&e=" + getParameterByName('e');
@@ -174,11 +171,7 @@ App.run(function($rootScope, $state, $stateParams, Auth, RoleStore, amMoment, $q
 
     }
     else if((fromState.title === 'Login' || fromState.title === 'Change password') && Auth.isAuthenticated()) {
-
       event.preventDefault();
-
-      console.log('moving')
-
       //if we are logging move to desired location
       redirect.move();
     }

@@ -14,19 +14,16 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.customer.id">
-              <h4>Spett.le {{retainer_agreement.matter.customer.name}}</h4>
+            <div class="pull-right text-right">
+              <h4>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                {{retainer_agreement.matter.customer.name}}
+              </h4>
               <p>
                 <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
-              </p>
-            </div>
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.company.id">
-              <h4>All'attenzione di {{retainer_agreement.matter.company.name}}</h4>
-              <p>
-                <span ng-if="retainer_agreement.matter.company.address">{{retainer_agreement.matter.company.address}}</span><br/>
-                <span ng-if="retainer_agreement.matter.company.vat">P.I. {{retainer_agreement.matter.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -231,7 +228,8 @@
             <button class="btn waves-effect" ng-click="showNext = false">
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
             </button>
-            <span ng-if="current_user.id != retainer_agreement.owner.id">
+            <span ng-if="current_user.id == retainer_agreement.matter.customer.id ||
+              current_user.companies.indexOf(retainer_agreement.matter.customer.id)">
               <button class="btn btn-primary waves-effect" ng-click="openPaymentModal()">
                 <span>Effettua Pagamento</span>
               </button>

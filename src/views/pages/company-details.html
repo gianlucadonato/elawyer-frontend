@@ -1,0 +1,127 @@
+<div class="pmb-block">
+  <div class="pmbb-header">
+    <h2><i class="zmdi zmdi-account-circle m-r-5"></i> Informazioni Azienda</h2>
+    <ul class="actions" ng-if="isOwner">
+      <li class="dropdown">
+        <a href="" data-ng-click="toggleProfileInfo()">
+          <i class="zmdi zmdi-edit"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="pmbb-body p-l-30">
+    <div class="pmbb-view" data-ng-if="!editProfileInfo">
+      <dl class="dl-horizontal">
+        <dt>Ragione Sociale</dt>
+        <dd>{{ company.name }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Email</dt>
+        <dd>{{ company.email }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Descrizione</dt>
+        <dd>{{ company.description }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Sede Legale</dt>
+        <dd>{{ company.address }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Telefono Fisso</dt>
+        <dd>{{ company.phone }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Telefono Cellulare</dt>
+        <dd>{{ company.mobile_phone }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>P.IVA</dt>
+        <dd>{{company.vat}}</dd>
+      </dl>
+    </div>
+
+    <form class="pmbb-edit" data-ng-if="editProfileInfo">
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Ragione Sociale</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.name" type="text" class="form-control" placeholder="eg. ACME">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Email</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.email" type="email" class="form-control"  placeholder="eg. acme@gmail.com">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Descrizione</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.description" type="text" class="form-control" placeholder="Inserisci Descrizione">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Sede legale</dt>
+        <dd>
+          <div class="fg-line">
+            <input type="text" ng-model="company.address" placeholder="Inserisci Indirizzo" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Fisso</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Cellulare</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Partita Iva</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="company.vat_number" type="text" class="form-control" placeholder="P.Iva">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Proprietari</dt>
+        <dd>
+          <div class="m-t-10">
+            <ul style="padding-left: 15px;">
+              <li ng-repeat="owner in company.owners">
+                {{owner.name}}
+                <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
+              </li>
+            </ul>
+            <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
+          </div>
+          <div ng-if="showOwnerInput" class="m-t-10">
+            <input type="text" ng-model="ownerObj"
+            uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
+            class="form-control input-inline" placeholder="Inserisci Proprietario">
+            <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
+          </div>
+        </dd>
+      </dl>
+      <div class="m-t-30">
+        <button class="btn btn-primary btn-sm" data-ng-click="updateCompany(company)">SALVA</button>
+        <button class="btn btn-link btn-sm" data-ng-click="toggleProfileInfo()" >ANNULLA</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -47,7 +47,22 @@
       }
     };
 
-    this.updateUser = function(user) {
+    $scope.addCompany = function(resource) {
+      $scope.user.companies.push(resource);
+    };
+
+    /*====================================================
+     * Edit User Infos
+     * =====================================================*/
+    $scope.toggleProfileInfo = function(type) {
+      $scope.editProfileInfo = !$scope.editProfileInfo;
+    };
+
+    $scope.toggleBillingInfo = function(type) {
+      $scope.editBillingInfo = !$scope.editBillingInfo;
+    };
+
+    $scope.updateUser = function(user) {
       if(user.birthday) {
         // Transform data in ms
         var bd = user.birthday.split('/');
@@ -65,19 +80,6 @@
           Notify.error('Error!','Unable to update user');
         });
     };
-
-    /*====================================================
-     * Edit User Infos
-     * =====================================================*/
-    $scope.toggleProfileInfo = function(type) {
-      $scope.editProfileInfo = !$scope.editProfileInfo;
-    };
-
-    $scope.toggleBillingInfo = function(type) {
-      $scope.editBillingInfo = !$scope.editBillingInfo;
-    };
-
-    $scope.updateUser = this.updateUser;
 
     $scope.getLocation = function(val) {
       return $http.get('//maps.googleapis.com/maps/api/geocode/json', {

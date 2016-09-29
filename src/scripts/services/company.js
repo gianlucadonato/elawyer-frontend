@@ -2,24 +2,26 @@
   'use strict';
 
   /**=========================================================
-  * File: matter.js
-  * Matter Service
+  * File: company.js
+  * Company Service
   =========================================================*/
 
-  App.factory('Company', function ($rootScope, $q, $http, API, Service) {
+  App.factory('Company', function ($q, $http, API) {
 
     var api = {};
-    var editor = {};
-    var template = {
-      name: '',
-      email: '',
-      mobile_phone: '',
-      phone: '',
-      vat: '',
-      address: '',
-      description: '',
-      owners: [],
-      users: []
+
+    api.getTemplate = function() {
+      return {
+        name: '',
+        email: '',
+        mobile_phone: '',
+        phone: '',
+        vat: '',
+        address: '',
+        description: '',
+        owners: [],
+        users: []
+      };
     };
 
     /* API */
@@ -107,10 +109,7 @@
     };
 
 
-    return {
-      api: api,
-      template: function() {return angular.copy(template);}
-    };
+    return api;
 
   });
 
