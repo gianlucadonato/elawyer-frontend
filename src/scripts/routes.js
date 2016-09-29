@@ -29,6 +29,12 @@
         abstract: true,
         templateUrl: helper.partialsPath('common.html')
       })
+      .state('auth.confirm_account', {
+        url: '/confirm_account?confirmed',
+        title: 'Comfirm',
+        templateUrl: helper.pagesPath('confirm.html'),
+        controller: 'AuthenticationCtrl'
+      })
       .state('auth.login', {
         url: '/',
         title: 'Login',

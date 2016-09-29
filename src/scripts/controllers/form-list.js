@@ -6,7 +6,7 @@
   * FormList Controller
   =========================================================*/
 
-  App.controller('FormListCtrl', function($scope, $filter, Answer, Notify, ngTableParams) {
+  App.controller('FormListCtrl', function($scope, $filter, Answer, Notify, ngTableParams, Auth) {
 
     $scope.answers = [];
     $scope.isLoading = false;
@@ -55,6 +55,31 @@
         }
       });
     }
+
+
+    $scope.copyLink = function(m) {
+      //for testing
+      if (window.location.href.indexOf('localhost'))
+        window.prompt("Copy to clipboard: Ctrl+C, Enter", "http://localhost:3000/#/forms/"+m.id+"/answer");
+      else
+        window.prompt("Copy to clipboard: Ctrl+C, Enter", "http://elawyer.herokuapp.com/#/forms/"+m.id+"/answer");
+    };
+
+    $scope.sendLink = function(m) {
+      var msg = window.prompt("Inserisci testo personalizzato. Allegheremo il link per permettere all'utente di inizializzare il suo account", "Salve, clicca sul bottone sottostante per impostare la tua password elawyer e rispondere al nostro questionario");
+
+      if (msg)
+        Auth.reset_password({
+          text: msg,
+          link: "http://elawyer.herokuapp.com/#/forms/"+m.id+"/answer",
+          email: m.customer.email,
+
+        }).then(function success(data) {
+           Notify.success('OK!', "Email di invtio inviata con successo!");
+        }, function bad(error) {
+            Notify.error('Error!', "C'è stato un problema ad inviare la mail di invito");
+        });
+    };
 
     $scope.deleteForm = function(m) {
       swal({

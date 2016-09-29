@@ -1,9 +1,9 @@
 <header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include src="'views/partials/header.html'" data-ng-controller="HeaderCtrl as hctrl"></header>
 
 <section id="main" style="width: 100%; height: 100vh;">
-  <aside id="sidebar" data-ng-include src="'views/partials/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.left === true }"></aside>
+  <aside id="sidebar" data-ng-include src="'views/partials/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.left === true }" ng-show="isAuthenticated"></aside>
 
-  <aside id="chat" data-ng-include src="'views/partials/chat.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.right === true }"></aside>
+  <aside id="chat" data-ng-include src="'views/partials/chat.html'" data-ng-class="{ 'toggled': mactrl.showSidebar.right === true }" ></aside>
 
   <section id="content" class="page-view" data-ui-view style="display: table; width: 100%; height: 100%;"></section>
 

@@ -62,7 +62,7 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
             var Auth    = $injector.get('Auth');
             var $state  = $injector.get('$state');
             Auth.deleteUser();
-            $state.go('auth.login');
+            //$state.go('auth.login');
           }
         }
         return $q.reject(error);
@@ -74,9 +74,12 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
 
 // APP RUN
 // -----------------------------------
-App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $window, $templateCache) {
+App.run(function($rootScope, $state, $stateParams, Auth, RoleStore, amMoment, $q, $window, $templateCache, $timeout, $location) {
 
   amMoment.changeLocale('it');
+
+
+
 
   RoleStore.defineRole('ADMIN', function () {
     if(Auth.isAuthenticated()) {
@@ -117,15 +120,67 @@ App.run(function($rootScope, $state, Auth, RoleStore, amMoment, $q, $window, $te
     }
   });
 
-  // Redirect user to login page if not authenticated
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-    if(toState.requireLogin && !Auth.isAuthenticated()) {
-      event.preventDefault();
-      $state.go('auth.login');
+  var redirect = {
+    url: {},
+    params: {},
+    set: function(s, p) {
+      this.url = s;
+      this.params = p;
+    },
+    move: function() {
+      if (this.isRoot())
+        $state.go('profile.details', $rootScope.current_user);
+      else
+        $state.go(this.url.name, this.params);
+    },
+    isRoot: function() {
+      if (!this.url.requireLogin)
+        return true;
+      else return false;
     }
-    else if(toState.title === 'Login' && Auth.isAuthenticated()) {
+  };
+
+
+  // Redirect user to login page if not authenticated
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams, $window) {
+
+
+    console.log("localhost:3000/#/forms/57e92a9933dfe706308388b2/answer?t=10f7e4a4d30cd789$45e083a72a171006&e=therstion1931@rhyta.com", toState, toParams)
+
+    if(toState.requireLogin && !Auth.isAuthenticated() && toState.title != 'Comfirm') {
+
       event.preventDefault();
-      $state.go('profile.details', $rootScope.current_user);
+
+      redirect.set(toState, toParams);
+
+      function getParameterByName(name, url) {
+          if (!url) url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      if (getParameterByName('t')) {
+        //window.location.hash = '#/change_password?t='+ getParameterByName('t') + "&e=" + getParameterByName('e');
+        $state.go('auth.change_password', {t: getParameterByName('t'), e: getParameterByName('e')});
+      }
+      else {
+        $state.go('auth.login');
+      }
+      //switch if there is invitation link
+
+    }
+    else if((fromState.title === 'Login' || fromState.title === 'Change password') && Auth.isAuthenticated()) {
+
+      event.preventDefault();
+
+      console.log('moving')
+
+      //if we are logging move to desired location
+      redirect.move();
     }
   });
 

@@ -1,6 +1,6 @@
 <ul class="header-inner clearfix">
 
-  <li id="menu-trigger" ng-click="mactrl.toggleSidebar('left')" ng-class="{'open': mactrl.showSidebar.left === true}">
+  <li id="menu-trigger" ng-click="mactrl.toggleSidebar('left')" ng-class="{'open': mactrl.showSidebar.left === true}" ng-show="isAuthenticated">
     <div class="line-wrap">
       <div class="line top"></div>
       <div class="line center"></div>
