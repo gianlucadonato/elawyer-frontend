@@ -258,6 +258,13 @@
         templateUrl: helper.pagesPath('documents.html'),
         controller: 'DocumentsCtrl'
       })
+      .state('page.drive', {
+        url: '/drive',
+        title: 'Drive',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('drive.html'),
+        controller: 'DriveCtrl'
+      })
       //------------------------------
       // INVOICES
       //------------------------------

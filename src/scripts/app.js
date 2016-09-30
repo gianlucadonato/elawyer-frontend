@@ -37,7 +37,7 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
     .defaults({
       api_key: ENV.google_api_key,
       client_id: ENV.google_client_id,
-      scopes: ['https://www.googleapis.com/auth/drive']
+      scopes: ENV.google_scopes
     });
 
   // Auth Interceptor

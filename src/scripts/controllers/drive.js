@@ -2,11 +2,11 @@
   'use strict';
 
   /**=========================================================
-  * File: documents.js
+  * File: drive.js
   * Documents Controller
   =========================================================*/
 
-  App.controller('DocumentsCtrl', function($rootScope, $scope, $state, User, GoogleClient, Auth) {
+  App.controller('DriveCtrl', function($scope, User, GoogleClient, Drive, Auth) {
 
     $scope.showSignInOverlay = false;
 
@@ -17,23 +17,30 @@
 
     function checkAuth() {
       Auth.getUser().then(function(user){
-        console.log('currentUser', user);
         if(!user.oauth.google.access_token) {
           GoogleClient
           .checkAuth()
           .then(function(res){
-            console.log('logged in!', res);
+            console.log('fesfew', res);
+            getFolderList();
             // GoogleClient.signOut().then(function(){
             //   console.log('signed out');
             // });
           })
           .catch(function(err){
             $scope.showSignInOverlay = true;
-            //GoogleClient.render('btn-gdrive');
           });
         } else {
           console.log('user connected: do nothing.');
         }
+      });
+    }
+
+    function getFolderList() {
+      Drive.list().then(function(data){
+        console.log('list folders', data);
+      }).catch(function(err){
+        console.log('unable to fetch folders', err);
       });
     }
 
@@ -43,17 +50,9 @@
         .then(function(user){
           $scope.showSignInOverlay = false;
           var auth = user.getAuthResponse();
-          User.update({
-            id: 'me',
-            oauth: {
-              google: {
-                id_token: auth.id_token,
-                access_token: auth.access_token,
-                expires_at: auth.expires_at,
-                scope: auth.scope,
-              }
-            }
-          }).then(function(res){
+          console.log('user', user);
+          console.log('auth', auth);
+          Auth.set_google_account(auth).then(function(res){
             console.log('user updated!', res);
           });
         })

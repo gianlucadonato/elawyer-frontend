@@ -11,7 +11,7 @@
     return {
       restrict: 'EA',
       scope: {
-        newCompany: '=',
+        newCompany: '=?',
         newCompanyCb: '='
       },
       link: function(scope, element, attrs) {

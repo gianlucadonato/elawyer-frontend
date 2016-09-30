@@ -11,7 +11,7 @@
     return {
       restrict: 'A',
       scope: {
-        searchCustomer: '=',
+        searchCustomer: '=?',
         searchCustomerCb: '='
       },
       link: function(scope, element, attrs) {
@@ -154,7 +154,7 @@
         scope.showAddOwner = function() {
           scope.showOwnerInput = !scope.showOwnerInput;
         };
-        
+
         scope.getLocation = function(val) {
           return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
             params: {

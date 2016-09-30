@@ -10,13 +10,13 @@
     var defaults = {};
     var apiToLoad = [];
 
-    this.defaults = function(options) {
-      angular.extend(defaults, options);
+    this.addApi = function(api, version) {
+      apiToLoad.push({api:api, version:version});
       return this;
     };
 
-    this.addApi = function(api, version) {
-      apiToLoad.push({api:api, version:version});
+    this.defaults = function(options) {
+      angular.extend(defaults, options);
       return this;
     };
 

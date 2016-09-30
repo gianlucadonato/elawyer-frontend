@@ -10,7 +10,7 @@
     return {
       restrict: 'EA',
       scope: {
-        editMatter: '=',
+        editMatter: '=?',
         editMatterCb: '='
       },
       link: function(scope, element, attrs) {
