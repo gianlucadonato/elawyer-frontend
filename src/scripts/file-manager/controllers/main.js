@@ -23,6 +23,10 @@
         $scope.fileList = [];
         $scope.temps = [];
 
+        $rootScope.$on('refresh-file-manager', function(data){
+          $scope.fileNavigator.refresh();
+        });
+
         $scope.$watch('temps', function() {
           if ($scope.singleSelection()) {
             $scope.temp = $scope.singleSelection();

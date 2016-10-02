@@ -3,7 +3,8 @@
   angular
     .module('FileManagerApp')
     .service('fileNavigator', [
-      'apiMiddleware', 'fileManagerConfig', 'item', function (ApiMiddleware, fileManagerConfig, Item) {
+      '$rootScope', 'apiMiddleware', 'fileManagerConfig', 'item',
+      function ($rootScope, ApiMiddleware, fileManagerConfig, Item) {
 
       var FileNavigator = function() {
         this.apiMiddleware = new ApiMiddleware();

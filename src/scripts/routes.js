@@ -251,19 +251,12 @@
       //------------------------------
       // DOCUMENTS
       //------------------------------
-      .state('page.documents', {
-        url: '/documents',
-        title: 'Documents',
-        requireLogin: true,
-        templateUrl: helper.pagesPath('documents.html'),
-        controller: 'DocumentsCtrl'
-      })
       .state('page.docs', {
         url: '/docs',
         title: 'Documents',
         requireLogin: true,
-        templateUrl: helper.pagesPath('drive.html'),
-        controller: 'DriveCtrl'
+        templateUrl: helper.pagesPath('documents.html'),
+        controller: 'DocumentsCtrl'
       })
       //------------------------------
       // INVOICES

@@ -6,60 +6,67 @@
   * Documents Controller
   =========================================================*/
 
-  App.controller('DocumentsCtrl', function($rootScope, $scope, $state, User, GoogleClient, Auth) {
+  App.controller('DocumentsCtrl', function($rootScope, $scope, GoogleClient, Drive, User, Notify, $localStorage) {
 
     $scope.showSignInOverlay = false;
+    $scope.showInitFolders = false;
 
-    function activate() {
-      checkAuth();
-    }
     activate();
 
-    function checkAuth() {
-      Auth.getUser().then(function(user){
-        console.log('currentUser', user);
-        if(!user.oauth.google.access_token) {
-          GoogleClient
-          .checkAuth()
-          .then(function(res){
-            console.log('logged in!', res);
-            // GoogleClient.signOut().then(function(){
-            //   console.log('signed out');
-            // });
-          })
-          .catch(function(err){
-            $scope.showSignInOverlay = true;
-            //GoogleClient.render('btn-gdrive');
-          });
-        } else {
-          console.log('user connected: do nothing.');
-        }
+    function getUser() {
+      return User.get($localStorage.current_user);
+    }
+
+    function activate() {
+      GoogleClient
+      .checkAuth()
+      .then(function(res){
+        getUser().then(function(user){
+          if(user.accounts.google) activate();
+          else $scope.showSignInOverlay = true;
+        }).catch(function(err){
+          Notify.error('Error!', 'Unable to get current user!');
+        });
+      })
+      .catch(function(err){
+        getUser().then(function(user){
+          if(user.accounts.google) activate();
+          else $scope.showSignInOverlay = true;
+        });
       });
     }
 
     $scope.signInDrive = function($event) {
       GoogleClient
-        .signIn()
-        .then(function(user){
-          $scope.showSignInOverlay = false;
-          var auth = user.getAuthResponse();
-          User.update({
-            id: 'me',
-            oauth: {
-              google: {
-                id_token: auth.id_token,
-                access_token: auth.access_token,
-                expires_at: auth.expires_at,
-                scope: auth.scope,
-              }
-            }
-          }).then(function(res){
-            console.log('user updated!', res);
+        .signIn({ prompt: 'consent' })
+        .then(function(auth){
+          Drive.setupGoogleAccount(auth).then(function(res){
+            $scope.showInitFolders = true;
+            Drive
+              .initDriveFolders()
+              .then(function(res){
+                $scope.showSignInOverlay = false;
+                $scope.showInitFolders = false;
+                $rootScope.$broadcast('refresh-file-manager');
+              })
+              .catch(function(err){
+                console.log('Unable to setup folders!', err);
+                Notify.error('Error!', 'Unable to set up folders!');
+              });
+          }).catch(function(err){
+            console.log('Unable to Set Google Account!', err);
+            Notify.error('Error!', 'Unable to Set Google Account!');
           });
         })
         .catch(function(err){
-          console.log('User is NOT authenticated');
+          Notify.error('Error!', 'Unable to Login with Google!');
         });
+    };
+
+    $scope.signOut = function() {
+      GoogleClient.signOut().then(function(){
+        console.log('Signed Out!');
+      });
     };
 
   });
