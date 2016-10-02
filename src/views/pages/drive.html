@@ -1,14 +1,26 @@
 <div class="documents">
+
+  <!-- OVERLAY -->
   <div class="signin-overlay" ng-show="showSignInOverlay">
-    <div class="content text-center">
+    <div class="content text-center" ng-if="!showInitFolders">
       <img src="/images/gdrive.png" alt="">
       <p>Connetti il tuo Account Google per poter accedere ai Documenti</p>
       <button id="btn-gdrive" class="btn btn-primary btn-lg" ng-click="signInDrive($event)">
         Accedi a Google Drive
       </button>
     </div>
+    <div class="content text-center" ng-if="showInitFolders">
+      <div class="preloader pl-lg pls-amber">
+        <svg class="pl-circular" viewBox="25 25 50 50">
+          <circle class="plc-path" cx="50" cy="50" r="20" />
+        </svg>
+      </div>
+      <p class="m-t-10">Attendi inizializzazione dell'albero delle cartelle...</p>
+    </div>
   </div>
-  <div>
-    <h3>Drive Page</h3>
+
+  <!-- START FILE DIRECTORY -->
+  <div class="file-manager">
+    <angular-filemanager></angular-filemanager>
   </div>
 </div>

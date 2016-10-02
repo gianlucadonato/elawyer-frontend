@@ -23,6 +23,9 @@
           if (!this.error && data.error) {
             this.error = data.error.message;
           }
+          if (!this.error && (data.error || {}).errors) {
+            this.error = data.error.errors[0].message;
+          }
           if (!this.error && defaultMsg) {
             this.error = defaultMsg;
           }
@@ -39,7 +42,6 @@
 
           data.action = 'list';
           data.path = path;
-
           self.inprocess = true;
           self.error = '';
 
@@ -101,7 +103,6 @@
             action: 'remove',
             fileIds: items
           };
-
           self.inprocess = true;
           self.error = '';
           $http.post(apiUrl, data).success(function(data) {

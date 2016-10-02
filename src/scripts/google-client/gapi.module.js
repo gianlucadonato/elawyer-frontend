@@ -58,14 +58,19 @@
       };
 
       // Pop Up SignIn Dialog
-      this.signIn = function() {
+      this.signIn = function(data) {
         var deferred = $q.defer();
+        var opts = {
+          scope: options.scopes.join(' '),
+          redirect_uri: 'postmessage'
+        };
+        angular.extend(opts, data);
         var auth = gapi.auth2.getAuthInstance();
-        auth.signIn({
-          scope: options.scopes.join(' ')
-        }).then(function(res){
-          deferred.resolve(res);
-        });
+        auth
+          .grantOfflineAccess(opts)
+          .then(function(resp) {
+            deferred.resolve(resp);
+          });
         return deferred.promise;
       };
 

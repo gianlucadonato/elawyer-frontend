@@ -133,19 +133,6 @@
       return deferred.promise;
     };
 
-    auth.set_google_account = function(data) {
-      var deferred = $q.defer();
-      $http
-        .post(API.host + '/api/auth/set_google_account', data)
-        .then(function(res){
-          deferred.resolve(res.data);
-        })
-        .catch(function(err){
-          deferred.reject(err);
-        });
-      return deferred.promise;
-    };
-
     return auth;
   });
 
