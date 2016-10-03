@@ -14,6 +14,7 @@
     activate();
 
     function getUser() {
+      console.log('called getUser');
       return User.get($localStorage.current_user);
     }
 
@@ -22,16 +23,16 @@
       .checkAuth()
       .then(function(res){
         getUser().then(function(user){
-          if(user.accounts.google) activate();
-          else $scope.showSignInOverlay = true;
+          if(!user.accounts.google)
+            $scope.showSignInOverlay = true;
         }).catch(function(err){
           Notify.error('Error!', 'Unable to get current user!');
         });
       })
       .catch(function(err){
         getUser().then(function(user){
-          if(user.accounts.google) activate();
-          else $scope.showSignInOverlay = true;
+          if(!user.accounts.google)
+            $scope.showSignInOverlay = true;
         });
       });
     }
