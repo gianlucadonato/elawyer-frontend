@@ -23,6 +23,10 @@
         $scope.fileList = [];
         $scope.temps = [];
 
+        $rootScope.$on('refresh-file-manager', function(data){
+          $scope.fileNavigator.refresh();
+        });
+
         $scope.$watch('temps', function() {
           if ($scope.singleSelection()) {
             $scope.temp = $scope.singleSelection();
@@ -41,6 +45,11 @@
         $scope.setTemplate = function(name) {
             $storage.setItem('viewTemplate', name);
             $scope.viewTemplate = name;
+        };
+
+        $scope.changeTemplate = function() {
+          $scope.viewTemplate = $scope.viewTemplate === 'main-table.html' ? 'main-icons.html' : 'main-table.html';
+          $storage.setItem('viewTemplate', $scope.viewTemplate);
         };
 
         $scope.changeLanguage = function (locale) {
@@ -317,9 +326,9 @@
           if (!name || $scope.fileNavigator.fileNameExists(name)) {
             return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
           }
+          item.tempModel.parentId = $scope.fileNavigator.currentFolderId;
           $scope.apiMiddleware.createFolder(item).then(function() {
-            $scope.fileNavigator.refresh(
-              );
+            $scope.fileNavigator.refresh();
             $scope.modal('newfolder', true);
           });
         };

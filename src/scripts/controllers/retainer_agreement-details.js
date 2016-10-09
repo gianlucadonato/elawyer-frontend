@@ -129,36 +129,40 @@
 
     $scope.payWithBankTransfer = function(data) {
       choosePaymentModal.dismiss();
-      Uploader.upload(data.files)
-        .then(function(data) {
-          RetainerAgreement.api.pay($scope.retainer_agreement, {
-            invoice_type: $scope.invoice_type,
-            apply_discount: $scope.retainer_agreement.apply_discount,
-            payment_method: 'bank_transfer'
-          }).then(function(res) {
-            swal({
-              title: "OK!",
-              text: "Abbiamo ricevuto un'evidenza di pagamento. Attendi la verifica dei nostri operatori.",
-              type: "success",
-              showCancelButton: false,
-              confirmButtonText: "OK!",
-              closeOnConfirm: true
-            }, function() {
-              $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
-            });
-          }).catch(function(err) {
-            Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
-          });
-        }).catch(function(err) {
+      console.log('$scope.retainer_agreement', $scope.retainer_agreement);
+      Uploader.upload({
+        files: data.files,
+        parentId: $scope.retainer_agreement.matter.drive_folder.id
+      })
+      .then(function(data) {
+        RetainerAgreement.api.pay($scope.retainer_agreement, {
+          invoice_type: $scope.invoice_type,
+          apply_discount: $scope.retainer_agreement.apply_discount,
+          payment_method: 'bank_transfer'
+        }).then(function(res) {
           swal({
-            title: "Oops!",
-            text: "C'è stato un problema nel caricare l'evidenza di pagamento.",
-            type: "error",
+            title: "OK!",
+            text: "Abbiamo ricevuto un'evidenza di pagamento. Attendi la verifica dei nostri operatori.",
+            type: "success",
             showCancelButton: false,
             confirmButtonText: "OK!",
             closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
           });
+        }).catch(function(err) {
+          Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
         });
+      }).catch(function(err) {
+        swal({
+          title: "Oops!",
+          text: "C'è stato un problema nel caricare l'evidenza di pagamento.",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonText: "OK!",
+          closeOnConfirm: true
+        });
+      });
     };
 
     /* Send Retainer Agreement to Customer

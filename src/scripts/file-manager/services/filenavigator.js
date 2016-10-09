@@ -3,14 +3,16 @@
   angular
     .module('FileManagerApp')
     .service('fileNavigator', [
-      'apiMiddleware', 'fileManagerConfig', 'item', function (ApiMiddleware, fileManagerConfig, Item) {
+      '$rootScope', 'apiMiddleware', 'fileManagerConfig', 'item',
+      function ($rootScope, ApiMiddleware, fileManagerConfig, Item) {
 
       var FileNavigator = function() {
         this.apiMiddleware = new ApiMiddleware();
         this.requesting = false;
         this.fileList = [];
         this.currentPath = [];
-        this.currentFolderId = 'root';
+        this.clickedFolders = {};
+        this.currentFolderId = '';
         this.history = [];
         this.error = '';
         this.onRefresh = function() {};
@@ -35,6 +37,11 @@
         return deferred.resolve(data);
       };
 
+      FileNavigator.prototype.listRoot = function(params) {
+        if(!params) params = {};
+        return this.apiMiddleware.listRoot(params, this.currentPath, this.deferredHandler.bind(this));
+      };
+
       FileNavigator.prototype.list = function(params) {
         if(!params) params = {};
         return this.apiMiddleware.list(params, this.currentPath, this.deferredHandler.bind(this));
@@ -45,17 +52,23 @@
         var path = self.currentPath.join('/');
         self.requesting = true;
         self.fileList = [];
-        return self.list({
-          parentId: self.currentFolderId
-        }).then(function(data) {
+        if(!path)
+          return self.listRoot({}).then(cb).finally(function() {
+            self.requesting = false;
+          });
+        else
+          return self.list({
+            file_id: self.currentFolderId
+          }).then(cb).finally(function() {
+            self.requesting = false;
+          });
+        function cb(data) {
           self.fileList = (data.result || []).map(function(file) {
             return new Item(file, self.currentPath);
           });
           self.buildTree(path);
           self.onRefresh();
-        }).finally(function() {
-          self.requesting = false;
-        });
+        }
       };
 
       FileNavigator.prototype.buildTree = function(path) {
@@ -109,10 +122,9 @@
 
       FileNavigator.prototype.folderClick = function(item) {
         this.currentPath = [];
-        this.currentPath = [];
-        this.currentFolderId = 'root';
-        if (item && item.isFolder()) {
+        if (item && item.isType('dir')) {
           this.currentPath = item.model.fullPath().split('/').splice(1);
+          this.clickedFolders[this.currentPath[this.currentPath.length-1]] = item.model.id;
           this.currentFolderId = item.model.id;
         }
         this.refresh();
@@ -125,8 +137,9 @@
         }
       };
 
-      FileNavigator.prototype.goTo = function(index) {
+      FileNavigator.prototype.goTo = function(index, dir) {
         this.currentPath = this.currentPath.slice(0, index + 1);
+        this.currentFolderId = this.clickedFolders[dir];
         this.refresh();
       };
 
@@ -138,7 +151,7 @@
 
       FileNavigator.prototype.listHasFolders = function() {
         return this.fileList.find(function(item) {
-          return item.model.type === 'dir';
+          return item.isType('dir');
         });
       };
 

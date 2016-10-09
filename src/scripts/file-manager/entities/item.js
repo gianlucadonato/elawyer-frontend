@@ -9,7 +9,7 @@
         var rawModel = {
           id: model && model.id || '',
           name: model && model.name || '',
-          type: model && model.type || 'file',
+          type: model && isFile(model.mimeType) ? 'file' : 'dir',
           mimeType: model && model.mimeType || '',
           size: model && parseInt(model.size || 0),
           createdTime: model && model.createdTime,
@@ -19,7 +19,6 @@
           parents: model && model.parents,
           perms: new Chmod(model && model.rights),
           path: path || [],
-          parentId: parentId,
           content: model && model.content || '',
           recursive: false,
           fullPath: function() {
@@ -38,6 +37,11 @@
           var d = (mysqlDate || '').toString().split(/[- :]/);
           return new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5]);
         }
+
+        function isFile(type) {
+          if(!type) return false;
+          return ['dir','application/vnd.google-apps.folder'].indexOf(type) < 0;
+        }
       };
 
       Item.prototype.update = function() {
@@ -49,8 +53,18 @@
         this.error = '';
       };
 
+      Item.prototype.isFile = function(type) {
+        return ['dir','application/vnd.google-apps.folder'].indexOf(type) < 0;
+      };
+
       Item.prototype.isFolder = function() {
-        return this.model.type === 'dir';
+        return !this.isFile(this.model.type);
+      };
+
+      Item.prototype.isType = function(type) {
+        var isFile = this.isFile(this.model.type);
+        if(type === 'dir') isFile = !isFile;
+        return isFile;
       };
 
       Item.prototype.isEditable = function() {

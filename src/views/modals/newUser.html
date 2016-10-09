@@ -1,67 +1,97 @@
-<div class="modal-header pb-23">
-  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Nuovo Cliente</h4>
-</div>
-<div class="modal-body">
-  <form name="newCustomer" ng-submit="createUser(form)">
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group">
+<!-- CREATE USER -->
+<div class="card">
+  <div class="card-header ch-alt">
+    <h3 style="margin:0; font-weight:300;">
+      <i class="zmdi zmdi-account-circle m-r-5"></i> Crea Nuovo
+      <span ng-if="newUser == 'user'">Utente</span>
+      <span ng-if="newUser == 'lawyer'">Avvocato</span>
+    </h3>
+  </div>
+  <div class="card-body card-padding">
+    <form class="pmbb-edit" ng-submit="createUser(user)">
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Nome</dt>
+        <dd>
           <div class="fg-line">
-            <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="Nome" required>
+            <input data-ng-model="user.first_name" type="text" class="form-control" placeholder="eg. Mario" required>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="form-group">
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Cognome</dt>
+        <dd>
           <div class="fg-line">
-            <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Cognome" required>
+            <input data-ng-model="user.last_name" type="text" class="form-control" placeholder="eg. Rossi" required>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group">
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Email</dt>
+        <dd>
           <div class="fg-line">
-            <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
+            <input data-ng-model="user.email" type="email" class="form-control"  placeholder="eg. mrossi@gmail.com" required>
           </div>
-          <div ng-messages="signupForm.email.$error" class="form-errors">
-            <div ng-message="invalid">Invalid Email.</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="form-group">
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Luogo di Nascita</dt>
+        <dd>
           <div class="fg-line">
-            <select name="gender" class="form-control input-sm" ng-model="form.gender">
-              <option value="" disabled>Sesso</option>
-              <option value="male">Uomo</option>
-              <option value="female">Donna</option>
-            </select>
+            <input type="text" ng-model="user.birth_place" placeholder="Inserisci Luogo di Nascita" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group">
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Residenza</dt>
+        <dd>
           <div class="fg-line">
-            <input type='text' class="form-control input-sm" data-input-mask="{mask: '00/00/0000'}" placeholder="Data di Nascita eg.08/06/1990" ng-model="form.birthday">
+            <input type="text" ng-model="user.residence" placeholder="Inserisci Residenza" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
           </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="form-group">
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Domicilio</dt>
+        <dd>
           <div class="fg-line">
-            <input type="text" class="form-control input-sm" data-input-mask="{mask: '000 0000000'}" placeholder="Tel. eg.340 1231986" data-ng-model="form.phone">
+            <input type="text" ng-model="user.domicile" placeholder="Inserisci Domicilio" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
           </div>
-        </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Codice Fiscale</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.fiscal_code" type="text" class="form-control" placeholder="Inserisci Codice Fiscale">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Partita Iva</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.vat_number" type="text" class="form-control" placeholder="Inserisci P.Iva">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Fisso</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.phone" type="text" class="form-control" data-input-mask="{mask: '0000 000000'}" placeholder="eg. 0422 123321">
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt class="p-t-10">Telefono Cellulare</dt>
+        <dd>
+          <div class="fg-line">
+            <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+          </div>
+        </dd>
+      </dl>
+      <div class="m-t-30">
+        <button type="submit" class="btn btn-primary btn-block">SALVA</button>
       </div>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-orange btn-block waves-effect" ng-if="!success">Conferma</button>
-      <div class="alert alert-success" ng-if="success" role="alert">Utente creato con successo. Torna indietro e ricercalo per continuare</div>
-      <div class="alert alert-danger" ng-if="wrong" role="alert">Errore nella creazione dell'utente, controlla i campi.</div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>

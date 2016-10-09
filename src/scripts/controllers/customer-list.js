@@ -27,38 +27,8 @@
         });
     }
 
-    $scope.openNewCustomerModal = function() {
-      self.newCustomerModal = $uibModal.open({
-        animation: false,
-        size: '',
-        backdrop: true,
-        keyboard: true,
-        templateUrl: 'views/modals/newUser.html',
-        resolve: {
-          customers: function () {
-            return $scope.customers;
-          }
-        },
-        controller: function($scope, $uibModalInstance, customers){
-          $scope.createUser = function(data) {
-            if(data.birthday) {
-              // Transform data in ms
-              var bd = data.birthday.split('/');
-              data.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
-            }
-            User
-              .create(data)
-              .then(function(user){
-                $uibModalInstance.dismiss();
-                customers.push(data);
-                Notify.success('OK!','User created successfully!');
-              })
-              .catch(function(err){
-                Notify.error('Error!','Unable to create user');
-              });
-          };
-        }
-      });
+    $scope.addCustomer = function(user) {
+      $scope.customers.unshift(user);
     };
 
     $scope.deleteCustomer = function(user) {

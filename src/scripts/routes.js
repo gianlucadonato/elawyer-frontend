@@ -257,8 +257,8 @@
       //------------------------------
       // DOCUMENTS
       //------------------------------
-      .state('page.documents', {
-        url: '/documents',
+      .state('page.docs', {
+        url: '/docs',
         title: 'Documents',
         requireLogin: true,
         templateUrl: helper.pagesPath('documents.html'),

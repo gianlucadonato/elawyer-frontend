@@ -1,0 +1,67 @@
+<div class="modal-header pb-23">
+  <h4 class="modal-title"><i class="zmdi zmdi-account-add"></i> Nuovo Cliente</h4>
+</div>
+<div class="modal-body">
+  <form name="newCustomer" ng-submit="createUser(form)">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="Nome" required>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Cognome" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
+          </div>
+          <div ng-messages="signupForm.email.$error" class="form-errors">
+            <div ng-message="invalid">Invalid Email.</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <select name="gender" class="form-control input-sm" ng-model="form.gender">
+              <option value="" disabled>Sesso</option>
+              <option value="male">Uomo</option>
+              <option value="female">Donna</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <input type='text' class="form-control input-sm" data-input-mask="{mask: '00/00/0000'}" placeholder="Data di Nascita eg.08/06/1990" ng-model="form.birthday">
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="fg-line">
+            <input type="text" class="form-control input-sm" data-input-mask="{mask: '000 0000000'}" placeholder="Tel. eg.340 1231986" data-ng-model="form.phone">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-orange btn-block waves-effect" ng-if="!success">Conferma</button>
+      <div class="alert alert-success" ng-if="success" role="alert">Utente creato con successo. Torna indietro e ricercalo per continuare</div>
+      <div class="alert alert-danger" ng-if="wrong" role="alert">Errore nella creazione dell'utente, controlla i campi.</div>
+    </div>
+  </form>
+</div>

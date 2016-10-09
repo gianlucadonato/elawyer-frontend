@@ -15,13 +15,16 @@
 
         ApiMiddleware.prototype.getFileList = function(files) {
           return (files || []).map(function(file) {
-            // return file && file.model.fullPath();
             return file && file.model.id;
           });
         };
 
         ApiMiddleware.prototype.getFilePath = function(item) {
           return item && item.model.fullPath();
+        };
+
+        ApiMiddleware.prototype.listRoot = function(params, path, customDeferredHandler) {
+          return this.apiHandler.list(params, fileManagerConfig.listRootUrl, this.getPath(path), customDeferredHandler);
         };
 
         ApiMiddleware.prototype.list = function(params, path, customDeferredHandler) {
@@ -123,12 +126,7 @@
         };
 
         ApiMiddleware.prototype.createFolder = function(item) {
-          console.log('item', item);
-          var data = {
-            folderName: item.tempModel.name,
-            parentId: item.tempModel.parentId
-          };
-          return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, data);
+          return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, item.tempModel);
         };
 
         return ApiMiddleware;
