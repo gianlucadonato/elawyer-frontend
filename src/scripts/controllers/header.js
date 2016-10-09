@@ -6,7 +6,17 @@
   * Header Controller
   =========================================================*/
 
-  App.controller('HeaderCtrl', function($timeout, Message) {
+  App.controller('HeaderCtrl', function($timeout, Message, $http, API, $scope) {
+
+
+    $http
+      .get(API.host + "/api/notifications")
+      .then(function success(data) {
+        $scope.notifications = data.data.notifications;
+      }).catch(function error(err) {
+
+      });
+
 
     // Top Search
     this.openSearch = function(){
