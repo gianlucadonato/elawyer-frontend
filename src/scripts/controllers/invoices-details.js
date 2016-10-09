@@ -6,7 +6,7 @@
   * InvoiceDetails Controller
   =========================================================*/
 
-  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, RetainerAgreement, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('InvoiceDetailsCtrl', function($scope, $stateParams, $state, Invoice, Notify, RetainerAgreement, $window, $timeout, $uibModal, StripeCheckout, Uploader, $rootScope) {
 
     $scope.invoice = {};
 
@@ -64,13 +64,16 @@
 
     $scope.payWithStripe = function() {
       choosePaymentModal.dismiss();
-      var total = $scope.invoice.calc.final_price;
+
+      console.log($scope.invoice)
+
+      var total = $scope.invoice.info.final_price;
       var stripe = StripeCheckout.configure({});
       var options = {
         paying: parseInt(total) * 100,
         invoice_type: $scope.invoice.invoice_type,
         payment_method: 'stripe',
-        email: ($scope.invoice.customer || $scope.invoice.company).email
+        email: $scope.invoice.matter.customer.email
       };
       stripe.open({
         amount: options.paying,
@@ -88,7 +91,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.invoices');
+            $state.go('page.matter-list');
           });
         }).catch(function(err) {
           swal({
@@ -120,7 +123,7 @@
               confirmButtonText: "OK!",
               closeOnConfirm: true
             }, function() {
-              $state.go('page.invoices');
+              $state.go('page.matter-list');
             });
           }).catch(function(err) {
             Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");

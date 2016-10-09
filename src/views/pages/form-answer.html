@@ -10,8 +10,6 @@
     </div>
 
 
-
-
     <div class="card-body card-padding" ng-if="review">
       <div class="question" ng-repeat="i in form.items">
 
@@ -92,8 +90,7 @@
 
           <div ng-if="i.type == 'date'">
             <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span><br/>
+              <h4><span tooltip-placement="right" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}</span><span ng-if="i.is_mandatory"> *</span></h4>
               <div class="dd-block">
                 <div class="date-picker">
                   <uib-datepicker show-weeks="false" ng-model="i.value" ng-value="i.value" min-date="minDate" class="dp-inline"></uib-datepicker>
@@ -104,8 +101,7 @@
 
           <div ng-if="i.type == 'input'">
             <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span>
+              <h4><span tooltip-placement="right" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}</span><span ng-if="i.is_mandatory"> *</span></h4>
               <div class="input-group">
                 <span class="input-group-addon" ng-show="i.icon"><i class="zmdi zmdi-{{i.icon}}"></i></span>
                 <div class="fg-line">
@@ -117,8 +113,7 @@
 
           <div ng-if="i.type == 'checkbox'" style="z-index:10000">
             <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span>
+              <h4><span tooltip-placement="right" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}</span><span ng-if="i.is_mandatory"> *</span></h4>
               <div class="input-group">
                 <div class="checkbox m-b-15">
                   <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="r in i.options track by $index">
@@ -133,8 +128,7 @@
 
           <div ng-if="i.type == 'radio'" style="z-index:10000">
             <div class="form-group">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span>
+              <h4><span tooltip-placement="right" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}</span><span ng-if="i.is_mandatory"> *</span></h4>
               <div class="input-group">
                 <div class="radio m-b-15" ng-repeat="r in i.options track by $index">
                   <label>
@@ -153,8 +147,7 @@
 
           <div ng-if="i.type == 'select'" style="z-index:10000">
             <div class="form-group" style="overflow: visible !important">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span>
+              <h4 tooltip-placement="bottom" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <div class="input-group" style="overflow: visible !important">
 
                 <select chosen class="w-100 localytics-chosen" ng-options="r.title for r in i.options track by r.title" ng-model="i.value" ng-value="i.value.title"  data-placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000; width:400px !important">
@@ -169,8 +162,7 @@
 
           <div ng-if="i.type == 'multiple-select'" style="z-index:10000">
             <div class="form-group" style="overflow: visible !important">
-              <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-              <span>{{i.description}}</span>
+              <h4 tooltip-placement="bottom" uib-tooltip="{{i.description}}">{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory"> *</span></h4>
               <div class="input-group" style="overflow: visible !important">
                 <select chosen multiple class="w-100 localytics-chosen" ng-options="r.title for r in i.options" ng-model="i.value"  placeholder-text-single="'Seleziona un\'opzione'" style="width:400px !important">
                   <option value=""></option>
@@ -184,7 +176,6 @@
           <div ng-if="i.type == 'textarea'">
             <div class="form-group">
               <h4>{{$index + 1}}. {{i.title}}<span ng-if="i.is_mandatory">*</span></h4>
-              <span>{{i.description}}</span>
               <textarea type="text" name="Valore predefinito" class="form-control" value="{{i.default}}"  placeholder="{{i.placeholder || 'iserisci..'}}" ng-model="i.value" ng-value="i.value" style="max-width: 400px">{{i.default}}</textarea>
             </div>
           </div>

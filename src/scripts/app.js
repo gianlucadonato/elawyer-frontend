@@ -164,7 +164,7 @@ App.run(function($rootScope, $state, $stateParams, Auth, RoleStore, amMoment, $q
         //window.location.hash = '#/change_password?t='+ getParameterByName('t') + "&e=" + getParameterByName('e');
         $state.go('auth.change_password', {t: getParameterByName('t'), e: getParameterByName('e')});
       }
-      else {
+      else if (toState.requireLogin) {
         $state.go('auth.login');
       }
       //switch if there is invitation link

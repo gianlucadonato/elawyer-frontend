@@ -99,17 +99,25 @@
       });
     };
 
+    $scope.fixCurrent = function(id) {
+      //chissà perchè ho dovuto fare questo workaround
+      $scope.current = id;
+    };
+
 
     $scope.setUser = function(user, formRef) {
 
-      var query = {id: formRef.id,};
+      var query = {id: $scope.current};
 
-      if (user.type == 'user')
+      if (!formRef)
         query.customer_id = user.id;
-      else if (user.type == 'company')
+
+      if (formRef && formRef.resourceType === 'user')
+        query.customer_id = user.id;
+      else if (formRef && formRef.resourceType === 'company')
         query.company_id = user.id;
 
-      if(formRef.id)
+      if(query.customer_id || query.company_id)
         Answer.api.create(query).then(function(data){
           swal({
             title: "Sent!",

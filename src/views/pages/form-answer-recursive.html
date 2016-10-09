@@ -4,7 +4,7 @@
 
     <div ng-if="n.type == 'date'">
       <div class="form-group">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory"> *</span></h4>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory"> *</span></h4>
         <span>{{n.description}}</span><br/>
         <div class="dd-block">
           <div class="date-picker">
@@ -16,8 +16,7 @@
 
     <div ng-if="n.type == 'input'">
       <div class="form-group">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory"> *</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory">*</span></h4>
         <div class="input-group">
             <span class="input-group-addon" ng-show="n.icon"><i class="zmdi zmdi-{{n.icon}}"></i></span>
             <div class="fg-line">
@@ -29,8 +28,7 @@
 
     <div ng-if="n.type == 'checkbox'" style="z-index:10000">
       <div class="form-group">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory"> *</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory"> *</span></h4>
         <div class="input-group">
           <div class="checkbox m-b-15">
             <label class="checkbox m-b-15" style="margin-bottom: 15px" ng-repeat="r in n.options track by $index">
@@ -45,8 +43,7 @@
 
     <div ng-if="n.type == 'radio'" style="z-index:10000">
       <div class="form-group">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory"> *</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory"> *</span></h4>
         <div class="input-group">
           <div class="radio m-b-15" ng-repeat="r in n.options track by $index">
               <label>
@@ -65,8 +62,7 @@
 
     <div ng-if="n.type == 'select'" style="z-index:10000">
       <div class="form-group" style="overflow: visible !important">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory"> *</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory"> *</span></h4>
         <div class="input-group" style="overflow: visible !important">
 
           <select chosen class="w-100 localytics-chosen" ng-options="r.title for r in n.options track by r.title" ng-model="n.value"  data-placeholder-text-single="'Seleziona un\'opzione'" style="z-index:10000; width:400px !important">
@@ -81,8 +77,7 @@
 
     <div ng-if="n.type == 'multiple-select'" style="z-index:10000">
       <div class="form-group" style="overflow: visible !important">
-        <h4>{{n.title}}<span ng-if="i.is_mandatory"> *</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="i.is_mandatory"> *</span></h4>
         <div class="input-group" style="overflow: visible !important">
           <select chosen multiple class="w-100 localytics-chosen" ng-options="r.title for r in n.options" ng-model="n.value"  placeholder-text-single="'Seleziona un\'opzione'" style="width:400px !important">
             <option value=""></option>
@@ -95,8 +90,7 @@
 
     <div ng-if="n.type == 'textarea'">
       <div class="form-group">
-        <h4>{{n.title}}<span ng-if="n.is_mandatory">*</span></h4>
-        <span>{{n.description}}</span>
+        <h4><span tooltip-placement="right" uib-tooltip="{{n.description}}">{{n.title}}</span><span ng-if="n.is_mandatory">*</span></h4>
           <textarea type="text" name="Valore predefinito" class="form-control" value="{{n.default}}"  placeholder="{{n.placeholder || 'iserisci..'}}" ng-model="n.value" ng-value="n.value" style="max-width: 400px">{{n.default}}</textarea>
       </div>
     </div>

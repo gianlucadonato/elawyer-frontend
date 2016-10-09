@@ -1,0 +1,28 @@
+<div class="row m-t-25 center-vertically">
+  <div class="col-sm-6 col-sm-offset-3">
+    <!-- LOGIN -->
+
+    <div class="card" ng-if="!confirmed">
+      <div class="card-header bgm-red">
+          <h2>Errore <small>C'è stato un errore durante la conferma del tuo account</small></h2>
+      </div>
+
+      <div class="card-body card-padding">
+          Abbiamo riscontrato un errore a confermare il tuo indirizzo email. Questo può succedere se il tuo account è già stato confermato, se hai utilizzato un link non valido, o a causa di un malfunzionamento dell'applicazione. Perfavore contatta gli amministratori di sistema per confermare il tuo indirizzo email.
+      </div>
+    </div>
+
+    <div class="card" ng-if="confirmed">
+      <div class="card-header bgm-green">
+          <h2>Complimenti <small>Account confermato con successo</small></h2>
+      </div>
+
+      <div class="card-body card-padding">
+          Il tuo account risulta confermato. Da questo momento, potrai utilizzare elawyer al pieno delle sue potenzialità.
+          <br/></br>
+          <button class="btn btn-success waves-effect" ui-sref="page.matter-list">Accedi ad elawyer</button>
+      </div>
+    </div>
+
+  </div>
+</div>
