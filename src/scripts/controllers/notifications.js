@@ -6,7 +6,7 @@
   * FormList Controller
   =========================================================*/
 
-  App.controller('FormListCtrl', function($scope, $filter, Answer, Notify, ngTableParams, Auth) {
+  App.controller('notifications', function($scope, $filter, Answer, Notify, ngTableParams, Auth) {
 
     $scope.answers = [];
     $scope.isLoading = false;

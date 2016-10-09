@@ -8,6 +8,7 @@
 
   App.controller('AuthenticationCtrl', function($scope, $state, $timeout, Auth, User, Notify, $stateParams){
 
+    $scope.confirmed = $stateParams.confirmed === 'true' ? true : false;
     /*===============
      * STD AUTH
      * ==============*/

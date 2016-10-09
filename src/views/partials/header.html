@@ -1,6 +1,6 @@
 <ul class="header-inner clearfix">
 
-  <li id="menu-trigger" ng-click="mactrl.toggleSidebar('left')" ng-class="{'open': mactrl.showSidebar.left === true}">
+  <li id="menu-trigger" ng-click="mactrl.toggleSidebar('left')" ng-class="{'open': mactrl.showSidebar.left === true}" ng-show="isAuthenticated">
     <div class="line-wrap">
       <div class="line top"></div>
       <div class="line center"></div>
@@ -47,10 +47,10 @@
       </li> -->
 
       <!-- Notification -->
-      <!-- <li class="dropdown" uib-dropdown>
+      <li class="dropdown" uib-dropdown>
         <a uib-dropdown-toggle href="">
           <i class="tm-icon zmdi zmdi-notifications"></i>
-          <i class="tmn-counts">9</i>
+          <!-- <i class="tmn-counts">9</i> -->
         </a>
         <div class="dropdown-menu dropdown-menu-lg stop-propagate pull-right">
           <div class="listview" id="notifications">
@@ -65,14 +65,48 @@
               </ul>
             </div>
             <div class="lv-body">
-              <a class="lv-item" ng-href="" ng-repeat="w in hctrl.messageResult.list">
+              <a class="lv-item" ng-href="" ng-repeat="w in notifications">
                 <div class="media">
                   <div class="pull-left">
-                    <img class="lv-img-sm" ng-src="{{ w.img }}" alt="">
+                    <img class="lv-img-sm" ng-src="{{ w.issuer.avatar_url }}" default-src random="true">
                   </div>
-                  <div class="media-body">
-                    <div class="lv-title">{{ w.user }}</div>
-                    <small class="lv-small">{{ w.text }}</small>
+                  <div class="media-body" style="cursor:pointer">
+                    <div ng-if="w.action_type=='invoice-paid'" ui-sref="page.invoice-details({id: w.resource._id})">
+                      <div class="lv-title">Pagamento Fattura</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ha pagato una fattura</small>
+                    </div>
+                    <div ng-if="w.action_type=='retainer-create'" ui-sref="page.retainer_agreement-details({id: w.resource._id})">
+                      <div class="lv-title">Nuovo preventivo</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ti ha assegnato una lettera di incarico</small>
+                    </div>
+                    <div ng-if="w.action_type=='form-create'" ui-sref="page.form-answer({id: w.resource._id})">
+                      <div class="lv-title">Nuovo questionario</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ti ha assegnato un nuovo questionario</small>
+                    </div>
+                    <div ng-if="w.action_type=='form-answer'" ui-sref="page.form-answer({id: w.resource._id})">
+                      <div class="lv-title">Risposta questionario</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ha risposto ad un questionario</small>
+                    </div>
+                    <div ng-if="w.action_type=='join-invitation'" ui-sref="profile.details({id: w.resource._id})">
+                      <div class="lv-title">Invito</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ti ha invitato a partecipare a elawyer</small>
+                    </div>
+                    <div ng-if="w.action_type=='signup'" ui-sref="profile.details({id: w.resource._id})">
+                      <div class="lv-title">Benvenuto</div>
+                      <small class="lv-small" >Benvenuto su elawyer {{ w.target.first_name }} {{ w.target.last_name }} </small>
+                    </div>
+                    <div ng-if="w.action_type=='company-invitation'" ui-sref="company.details({id: w.resource._id})">
+                      <div class="lv-title">Invito - a {{ w.resource.name }}</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ti ha invitato come collaboratore di {{ w.resource.name }}</small>
+                    </div>
+                    <div ng-if="w.action_type=='matter-create'" ui-sref="page.matter-details({id: w.resource._id})">
+                      <div class="lv-title">Nuova pratica</div>
+                      <small class="lv-small" >{{ w.issuer.first_name }} {{ w.issuer.last_name }} ti ha assegnato una nuova pratica chiamata: {{ w.resource.name }}</small>
+                    </div>
+                    <div ng-if="w.action_type=='password-reset'" ui-sref="page.matter-details({id: w.resource._id})">
+                      <div class="lv-title">Richiesta reset password</div>
+                      <small class="lv-small" >Hai chiesto di resettare la tua password</small>
+                    </div>
                   </div>
                 </div>
               </a>
@@ -81,7 +115,7 @@
             <a class="lv-footer" href="">View Previous</a>
           </div>
         </div>
-      </li> -->
+      </li>
 
       <!-- <li class="dropdown" uib-dropdown>
         <a uib-dropdown-toggle href="">

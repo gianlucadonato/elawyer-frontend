@@ -1,6 +1,6 @@
-<div class="sidebar-inner c-overflow">
+<div class="sidebar-inner c-overflow" ng-show="isAuthenticated">
 
-  <div class="profile-menu" ng-if="isAuthenticated">
+  <div class="profile-menu">
     <a href="" toggle-submenu>
       <div class="profile-pic">
         <img ng-src="{{current_user.avatar_url}}" default-src alt="">
@@ -32,7 +32,9 @@
       <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
     </li> -->
 
-    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('users') }"
+    <!-- Tutti gli or sono perchè le risorse sono sotto il namespace page. Bisognerebbe utilizzare una navigazione con bradcrumb anche nelle route di angular e.g: /matters/retainer_agreements/352352jb5h32jh32-->
+
+    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('page.customer-list') || mactrl.$state.includes('page.lawyer-list')}"
       permission permission-only="['LAWYER', 'ADMIN']">
       <a href="" toggle-submenu><i class="zmdi zmdi-accounts"></i> Contatti</a>
       <ul>
@@ -42,11 +44,11 @@
       </ul>
     </li>
 
-    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('users') }"
+    <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('page.form-list') ||  mactrl.$state.includes('page.form-draft') || mactrl.$state.includes('page.form-create') || mactrl.$state.includes('page.form-edit') || mactrl.$state.includes('page.form-answer')}"
       permission permission-only="['LAWYER', 'ADMIN']">
       <a href="" toggle-submenu><i class="zmdi zmdi-format-list-numbered"></i> Questionari</a>
       <ul>
-        <li><a data-ui-sref-active="active" data-ui-sref="page.form-list" data-ng-click="mactrl.sidebarStat($event)">Inviati</a></li>
+        <li data-ng-class="{ 'active': mactrl.$state.includes('page.form-list') }"><a data-ui-sref-active="active" data-ui-sref="page.form-list" data-ng-click="mactrl.sidebarStat($event)">Inviati</a></li>
         <li><a data-ui-sref-active="active" data-ui-sref="page.form-draft" data-ng-click="mactrl.sidebarStat($event)">Questionari</a></li>
       </ul>
     </li>
@@ -57,7 +59,7 @@
       </a>
     </li>
 
-    <li data-ui-sref-active="active" data-ng-class="{ 'active': mactrl.$state.includes('matters') }">
+    <li data-ui-sref-active="active" data-ng-class="{ 'active': mactrl.$state.includes('matters') || mactrl.$state.includes('page.retainer_agreement-details') || mactrl.$state.includes('page.retainer_agreement-create') || mactrl.$state.includes('page.retainer_agreement-list') ||  mactrl.$state.includes('page.retainer_agreement-edit') || mactrl.$state.includes('page.matter-list') || mactrl.$state.includes('page.matter-create') || mactrl.$state.includes('page.matter-edit') || mactrl.$state.includes('page.matter-details')}">
       <a data-ui-sref="page.matter-list" data-ng-click="mactrl.sidebarStat($event)">
         <i class="zmdi zmdi-file-text"></i> Pratiche
       </a>
