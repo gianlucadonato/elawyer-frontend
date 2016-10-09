@@ -31,7 +31,7 @@
       } else {
         // Generate Invoice Link
         var newWin = $window.open('', '_blank');
-        Invoice.api.download($scope.invoice.id).then(function(data){
+        Invoice.download($scope.invoice.id).then(function(data){
           var file = new Blob([data], { type: 'application/pdf' });
           var fileURL = URL.createObjectURL(file);
           newWin.location = fileURL;
