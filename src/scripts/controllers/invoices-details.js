@@ -51,7 +51,7 @@
     };
 
     $scope.openPdfLink = function() {
-      downloadPdfModal.dismiss();
+      //downloadPdfModal.dismiss();
       $window.open($scope.invoice.invoice_link, '_blank');
     };
 
