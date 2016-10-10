@@ -11,7 +11,7 @@
     var api = {};
 
     api.upload = function(data) {
-      for (var i = 0; i < data.files.length; i++) {
+      for (var i = 0; i < (data.files || []).length; i++) {
         var fileName = data.files[i].name || 'file-'+i;
         data[fileName] = data.files[i];
       }

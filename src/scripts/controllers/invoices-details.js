@@ -64,14 +64,10 @@
 
     $scope.payWithStripe = function() {
       choosePaymentModal.dismiss();
-
-      console.log($scope.invoice)
-
       var total = $scope.invoice.info.final_price;
       var stripe = StripeCheckout.configure({});
       var options = {
         paying: parseInt(total) * 100,
-        invoice_type: $scope.invoice.invoice_type,
         payment_method: 'stripe',
         email: $scope.invoice.matter.customer.email
       };
@@ -82,7 +78,7 @@
       })
       .then(function(result) {
         options.stripe_token = result[0].id;
-        RetainerAgreement.api.pay($scope.invoice.retainer_agreement, options).then(function(res) {
+        Invoice.pay($scope.invoice.id, options).then(function(res) {
           swal({
             title: "OK!",
             text: "La lettera d'incarico è stata pagata correttamente.",
@@ -91,8 +87,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.matter-list');
-          });
+            $state.go('page.matter-details', $scope.invoice.matter);          });
         }).catch(function(err) {
           swal({
             title: "Errore!",
@@ -106,38 +101,39 @@
       });
     };
 
-
     $scope.payWithBankTransfer = function(data) {
-      Uploader.upload(data.files)
-        .then(function(data) {
-          RetainerAgreement.api.pay($scope.invoice.retainer_agreement, {
-            invoice_type: $scope.invoice.invoice_type,
-            payment_method: 'bank_transfer'
-          }).then(function(res) {
-            choosePaymentModal.dismiss();
-            swal({
-              title: "OK!",
-              text: "Abbiamo ricevuto un'evidenza di pagamento. Attendi la verifica dei nostri operatori.",
-              type: "success",
-              showCancelButton: false,
-              confirmButtonText: "OK!",
-              closeOnConfirm: true
-            }, function() {
-              $state.go('page.matter-list');
-            });
-          }).catch(function(err) {
-            Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
-          });
-        }).catch(function(err) {
+      Uploader.upload({
+        files: data.files,
+        parentId: $scope.invoice.matter.drive_folder.id
+      })
+      .then(function(res) {
+        Invoice.pay($scope.invoice.id, {
+          payment_method: 'bank_transfer'
+        }).then(function(res) {
+          choosePaymentModal.dismiss();
           swal({
-            title: "Oops!",
-            text: "C'è stato un problema nel caricare l'evidenza di pagamento.",
-            type: "error",
+            title: "OK!",
+            text: "Abbiamo ricevuto un'evidenza di pagamento. Attendi la verifica dei nostri operatori.",
+            type: "success",
             showCancelButton: false,
             confirmButtonText: "OK!",
             closeOnConfirm: true
+          }, function() {
+            $state.go('page.matter-details', $scope.invoice.matter);
           });
+        }).catch(function(err) {
+          Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
         });
+      }).catch(function(err) {
+        swal({
+          title: "Oops!",
+          text: "C'è stato un problema nel caricare l'evidenza di pagamento.",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonText: "OK!",
+          closeOnConfirm: true
+        });
+      });
     };
 
     $scope.confirmPayment = function() {
@@ -151,7 +147,7 @@
         closeOnConfirm: true
       }, function() {
         $scope.invoice.is_confirmed = true;
-        Invoice.api.update($scope.invoice).then(function(data) {
+        Invoice.update($scope.invoice).then(function(data) {
           Notify.success('Success!', 'Invoice edited successfully!');
         }).catch(function(err){
           Notify.error('Error!', 'Unable to update invoice');

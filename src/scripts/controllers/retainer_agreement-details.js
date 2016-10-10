@@ -112,7 +112,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
+            $state.go('page.matter-details', $scope.retainer_agreement.matter);
           });
         }).catch(function(err) {
           swal({
@@ -129,7 +129,6 @@
 
     $scope.payWithBankTransfer = function(data) {
       choosePaymentModal.dismiss();
-      console.log('$scope.retainer_agreement', $scope.retainer_agreement);
       Uploader.upload({
         files: data.files,
         parentId: $scope.retainer_agreement.matter.drive_folder.id
@@ -148,7 +147,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
+            $state.go('page.matter-details', $scope.retainer_agreement.matter);
           });
         }).catch(function(err) {
           Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
