@@ -108,13 +108,9 @@
                 <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
               </li>
             </ul>
-            <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
-          </div>
-          <div ng-if="showOwnerInput" class="m-t-10">
-            <input type="text" ng-model="ownerObj"
-            uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
-            class="form-control input-inline" placeholder="Inserisci Proprietario">
-            <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
+            <a href="" search-customer search-customer-cb="addOwner" only="user">
+              <i class="zmdi zmdi-plus"></i> Aggiungi Proprietario
+            </a>
           </div>
         </dd>
       </dl>

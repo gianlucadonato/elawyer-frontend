@@ -16,14 +16,14 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
-            <th permission permission-only="['ADMIN']">Azioni</th>
+            <th permission permission-only="['LAWYER','ADMIN']">Azioni</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="c in customers">
             <td><a ui-sref="profile.details({id: c.id})">{{c.first_name}} {{c.last_name}}</a></td>
             <td>{{c.email}}</td>
-            <td permission permission-only="['ADMIN']">
+            <td permission permission-only="['LAWYER', 'ADMIN']">
               <ul class="actions">
                 <li>
                   <a href=""

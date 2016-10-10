@@ -9,6 +9,27 @@
   App.factory('User', function ($rootScope, $q, $http, API) {
     var api = {};
 
+    api.getModel = function() {
+      return {
+        first_name: '',
+        last_name: '',
+        email: '',
+        mobile_phone: '',
+        phone: '',
+        avatar_url: '',
+        birthday: '',
+        vat_number: '',
+        fiscal_code: '',
+        birth_place: '',
+        residence: '',
+        domicile: '',
+        address: '',
+        role: '',
+        accounts: {},
+        companies: [],
+      };
+    };
+
     api.list = function(query) {
       var deferred = $q.defer();
       $http

@@ -25,15 +25,47 @@
             templateUrl: 'views/modals/searchCustomer.html',
             scope: scope
           });
+          init();
         });
 
-        scope.isTabUserActive = true;
         scope.isTabCompanyActive = false;
         scope.showTabUser = true;
         scope.showTabCompany = true;
         scope.showCreateUser = false;
         scope.showCreateCompany = false;
+        scope.user = User.getModel();
+        scope.showCompanyInput = false;
+        scope.companyObj = undefined;
+        scope.userExistsError = false;
+        scope.ownerBlankError = false;
         scope.query = '';
+
+        function init() {
+          scope.isTabUserActive = true;
+          scope.isTabCompanyActive = false;
+          scope.showTabUser = true;
+          scope.showTabCompany = true;
+          scope.showCreateUser = false;
+          scope.showCreateCompany = false;
+          scope.user = User.getModel();
+          scope.showCompanyInput = false;
+          scope.companyObj = undefined;
+          scope.userExistsError = false;
+          scope.ownerBlankError = false;
+          scope.query = '';
+          if(attrs.only) {
+            switch(attrs.only) {
+              case 'user':
+                scope.showTabCompany = false;
+                scope.isTabUserActive = true;
+                break;
+              case 'company':
+                scope.showTabUser = false;
+                scope.isTabCompanyActive = true;
+                break;
+            }
+          }
+        }
 
         scope.search = function(query) {
           scope.users = [];
@@ -45,19 +77,6 @@
             scope.companies = companies;
           });
         };
-
-        if(attrs.only) {
-          switch(attrs.only) {
-            case 'user':
-              scope.showTabCompany = false;
-              scope.isTabUserActive = true;
-              break;
-            case 'company':
-              scope.showTabUser = false;
-              scope.isTabCompanyActive = true;
-              break;
-          }
-        }
 
         scope.createNewCustomer = function(type) {
           switch(type) {
@@ -99,26 +118,56 @@
 
         // Create User
         scope.createUser = function(data) {
-          if(data.birthday) {
+          var user = angular.copy(data);
+          if(user.birthday) {
             // Transform data in ms
-            var bd = data.birthday.split('/');
-            data.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
+            var bd = user.birthday.split('/');
+            user.birthday = new Date(bd[2], bd[1], bd[0]).getTime();
+          }
+          if((user.companies || []).length) {
+            user.companies = user.companies.map(function(company){
+              return company.id;
+            });
           }
           User
-            .create(data)
-            .then(function(user){
-              scope.selectUser(user, 'actionCreate');
+            .create(user)
+            .then(function(res){
+              scope.selectUser(res, 'actionCreate');
               Notify.success('OK!','User created successfully!');
             })
             .catch(function(err){
-              Notify.error('Error!','Unable to create user');
+              if(err.status === 409)
+                scope.userExistsError = true;
+              else
+                Notify.error('Error!','Unable to create user');
             });
+        };
+
+        scope.addCompany = function(company) {
+          if(company && company.id)
+            scope.user.companies.push(angular.copy(company));
+          scope.companyObj = undefined;
+        };
+
+        scope.removeCompany = function(company) {
+          if(company) {
+            var index = scope.user.companies.indexOf(company);
+            scope.user.companies.splice(index, 1);
+          }
+        };
+
+        scope.showAddCompany = function() {
+          scope.showCompanyInput = !scope.showCompanyInput;
+        };
+
+        scope.getCompanies = function(company) {
+          return Company.search({q: company}).then(function(companies){
+            return companies;
+          });
         };
 
         // Create Company
         scope.company = Company.getTemplate();
-        scope.showOwnerInput = false;
-        scope.ownerObj = undefined;
 
         if($localStorage.current_user)
           scope.company.owners.push($localStorage.current_user);
@@ -128,31 +177,25 @@
           company.owners = (company.owners || []).map(function(item){
             return item.id;
           });
-          Company.create(company).then(function(data){
-            scope.selectCompany(data, 'actionCreate');
-          }).catch(function(err){
-            Notify.error("Error!", "Unable to create company");
-          });
+          if(company.owners.length) {
+            Company.create(company).then(function(data){
+              scope.selectCompany(data, 'actionCreate');
+            }).catch(function(err){
+              Notify.error("Error!", "Unable to create company");
+            });
+          } else {
+            scope.ownerBlankError = true;
+          }
         };
 
         scope.addOwner = function(owner) {
-          if(owner) scope.company.owners.push(owner);
-          scope.ownerObj = undefined;
+          if(owner && owner.id)
+            scope.company.owners.push(owner);
         };
 
         scope.removeOwner = function(owner) {
           var index = scope.company.owners.indexOf(owner);
           scope.company.owners.splice(index, 1);
-        };
-
-        scope.getOwners = function(owner) {
-          return User.search({q: owner}).then(function(users){
-            return users;
-          });
-        };
-
-        scope.showAddOwner = function() {
-          scope.showOwnerInput = !scope.showOwnerInput;
         };
 
         scope.getLocation = function(val) {
