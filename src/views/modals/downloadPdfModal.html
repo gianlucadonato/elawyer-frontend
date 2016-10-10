@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header ch-alt">
+    <h3 style="margin:0; font-weight:300;">
+      <i class="zmdi zmdi-download m-r-5"></i> Download PDF
+    </h3>
+  </div>
+  <div class="card-body card-padding">
+    <div ng-if="downloadingPDF">
+      <div class="spinner-wrapper text-center">
+        <svg class="spinner-container" style="width:65px;height:65px" viewBox="0 0 44 44">
+          <circle class="path" cx="22" cy="22" r="20" fill="none" stroke-width="4"></circle>
+        </svg>
+      </div>
+      <div class="text-center" style="margin:15px;">
+        <span style="font-size:18px; font-weight:300;">
+          Generazione PDF in corso ... Attendere
+        </span>
+      </div>
+    </div>
+    <div ng-if="!downloadingPDF">
+      <div class="text-center" style="margin:15px;">
+        <span style="font-size:18px; font-weight:300;">
+          Generazione PDF Completata!
+        </span>
+      </div>
+      <a href="{{invoice.invoice_link}}" class="btn btn-block btn-success">
+        Clicca QUI per scaricare il file
+      </a>
+    </div>
+  </div>
+</div>

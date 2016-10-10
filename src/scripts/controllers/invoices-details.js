@@ -25,20 +25,34 @@
     }
 
     // Download PDF
+    var downloadPdfModal;
     $scope.download = function() {
       if($scope.invoice.invoice_link) {
         $window.open($scope.invoice.invoice_link, '_blank');
       } else {
         // Generate Invoice Link
-        var newWin = $window.open('', '_blank');
+        downloadPdfModal = $uibModal.open({
+          animation: false,
+          size: '',
+          backdrop: true,
+          keyboard: true,
+          templateUrl: 'views/modals/downloadPdfModal.html',
+          scope: $scope
+        });
+        $scope.downloadingPDF = true;
         Invoice.download($scope.invoice.id).then(function(data){
-          var file = new Blob([data], { type: 'application/pdf' });
-          var fileURL = URL.createObjectURL(file);
-          newWin.location = fileURL;
+          $scope.downloadingPDF = false;
+          $scope.invoice.invoice_link = data.invoice_link;
         }).catch(function(err){
-          console.log('Unable to download pdf', err);
+          $scope.downloadingPDF = false;
+          Notify.error('Unable to Download PDF!');
         });
       }
+    };
+
+    $scope.openPdfLink = function() {
+      downloadPdfModal.dismiss();
+      $window.open($scope.invoice.invoice_link, '_blank');
     };
 
     // Update Invoice Number
