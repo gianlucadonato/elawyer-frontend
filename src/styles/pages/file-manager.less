@@ -14,12 +14,21 @@
     align-items: center;
   }
 }
+#file-manager {
+  position: relative;
+}
+.file-manager.no-nav-color {
+  .navbar {
+    background-color: transparent !important;
+  }
+}
 .file-manager {
   font-size: 14px;
   height: 100vh;
   background: #FFF;
-  *,
-  *:focus {
+  overflow: hidden;
+
+  *,*:focus {
     outline: 0!important;
   }
 
@@ -165,7 +174,7 @@
   }
 
   #context-menu {
-    position: fixed;
+    position: absolute;
     display: none;
     z-index: 9999;
   }

@@ -2,6 +2,12 @@
   <div class="card">
     <div class="card-header ch-alt m-b-25">
       <h2>PRATICHE <small>Lista pratiche</small></h2>
+      <div class="search-box">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+          <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query">
+        </div>
+      </div>
       <button class="btn bgm-blue btn-float waves-effect" new-matter new-matter-cb="afterCreateMatter"
         permission permission-only="['LAWYER', 'ADMIN']"
         tooltip-placement="bottom" uib-tooltip="Nuova Pratica">
@@ -25,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="matter in matters">
+            <tr ng-repeat="matter in matters | filterBy: ['title', 'customer.name']: query ">
               <td>{{$index + 1}}</td>
               <td><a ui-sref="page.matter-details(matter)">{{matter.title}}</a></td>
               <td>{{matter.practice_area}}</td>

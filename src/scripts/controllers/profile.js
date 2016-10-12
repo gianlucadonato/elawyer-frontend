@@ -10,7 +10,9 @@
 
     $scope.editProfileInfo = false;
     $scope.editBillingInfo = false;
-
+    $scope.docsTab1Active = true;
+    $scope.docsTab2Active = false;
+    
     //check if it's me for editing
     $scope.me = $localStorage.current_user;
 

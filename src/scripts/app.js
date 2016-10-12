@@ -21,7 +21,8 @@ var App = angular.module('eLawyer', [
   'ui.tree',
   'angular-jwt',
   'stripe.checkout',
-  'google-client'
+  'google-client',
+  'angular.filter'
 ]);
 
 // APP CONFIG
