@@ -27,8 +27,11 @@
     // Download PDF
     var downloadPdfModal;
     $scope.download = function() {
-      if($scope.invoice.invoice_link) {
-        $window.open($scope.invoice.invoice_link, '_blank');
+      if(!$scope.invoice.invoice_number) {
+        return Notify.warn('Numero Fattura mancante!', 'Aspetta che l\'avvocato inserisca il numero di fattura!');
+      }
+      else if($scope.invoice.invoice_link) {
+        return $window.open($scope.invoice.invoice_link, '_blank');
       } else {
         // Generate Invoice Link
         downloadPdfModal = $uibModal.open({
@@ -40,12 +43,13 @@
           scope: $scope
         });
         $scope.downloadingPDF = true;
+        $scope.downloadingPdfError = false;
         Invoice.download($scope.invoice.id).then(function(data){
           $scope.downloadingPDF = false;
           $scope.invoice.invoice_link = data.invoice_link;
         }).catch(function(err){
           $scope.downloadingPDF = false;
-          Notify.error('Unable to Download PDF!');
+          $scope.downloadingPdfError = true;
         });
       }
     };

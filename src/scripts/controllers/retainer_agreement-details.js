@@ -164,6 +164,38 @@
       });
     };
 
+    // Download PDF
+    var downloadPdfModal;
+    $scope.download = function() {
+      if($scope.retainer_agreement.pdf_link) {
+        return $window.open($scope.retainer_agreement.pdf_link, '_blank');
+      } else {
+        // Generate Invoice Link
+        downloadPdfModal = $uibModal.open({
+          animation: false,
+          size: '',
+          backdrop: true,
+          keyboard: true,
+          templateUrl: 'views/modals/downloadPdfModal.html',
+          scope: $scope
+        });
+        $scope.downloadingPDF = true;
+        $scope.downloadingPdfError = false;
+        RetainerAgreement.api.download($scope.retainer_agreement).then(function(data){
+          $scope.downloadingPDF = false;
+          $scope.retainer_agreement.pdf_link = data.pdf_link;
+        }).catch(function(err){
+          $scope.downloadingPDF = false;
+          $scope.downloadingPdfError = true;
+        });
+      }
+    };
+
+    $scope.openPdfLink = function() {
+      //downloadPdfModal.dismiss();
+      $window.open($scope.retainer_agreement.pdf_link, '_blank');
+    };
+
     /* Send Retainer Agreement to Customer
      * ======================*/
     $scope.sendRetainerAgreement = function() {

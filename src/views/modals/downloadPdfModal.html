@@ -17,7 +17,7 @@
         </span>
       </div>
     </div>
-    <div ng-if="!downloadingPDF">
+    <div ng-if="!downloadingPDF && !downloadingPdfError">
       <div class="text-center" style="margin:15px;">
         <span style="font-size:18px; font-weight:300;">
           Generazione PDF Completata!
@@ -26,6 +26,9 @@
       <button class="btn btn-block btn-success" ng-click="openPdfLink()">
         Clicca QUI per scaricare il file
       </button>
+    </div>
+    <div ng-if="!downloadingPDF && downloadingPdfError">
+      <div class="alert alert-danger">Si è verificato un errore nella generazione del pdf!</div>
     </div>
   </div>
 </div>
