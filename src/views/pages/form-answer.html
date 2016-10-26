@@ -187,11 +187,12 @@
       <button class="btn btn-orange btn-icon-text waves-effect" ng-click="review = true" ng-show="!review">
         <span>Visualizza sommario </span><i class="zmdi zmdi-arrow-forward"></i>
       </button>
-      <button class="btn btn-icon-text waves-effect" ng-show="review" ng-click="review = false">
+      <button class="btn btn-icon-text waves-effect" ng-show="review && !exahusted" ng-click="review = false">
         <span>Indietro </span><i class="zmdi zmdi-arrow-back"></i>
       </button>
-      <button class="btn btn-success btn-icon-text waves-effect" ng-show="review" ng-click="save()">
-        <span>Salva </span><i class="zmdi zmdi-upload"></i>
+      <button class="btn btn-success btn-icon-text waves-effect" ng-show="review && !exahusted" ng-click="save()">
+        <span ng-show="form.answered/form.total != 1">Salva <i class="zmdi zmdi-upload"></i></span>
+        <span ng-show="form.answered/form.total == 1">Invia al mio avvocato <i class="zmdi zmdi-send"></i></span>
       </button>
     </div>
 
