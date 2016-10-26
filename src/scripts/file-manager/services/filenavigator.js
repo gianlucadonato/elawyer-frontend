@@ -12,7 +12,9 @@
         this.fileList = [];
         this.currentPath = [];
         this.clickedFolders = {};
+        this.rootFolderId = '';
         this.currentFolderId = '';
+        this.currentUserId = '';
         this.history = [];
         this.error = '';
         this.onRefresh = function() {};
@@ -37,9 +39,9 @@
         return deferred.resolve(data);
       };
 
-      FileNavigator.prototype.listRoot = function(params) {
+      FileNavigator.prototype.listMatters = function(params) {
         if(!params) params = {};
-        return this.apiMiddleware.listRoot(params, this.currentPath, this.deferredHandler.bind(this));
+        return this.apiMiddleware.listMatters(params, this.currentPath, this.deferredHandler.bind(this));
       };
 
       FileNavigator.prototype.list = function(params) {
@@ -52,16 +54,27 @@
         var path = self.currentPath.join('/');
         self.requesting = true;
         self.fileList = [];
-        if(!path)
-          return self.listRoot({}).then(cb).finally(function() {
-            self.requesting = false;
-          });
-        else
+        if(!path) {
+          if(this.rootFolderId.toString() === 'matters')
+            return self.listMatters({
+              user_id: self.currentUserId
+            }).then(cb).finally(function() {
+              self.requesting = false;
+            });
+          else {
+            return self.list({
+              file_id: self.rootFolderId
+            }).then(cb).finally(function() {
+              self.requesting = false;
+            });
+          }
+        } else {
           return self.list({
             file_id: self.currentFolderId
           }).then(cb).finally(function() {
             self.requesting = false;
           });
+        }
         function cb(data) {
           self.fileList = (data.result || []).map(function(file) {
             return new Item(file, self.currentPath);

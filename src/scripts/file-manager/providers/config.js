@@ -8,7 +8,7 @@
             appName: 'Documents',
             defaultLang: 'en',
 
-            listRootUrl: API.host + '/api/documents/list_root',
+            listMattersUrl: API.host + '/api/documents/list_matters',
             listUrl: API.host + '/api/documents/list',
             uploadUrl: API.host + '/api/documents/upload',
             renameUrl: API.host + '/api/documents/update',

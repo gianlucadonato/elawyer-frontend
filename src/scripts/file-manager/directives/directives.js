@@ -3,10 +3,17 @@
     var app = angular.module('FileManagerApp');
 
     app.directive('angularFilemanager', ['$parse', 'fileManagerConfig', function($parse, fileManagerConfig) {
-        return {
-            restrict: 'EA',
-            templateUrl: fileManagerConfig.tplPath + '/main.html'
-        };
+      return {
+        restrict: 'EA',
+        templateUrl: fileManagerConfig.tplPath + '/main.html',
+        transclude: true,
+        scope: {
+          rootId: "@?",
+          rootUser: "@?",
+          rootName: "@?",
+          rootActions: "@?"
+        }
+      };
     }]);
 
     app.directive('ngFile', ['$parse', function($parse) {

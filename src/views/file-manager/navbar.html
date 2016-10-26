@@ -7,11 +7,11 @@
         <!-- <input type="text" class="form-control input-sm file-search" ng-show="config.searchForm" placeholder="{{'search' | translate}}..." ng-model="$parent.query"> -->
 
         <button class="btn btn-orange btn-sm" ng-click="modal('newfolder') && prepareNewFolder()"
-          ng-show="fileNavigator.currentPath.length">
+          ng-show="fileNavigator.currentPath.length || rootActions == 'true'">
             <i class="glyphicon glyphicon-plus"></i> {{"new_folder" | translate}}
         </button>
         <button class="btn btn-orange btn-sm" ng-click="modal('uploadfile')"
-          ng-show="fileNavigator.currentPath.length && config.allowedActions.upload">
+          ng-show="(fileNavigator.currentPath.length || rootActions == 'true') && config.allowedActions.upload">
             <i class="glyphicon glyphicon-cloud-upload"></i> {{"upload_files" | translate}}
         </button>
 

@@ -16,8 +16,8 @@
           $scope.predicate[1] = predicate;
         };
         $scope.query = '';
-        $scope.fileNavigator = new FileNavigator();
         $scope.apiMiddleware = new ApiMiddleware();
+        $scope.fileNavigator = new FileNavigator();
         $scope.uploadFileList = [];
         $scope.viewTemplate = $storage.getItem('viewTemplate') || 'main-table.html';
         $scope.fileList = [];
@@ -25,6 +25,20 @@
 
         $rootScope.$on('refresh-file-manager', function(data){
           $scope.fileNavigator.refresh();
+        });
+
+        $scope.$watch('rootId', function(newValue, oldValue){
+          if(newValue) {
+            $scope.fileNavigator.rootFolderId = ($scope.rootId || '').toString();
+            $scope.fileNavigator.refresh();
+          }
+        });
+
+        $scope.$watch('rootUser', function(newValue, oldValue){
+          if(newValue) {
+            $scope.fileNavigator.currentUserId = ($scope.rootUser || '').toString();
+            $scope.fileNavigator.refresh();
+          }
         });
 
         $scope.$watch('temps', function() {
@@ -326,7 +340,11 @@
           if (!name || $scope.fileNavigator.fileNameExists(name)) {
             return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
           }
-          item.tempModel.parentId = $scope.fileNavigator.currentFolderId;
+          if(!$scope.fileNavigator.currentPath.length) {
+            item.tempModel.parentId = $scope.fileNavigator.rootFolderId;
+          } else {
+            item.tempModel.parentId = $scope.fileNavigator.currentFolderId;
+          }
           $scope.apiMiddleware.createFolder(item).then(function() {
             $scope.fileNavigator.refresh();
             $scope.modal('newfolder', true);
@@ -343,7 +361,11 @@
         };
 
         $scope.uploadFiles = function() {
-          $scope.apiMiddleware.upload($scope.uploadFileList, $scope.fileNavigator.currentFolderId).then(function() {
+          var parentId = $scope.fileNavigator.currentFolderId;
+          if(!$scope.fileNavigator.currentPath.length) {
+            parentId = $scope.fileNavigator.rootFolderId;
+          }
+          $scope.apiMiddleware.upload($scope.uploadFileList, parentId).then(function() {
             $scope.fileNavigator.refresh();
             $scope.uploadFileList = [];
             $scope.modal('uploadfile', true);
@@ -368,7 +390,6 @@
 
         $scope.changeLanguage(getQueryParam('lang'));
         $scope.isWindows = getQueryParam('server') === 'Windows';
-        $scope.fileNavigator.refresh();
 
     }]);
 })(angular, jQuery);

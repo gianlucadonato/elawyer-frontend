@@ -21,7 +21,8 @@ var App = angular.module('eLawyer', [
   'ui.tree',
   'angular-jwt',
   'stripe.checkout',
-  'google-client'
+  'google-client',
+  'angular.filter'
 ]);
 
 // APP CONFIG
@@ -51,6 +52,7 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
           }
         }
         if(config.url.indexOf('maps.googleapis') !== -1) {
+          console.log('config.headers', config.headers);
           delete config.headers.Authorization;
         }
         return config;

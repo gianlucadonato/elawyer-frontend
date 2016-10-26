@@ -23,8 +23,8 @@
           return item && item.model.fullPath();
         };
 
-        ApiMiddleware.prototype.listRoot = function(params, path, customDeferredHandler) {
-          return this.apiHandler.list(params, fileManagerConfig.listRootUrl, this.getPath(path), customDeferredHandler);
+        ApiMiddleware.prototype.listMatters = function(params, path, customDeferredHandler) {
+          return this.apiHandler.list(params, fileManagerConfig.listMattersUrl, this.getPath(path), customDeferredHandler);
         };
 
         ApiMiddleware.prototype.list = function(params, path, customDeferredHandler) {

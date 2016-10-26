@@ -57,5 +57,6 @@
   "src/bower_components/chosen/chosen.jquery.js",
   "src/bower_components/chosen/chosen.css",
   "src/bower_components/jasny-bootstrap/js/fileinput.js",
-  "src/bower_components/async/dist/async.min.js"
+  "src/bower_components/async/dist/async.min.js",
+  "src/bower_components/angular-filter/dist/angular-filter.min.js"
 ]

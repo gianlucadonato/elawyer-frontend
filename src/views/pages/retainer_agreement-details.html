@@ -29,6 +29,7 @@
             <div class="clearfix"></div>
           </div>
         </div>
+
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
@@ -42,7 +43,16 @@
             <div class="col-sm-6 text-right"></div>
           </div>
 
-          <h3>Lettera di incarico</h3>
+          <h3>
+            <span>Lettera di incarico</span>
+            <ul class="actions pull-right">
+              <li>
+                <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                  <i class="zmdi zmdi-download"></i>Scarica PDF
+                </button>
+              </li>
+            </ul>
+          </h3>
           <hr/>
           <p ng-if="retainer_agreement.description">{{retainer_agreement.description}}</p>
           <p ng-if="!retainer_agreement.description">
@@ -184,19 +194,16 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.customer.id">
-              <h4>Spett.le {{retainer_agreement.matter.customer.name}}</h4>
+            <div class="pull-right text-right">
+              <h4>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                {{retainer_agreement.matter.customer.name}}
+              </h4>
               <p>
                 <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
-              </p>
-            </div>
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.company.id">
-              <h4>All'attenzione di {{retainer_agreement.matter.company.name}}</h4>
-              <p>
-                <span ng-if="retainer_agreement.matter.company.address">{{retainer_agreement.matter.company.address}}</span><br/>
-                <span ng-if="retainer_agreement.matter.company.vat">P.I. {{retainer_agreement.matter.company.vat}}</span><br/>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -245,27 +252,26 @@
   <div class="row" ng-if="readMode">
     <div class="col-sm-12">
       <div class="card m-t-25 invoice-letter">
+
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.customer.id">
-              <h4>Spett.le {{retainer_agreement.matter.customer.name}}</h4>
+            <div class="pull-right text-right">
+              <h4>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                {{retainer_agreement.matter.customer.name}}
+              </h4>
               <p>
                 <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
                 <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
               </p>
             </div>
-            <div class="pull-right text-right" ng-if="retainer_agreement.matter.company.id">
-              <h4>All'attenzione di {{retainer_agreement.matter.company.name}}</h4>
-              <p>
-                <span ng-if="retainer_agreement.company.address">{{retainer_agreement.matter.company.address}}</span><br/>
-                <span ng-if="retainer_agreement.company.vat">P.I. {{retainer_agreement.matter.company.vat}}</span><br/>
-              </p>
-            </div>
             <div class="clearfix"></div>
           </div>
         </div>
+
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
@@ -279,7 +285,16 @@
             <div class="col-sm-6 text-right"></div>
           </div>
 
-          <h3>Lettera di incarico</h3>
+          <h3>
+            <span>Lettera di incarico</span>
+            <ul class="actions pull-right">
+              <li>
+                <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                  <i class="zmdi zmdi-download"></i>Download PDF
+                </button>
+              </li>
+            </ul>
+          </h3>
           <hr/>
           <p ng-if="retainer_agreement.description">{{retainer_agreement.description}}</p>
           <p ng-if="!retainer_agreement.description">

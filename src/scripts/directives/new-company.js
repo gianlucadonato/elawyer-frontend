@@ -40,13 +40,17 @@
           company.owners = (company.owners || []).map(function(item){
             return item.id;
           });
-          Company.create(company).then(function(data){
-            if(scope.newCompanyCb)
-              scope.newCompanyCb(company);
-            scope.currentModal.dismiss();
-          }).catch(function(err){
-            Notify.error("Error!", "Unable to create company");
-          });
+          if(company.owners.length) {
+            Company.create(company).then(function(data){
+              if(scope.newCompanyCb)
+                scope.newCompanyCb(company);
+              scope.currentModal.dismiss();
+            }).catch(function(err){
+              Notify.error("Error!", "Unable to create company");
+            });
+          } else {
+            Notify.error('Errore','Inserire almeno un proprietario!');
+          }
         };
 
         scope.addOwner = function(owner) {

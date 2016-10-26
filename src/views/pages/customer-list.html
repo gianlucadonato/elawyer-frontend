@@ -3,6 +3,12 @@
   <div class="card">
     <div class="card-header ch-alt m-b-25">
       <h2>CLIENTI <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small></h2>
+      <div class="search-box">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+          <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query">
+        </div>
+      </div>
       <button class="btn bgm-blue btn-float waves-effect" new-user="user" new-user-cb="addCustomer"
         permission permission-only="['LAWYER', 'ADMIN']"
         tooltip-placement="bottom" uib-tooltip="Crea Nuovo Cliente">
@@ -16,14 +22,14 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
-            <th permission permission-only="['ADMIN']">Azioni</th>
+            <th permission permission-only="['LAWYER','ADMIN']">Azioni</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="c in customers">
+          <tr ng-repeat="c in customers | filter: {name: query}">
             <td><a ui-sref="profile.details({id: c.id})">{{c.first_name}} {{c.last_name}}</a></td>
             <td>{{c.email}}</td>
-            <td permission permission-only="['ADMIN']">
+            <td permission permission-only="['LAWYER', 'ADMIN']">
               <ul class="actions">
                 <li>
                   <a href=""

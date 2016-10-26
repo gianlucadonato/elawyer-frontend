@@ -10,7 +10,6 @@
 
     $scope.editProfileInfo = !!$stateParams.editMode;
     $scope.isOwner = false;
-    $scope.showOwnerInput = false;
     $scope.ownerObj = undefined;
 
     function activate() {
@@ -50,7 +49,8 @@
       company.owners = (company.owners || []).map(function(owner) {
         return owner.id;
       });
-      Company
+      if(company.owners.length) {
+        Company
         .update(company)
         .then(function(data){
           Notify.success('OK!','Informazioni salvate con successo!');
@@ -59,12 +59,14 @@
         .catch(function(err){
           Notify.error('Error!','Unable to update company');
         });
+      } else {
+        Notify.error('Errore','Inserire almeno un proprietario!');
+      }
     };
 
     $scope.addOwner = function(owner) {
       if(owner && owner.id)
-        $scope.company.owners.push(angular.copy(owner));
-      $scope.ownerObj = {};
+        $scope.company.owners.push(owner);
     };
 
     $scope.removeOwner = function(owner) {
@@ -72,16 +74,6 @@
         var index = $scope.company.owners.indexOf(owner);
         $scope.company.owners.splice(index, 1);
       }
-    };
-
-    $scope.getOwners = function(owner) {
-      return User.search({q: owner}).then(function(users){
-        return users;
-      });
-    };
-
-    $scope.showAddOwner = function() {
-      $scope.showOwnerInput = !$scope.showOwnerInput;
     };
 
     $scope.getLocation = function(val) {

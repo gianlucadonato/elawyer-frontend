@@ -17,6 +17,10 @@
       pop('success', title, message, 'animated fadeIn', 'animated fadeOut');
     };
 
+    notify.warn = function(title, message) {
+      pop('warning', title, message, 'animated bounceInRight', 'animated bounceOutRight');
+    };
+
     notify.info = function(title, message) {
       pop('info', title, message, 'animated flipInY', 'animated flipOutY');
     };

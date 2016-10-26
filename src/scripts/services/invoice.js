@@ -56,9 +56,7 @@
     api.download = function(id) {
       var deferred = $q.defer();
       $http
-        .get(API.host + '/api/invoices/'+id+'/download', {
-          responseType: 'arraybuffer'
-        })
+        .get(API.host + '/api/invoices/'+id+'/download')
         .then(function(res){
           deferred.resolve(res.data);
         })

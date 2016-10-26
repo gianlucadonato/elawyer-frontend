@@ -112,7 +112,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
+            $state.go('page.matter-details', $scope.retainer_agreement.matter);
           });
         }).catch(function(err) {
           swal({
@@ -129,7 +129,6 @@
 
     $scope.payWithBankTransfer = function(data) {
       choosePaymentModal.dismiss();
-      console.log('$scope.retainer_agreement', $scope.retainer_agreement);
       Uploader.upload({
         files: data.files,
         parentId: $scope.retainer_agreement.matter.drive_folder.id
@@ -148,7 +147,7 @@
             confirmButtonText: "OK!",
             closeOnConfirm: true
           }, function() {
-            $state.go('page.matter-details', {id: $scope.retainer_agreement.matter.id});
+            $state.go('page.matter-details', $scope.retainer_agreement.matter);
           });
         }).catch(function(err) {
           Notify.error("Oops!", "Si è verificato un problema nel caricare l'evidenza di pagamento.");
@@ -163,6 +162,38 @@
           closeOnConfirm: true
         });
       });
+    };
+
+    // Download PDF
+    var downloadPdfModal;
+    $scope.download = function() {
+      if($scope.retainer_agreement.pdf_link) {
+        return $window.open($scope.retainer_agreement.pdf_link, '_blank');
+      } else {
+        // Generate Invoice Link
+        downloadPdfModal = $uibModal.open({
+          animation: false,
+          size: '',
+          backdrop: true,
+          keyboard: true,
+          templateUrl: 'views/modals/downloadPdfModal.html',
+          scope: $scope
+        });
+        $scope.downloadingPDF = true;
+        $scope.downloadingPdfError = false;
+        RetainerAgreement.api.download($scope.retainer_agreement).then(function(data){
+          $scope.downloadingPDF = false;
+          $scope.retainer_agreement.pdf_link = data.pdf_link;
+        }).catch(function(err){
+          $scope.downloadingPDF = false;
+          $scope.downloadingPdfError = true;
+        });
+      }
+    };
+
+    $scope.openPdfLink = function() {
+      //downloadPdfModal.dismiss();
+      $window.open($scope.retainer_agreement.pdf_link, '_blank');
     };
 
     /* Send Retainer Agreement to Customer

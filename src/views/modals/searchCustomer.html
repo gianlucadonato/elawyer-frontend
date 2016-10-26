@@ -108,6 +108,9 @@
             <div class="fg-line">
               <input data-ng-model="user.email" type="email" class="form-control"  placeholder="eg. mrossi@gmail.com" required>
             </div>
+            <span ng-if="userExistsError" style="color:red;">
+              Utente già esistente! Inserire un email diversa.
+            </span>
           </dd>
         </dl>
         <dl class="dl-horizontal">
@@ -171,6 +174,26 @@
           <dd>
             <div class="fg-line">
               <input data-ng-model="user.mobile_phone" type="text" class="form-control" data-input-mask="{mask: '000 0000000'}" placeholder="eg. 340 1231986">
+            </div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt class="p-t-10">Azienda</dt>
+          <dd>
+            <div class="m-t-10">
+              <ul style="padding-left: 15px;">
+                <li ng-repeat="company in user.companies">
+                  {{company.name}}
+                  <a href="" ng-click="removeCompany(company)" style="margin-left:5px;color:red;">X</a>
+                </li>
+              </ul>
+              <a href="" ng-click="showAddCompany()"><i class="zmdi zmdi-plus"></i> Aggiungi Azienda</a>
+            </div>
+            <div ng-if="showCompanyInput" class="m-t-10">
+              <input type="text" ng-model="companyObj"
+              uib-typeahead="company as company.name for company in getCompanies($viewValue)"
+              class="form-control input-inline" placeholder="Inserisci Azienda">
+              <a href="" ng-click="addCompany(companyObj)" class="btn btn-orange waves-effect">Aggiungi</a>
             </div>
           </dd>
         </dl>
@@ -257,14 +280,13 @@
                   <a href="" ng-click="removeOwner(owner)" style="margin-left:5px;color:red;">X</a>
                 </li>
               </ul>
-              <a href="" ng-click="showAddOwner()"><i class="zmdi zmdi-plus"></i> Aggiungi Proprietario</a>
+              <a href="" search-customer search-customer-cb="addOwner" only="user">
+                <i class="zmdi zmdi-plus"></i> Aggiungi Proprietario
+              </a>
             </div>
-            <div ng-if="showOwnerInput" class="m-t-10">
-              <input type="text" ng-model="ownerObj"
-              uib-typeahead="owner as owner.name for owner in getOwners($viewValue)"
-              class="form-control input-inline" placeholder="Inserisci Proprietario">
-              <a href="" ng-click="addOwner(ownerObj)" class="btn btn-orange waves-effect">Aggiungi</a>
-            </div>
+            <span ng-if="ownerBlankError" style="color:red;">
+              Inserire almeno un proprietario!
+            </span>
           </dd>
         </dl>
         <div class="m-t-30">

@@ -108,6 +108,19 @@
       return deferred.promise;
     };
 
+    api.download = function(obj, opt) {
+      var deferred = $q.defer();
+      $http
+        .post(API.host + '/api/retainer_agreement/'+obj.id+'/download', opt)
+        .then(function(res){
+          deferred.resolve(res.data);
+        })
+        .catch(function(err){
+          deferred.reject(err);
+        });
+      return deferred.promise;
+    };
+
     api.delete = function(obj) {
       var deferred = $q.defer();
       $http

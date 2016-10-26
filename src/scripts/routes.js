@@ -74,6 +74,11 @@
         requireLogin: true,
         templateUrl: helper.pagesPath('profile-details.html')
       })
+      .state ('profile.docs', {
+        url: '/docs',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('profile-docs.html')
+      })
       .state ('profile.timeline', {
         url: '/timeline',
         requireLogin: true,

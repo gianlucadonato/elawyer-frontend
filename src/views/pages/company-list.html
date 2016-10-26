@@ -5,6 +5,12 @@
       <h2>Aziende e Persone Giuridiche
         <small>Una persona giuridica è un ente cui l'ordinamento giuridico attribuisce la capacità giuridica, rendendolo quindi soggetto di diritto.</small>
       </h2>
+      <div class="search-box">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+          <input type="text" class="form-control" placeholder="Cerca per nome.." ng-model="query">
+        </div>
+      </div>
       <button class="btn bgm-blue btn-float waves-effect"
         ui-sref="page.company-create"
         permission permission-only="['LAWYER', 'ADMIN']"
@@ -23,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="company in companies">
+          <tr ng-repeat="company in companies | filter: {name: query}">
             <td><a ui-sref="company.details({id: company.id})">{{company.name}}</a></td>
             <td>{{company.email}}</td>
             <td permission permission-only="['LAWYER', 'ADMIN']">
