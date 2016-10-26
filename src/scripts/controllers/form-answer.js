@@ -121,18 +121,50 @@
     function getForm() {
       Answer.api.get($stateParams.id).then(function(data) {
         $scope.form = data;
-        computeAnswered()
+        computeAnswered();
+
+        if ($scope.form.answered === $scope.form.total) {
+          $scope.exahusted = true;
+          $scope.review = true;
+        }
+
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load form');
       });
     }
 
     $scope.save = function() {
-      Answer.api.update($scope.form).then(function(data) {
-        Notify.success('Congratulazioni!', 'Questionario salvato con successo');
-      }).catch(function(err){
-        Notify.error('Error!', 'Impossibile salvare questionario');
-      });
+       if ($scope.form.answered === $scope.form.total) {
+        swal({
+          title: "Attenzione!",
+          text: "Il questionario risulta completato. Salvandolo, verrà inviato al tuo avvocato e non potrai più modificarne il contenuto. Vuoi continuare ?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#F44336",
+          confirmButtonText: "Si, invia al mio avvocato",
+          cancelButtonText: "Annulla",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        }, function(isConfirm){
+          if (isConfirm) {
+            Answer.api.update($scope.form).then(function(data) {
+              Notify.success('Congratulazioni!', 'Questionario inviato con successo al tuo avvocato');
+              $scope.exahusted = true;
+            }).catch(function(err){
+              Notify.error('Error!', 'Impossibile salvare questionario');
+            });
+          }
+          else return false;
+        });
+       } else {
+        Answer.api.update($scope.form).then(function(data) {
+          Notify.success('Congratulazioni!', 'Questionario salvato con successo');
+        }).catch(function(err){
+          Notify.error('Error!', 'Impossibile salvare questionario');
+        });
+       }
+
+
     };
 
     $scope.ensureDate = function(a) {
