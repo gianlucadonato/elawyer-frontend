@@ -227,14 +227,26 @@
       });
     };
 
+    var currentModal;
+    $scope.openTermsConditions = function() {
+      currentModal = $uibModal.open({
+        animation: false,
+        size: 'lg',
+        backdrop: true,
+        keyboard: true,
+        templateUrl: 'views/modals/terms-conditions.html',
+        scope: $scope
+      });
+    };
+
     // Sticky Summary
-    $(window).scroll(function(){
-      if ($(this).scrollTop() > 230) {
-        $("#summary-box").addClass("fixed-top");
-      } else {
-        $("#summary-box").removeClass("fixed-top");
-      }
-    });
+    // $(window).scroll(function(){
+    //   if ($(this).scrollTop() > 230) {
+    //     $("#summary-box").addClass("fixed-top");
+    //   } else {
+    //     $("#summary-box").removeClass("fixed-top");
+    //   }
+    // });
   });
 
 })();

@@ -6,7 +6,7 @@
 
         var values = {
             appName: 'Documents',
-            defaultLang: 'en',
+            defaultLang: 'it',
 
             listMattersUrl: API.host + '/api/documents/list_matters',
             listUrl: API.host + '/api/documents/list',
@@ -49,6 +49,9 @@
             downloadFilesByAjax: true,
             previewImagesInModal: true,
             enablePermissionsRecursive: true,
+            hidePermissions: true,
+            hideSize: true,
+            hideDate: false,
             compressAsync: false,
             extractAsync: false,
 

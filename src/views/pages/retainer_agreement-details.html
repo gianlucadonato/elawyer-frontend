@@ -14,7 +14,42 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right">
+            <div class="pull-left text-left">
+              <p>
+                <strong>Padova</strong><br/>
+                <strong>Corso del Popolo n. 1 - 35131</strong><br/>
+                <span>+39 049 8758955 - Fax +39 049 8759252</span>
+              </p>
+              <p>
+                <strong>Milano</strong><br/>
+                <strong>Piazza del Duomo n. 20 - 20123</strong><br/>
+                <span>+39 02 7222201 - Fax + 39 02 861375</span>
+              </p>
+            </div>
+            <div class="pull-right text-right" style="position:relative;">
+              <ul class="btn-download">
+                <li>
+                  <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                    <i class="zmdi zmdi-download"></i>Scarica PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <!-- <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
+              <p>
+                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
+                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
+              </p> -->
+            </div>
+            <div class="col-sm-6 text-right">
               <h4>
                 <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
                 <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
@@ -26,33 +61,9 @@
                 <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
               </p>
             </div>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-
-        <div class="card-body card-padding">
-          <div class="row">
-            <div class="col-sm-6">
-              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
-              <p>
-                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
-                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
-                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
-              </p>
-            </div>
-            <div class="col-sm-6 text-right"></div>
           </div>
 
-          <h3>
-            <span>Lettera di incarico</span>
-            <ul class="actions pull-right">
-              <li>
-                <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
-                  <i class="zmdi zmdi-download"></i>Scarica PDF
-                </button>
-              </li>
-            </ul>
-          </h3>
+          <h3>Lettera di incarico</h3>
           <hr/>
           <p ng-if="retainer_agreement.description">{{retainer_agreement.description}}</p>
           <p ng-if="!retainer_agreement.description">
@@ -128,12 +139,13 @@
             </p>
           </div>
           <div class="m-t-25 m-b-25">
-            <form ng-submit="next()" class="p-t-25">
-              <div class="checkbox m-b-15">
+            <form ng-submit="next()" class="terms-conditions">
+              <div class="checkbox">
                 <label><input type="checkbox" required><i class="input-helper"></i>
-                  Il/la sottoscritto/a dichiara di accettare espressamente, ai sensi degli Articoli 1341 e 1342 C.C. le seguenti clausole: Dati Tecnici, Compensi Professionali e Estensione dell’Incarico.
+                  Il/la sottoscritto/a dichiara di accettare espressamente, ai sensi degli Articoli 1341 e 1342 C.C. le seguenti clausole: Dati Tecnici, Compensi Professionali e Estensione dell’Incarico sottostanti.
                 </label>
               </div>
+              <a href="" ng-click="openTermsConditions()">Leggi le Condizioni Generali</a>
               <div>
                 <button type="submit" class="btn btn-orange btn-block btn-icon-text waves-effect">
                   <span>Accetta e Conferma</span>
@@ -194,7 +206,41 @@
         <div class="card-header">
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
-            <div class="pull-right text-right">
+            <div class="pull-left text-left">
+              <p>
+                <strong>Padova</strong><br/>
+                <strong>Corso del Popolo n. 1 - 35131</strong><br/>
+                <span>+39 049 8758955 - Fax +39 049 8759252</span>
+              </p>
+              <p>
+                <strong>Milano</strong><br/>
+                <strong>Piazza del Duomo n. 20 - 20123</strong><br/>
+                <span>+39 02 7222201 - Fax + 39 02 861375</span>
+              </p>
+            </div>
+            <div class="pull-right text-right" style="position:relative;">
+              <ul class="btn-download">
+                <li>
+                  <button class="btn btn-flat btn-default btn-icon-text waves-effect" ng-click="download()">
+                    <i class="zmdi zmdi-download"></i>Scarica PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-6">
+              <!-- <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
+              <p>
+                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
+                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
+                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
+              </p> -->
+            </div>
+            <div class="col-sm-6 text-right">
               <h4>
                 <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
                 <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
@@ -206,20 +252,6 @@
                 <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
               </p>
             </div>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-        <div class="card-body card-padding">
-          <div class="row">
-            <div class="col-sm-6">
-              <h4>Avv. {{retainer_agreement.owner.first_name}} {{retainer_agreement.owner.last_name}}</h4>
-              <p>
-                <span ng-if="retainer_agreement.owner.address">{{retainer_agreement.owner.address}}</span><br/>
-                <span ng-if="retainer_agreement.owner.fiscal_code">C.F. {{retainer_agreement.owner.fiscal_code}}</span><br/>
-                <span ng-if="retainer_agreement.owner.vat_number">P.I. {{retainer_agreement.owner.vat_number}}</span>
-              </p>
-            </div>
-            <div class="col-sm-6 text-right"></div>
           </div>
 
           <div class="row">
