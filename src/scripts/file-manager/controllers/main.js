@@ -23,6 +23,12 @@
         $scope.fileList = [];
         $scope.temps = [];
 
+        if(($scope.hideSidebar || '').toString() === 'true') {
+          $scope.config.sidebar = false;
+        } else {
+          $scope.config.sidebar = true;
+        }
+
         $rootScope.$on('refresh-file-manager', function(data){
           $scope.fileNavigator.refresh();
         });

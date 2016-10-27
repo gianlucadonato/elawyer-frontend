@@ -11,7 +11,8 @@
           rootId: "@?",
           rootUser: "@?",
           rootName: "@?",
-          rootActions: "@?"
+          rootActions: "@?",
+          hideSidebar: "@?"
         }
       };
     }]);
