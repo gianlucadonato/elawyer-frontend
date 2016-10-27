@@ -6,7 +6,7 @@
   * RetainerAgreement Details Controller
   =========================================================*/
 
-  App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
+  App.controller('RetainerAgreementDetailsCtrl', function($scope, $stateParams, $state, RetainerAgreement, Notify, Auth, $window, $timeout, $uibModal, StripeCheckout, Uploader) {
 
     $scope.readMode = false;
     $scope.showNext = false;
@@ -49,11 +49,17 @@
           }
       }
       if(atLeastOneSelected) {
-        // Update selected services and show next
-        RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
+        var curr_user = Auth.getUser();
+        if($scope.retainer_agreement.owner_id == curr_user.id) {
           $scope.showNext = true;
-          $window.scrollTo(0, 0);
-        });
+        } else {
+          // Update selected services and show next
+          // $scope.retainer_agreement.is_accepted = true;
+          RetainerAgreement.api.update($scope.retainer_agreement).then(function(data) {
+            $scope.showNext = true;
+            $window.scrollTo(0, 0);
+          });
+        }
       } else {
         Notify.error('Errore', 'Seleziona almeno un servizio');
       }
@@ -166,7 +172,7 @@
 
     // Download PDF
     var downloadPdfModal;
-    $scope.download = function() {
+    $scope.download = function(showAll) {
       if($scope.retainer_agreement.pdf_link) {
         return $window.open($scope.retainer_agreement.pdf_link, '_blank');
       } else {
@@ -181,7 +187,10 @@
         });
         $scope.downloadingPDF = true;
         $scope.downloadingPdfError = false;
-        RetainerAgreement.api.download($scope.retainer_agreement).then(function(data){
+        RetainerAgreement.api.download(
+          $scope.retainer_agreement,
+          { show_all: !!showAll }
+        ).then(function(data){
           $scope.downloadingPDF = false;
           $scope.retainer_agreement.pdf_link = data.pdf_link;
         }).catch(function(err){
