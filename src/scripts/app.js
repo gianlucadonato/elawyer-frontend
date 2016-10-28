@@ -52,8 +52,9 @@ App.config(function($httpProvider, StripeCheckoutProvider, GoogleClientProvider,
           }
         }
         if(config.url.indexOf('maps.googleapis') !== -1) {
-          console.log('config.headers', config.headers);
-          delete config.headers.Authorization;
+          for(var key in config.headers)
+            if(key !== 'Accept')
+              delete config.headers[key];
         }
         return config;
       },
