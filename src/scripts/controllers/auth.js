@@ -103,15 +103,16 @@
       Auth
         .reset_password(data)
         .then(function(res){
-          $timeout(function(){
-            Notify.success('Success', 'If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.');
-            $scope.isSending = false;
-            $state.go('auth.login');
-          }, 1000);
+          Notify.success('OK!', 'Ti abbiamo inviato le istruzioni, controlla la tua casella di posta');
+          $scope.isSending = false;
+          $state.go('auth.login');
         })
         .catch(function(err){
           $scope.isSending = false;
-          Notify.error('Error', 'Unable to complete the operation.');
+          if(err.status === 404)
+            Notify.error('Errore!', 'L\'email inserita non è presente nel nostro database');
+          else
+            Notify.error('Errore!', 'Impossibile completare l\'operazione');
         });
     };
 

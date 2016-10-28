@@ -3,7 +3,7 @@
     <!-- SIGNUP -->
     <div class="card">
       <div class="card-header ch-alt">
-        <h2>CREATE ACCOUNT</h2>
+        <h2>CREA UN NUOVO ACCOUNT</h2>
       </div>
 
       <div class="card-body card-padding">
@@ -12,14 +12,14 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <div class="fg-line">
-                  <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="First Name" required>
+                  <input type="text" name="first_name" class="form-control input-sm" ng-model="form.first_name" placeholder="Nome" required>
                 </div>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <div class="fg-line">
-                  <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Last Name" required>
+                  <input type="text" name="last_name" class="form-control input-sm" ng-model="form.last_name" placeholder="Cognome" required>
                 </div>
               </div>
             </div>
@@ -31,8 +31,8 @@
                   <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required>
                 </div>
                 <div ng-messages="signupForm.email.$error" class="form-errors">
-                  <div ng-message="invalid">Invalid Email.</div>
-                  <div ng-message="alreadyInUse">Email already in use.</div>
+                  <div ng-message="invalid">Email invalida.</div>
+                  <div ng-message="alreadyInUse">Email già esistente.</div>
                 </div>
               </div>
             </div>
@@ -42,18 +42,18 @@
                   <input type="password" name="password" class="form-control input-sm" placeholder="Password" ng-model="form.password" required>
                 </div>
                 <div ng-messages="signupForm.password.$error" class="form-errors">
-                  <div ng-message="invalid">Invalid Password length (min 8 characters)</div>
+                  <div ng-message="invalid">Password troppo corta (min 8 characters)</div>
                 </div>
               </div>
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-orange btn-block waves-effect">SIGNUP NOW!</button>
+            <button type="submit" class="btn btn-orange btn-block waves-effect">REGISTRATI</button>
           </div>
         </form>
         <div class="m-t-25 text-center">
-          <span>Already have an account? </span>
-          <a ui-sref="auth.login" class="btn bgm-t-orange btn-block waves-effect">LOGIN</a>
+          <span>Hai già un account? </span>
+          <a ui-sref="auth.login" class="btn bgm-t-orange btn-block waves-effect">ACCEDI</a>
         </div>
       </div>
     </div>

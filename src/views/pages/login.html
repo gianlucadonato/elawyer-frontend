@@ -3,7 +3,7 @@
     <!-- LOGIN -->
     <div class="card">
       <div class="card-header ch-alt">
-        <h2>LOGIN</h2>
+        <h2>ACCEDI</h2>
       </div>
 
       <div class="card-body card-padding">
@@ -14,7 +14,7 @@
               <input type="email" name="email" class="form-control input-sm" ng-model="form.email" placeholder="Email" required autofocus>
             </div>
             <div ng-messages="loginForm.email.$error" class="form-errors">
-              <div ng-message="invalid">Invalid Email.</div>
+              <div ng-message="invalid">Email invalida</div>
             </div>
           </div>
           <div class="input-group">
@@ -23,21 +23,21 @@
               <input type="password" name="password" class="form-control input-sm" placeholder="Password" ng-model="form.password" required>
             </div>
             <div ng-messages="loginForm.password.$error" class="form-errors">
-              <div ng-message="invalid">Invalid Password.</div>
+              <div ng-message="invalid">Password Invalida</div>
             </div>
           </div>
           <div class="text-right">
             <a ui-sref="auth.reset_password" class="m-t-5">
-              <i class="fa fa-question-circle-o "></i> Forgot your password?
+              <i class="fa fa-question-circle-o "></i> Hai dimenticato la password?
             </a>
           </div>
           <div class="form-group m-t-10">
-            <button type="submit" class="btn btn-orange btn-block waves-effect">LOGIN</button>
+            <button type="submit" class="btn btn-orange btn-block waves-effect">ACCEDI</button>
           </div>
         </form>
         <div class="m-t-25 text-center">
-          <span>Don't have an account?</span>
-          <a ui-sref="auth.signup" class="btn bgm-t-orange btn-block waves-effect">SIGNUP</a>
+          <span>Non hai un account?</span>
+          <a ui-sref="auth.signup" class="btn bgm-t-orange btn-block waves-effect">REGISTRATI</a>
         </div>
       </div>
     </div>
