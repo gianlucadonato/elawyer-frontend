@@ -1,0 +1,23 @@
+<tabset class="profile-docs-tab">
+  <tab heading="DOC. UTENTE" active="docsTab1Active">
+    <div class="file-manager no-nav-color">
+      <angular-filemanager
+        root-id="{{company.drive_folder.id}}"
+        root-actions="true"
+        hide-sidebar="true">
+      </angular-filemanager>
+    </div>
+  </tab>
+
+  <tab heading="DOC. PRATICHE" active="docsTab2Active">
+    <div class="file-manager no-nav-color">
+      <angular-filemanager
+        root-id="matters"
+        root-user="{{company.id}}"
+        root-name="Pratiche"
+        root-actions="false"
+        hide-sidebar="true">
+      </angular-filemanager>
+    </div>
+  </tab>
+</tabset>

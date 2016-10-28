@@ -111,6 +111,11 @@
         },
         templateUrl: helper.pagesPath('company-details.html')
       })
+      .state ('company.docs', {
+        url: '/docs',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('company-docs.html')
+      })
       .state ('page.company-create', {
         url: '/company/create',
         requireLogin: true,

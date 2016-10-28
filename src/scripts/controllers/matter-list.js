@@ -33,7 +33,7 @@
       $scope.matters.unshift(matter);
     };
 
-    $scope.deleteMatter = function(user) {
+    $scope.deleteMatter = function(matter) {
       swal({
         title: "Are you sure?",
         text: "La pratica verrà eliminata permanentemente.",
@@ -46,8 +46,8 @@
         closeOnCancel: true
       }, function(isConfirm){
         if (isConfirm) {
-          Matter.delete(user).then(function(data){
-            var index = $scope.matters.indexOf(user);
+          Matter.delete(matter).then(function(data){
+            var index = $scope.matters.indexOf(matter);
             $scope.matters.splice(index, 1);
             Notify.success('OK!', "Selected matter deleted successfully!");
           }).catch(function(err){

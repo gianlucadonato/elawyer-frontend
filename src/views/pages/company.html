@@ -40,7 +40,13 @@
         <div class="pm-body clearfix">
           <ul class="tab-nav tn-justified">
             <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="company.details(company)">Informazioni</a></li>
-            <!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="profile.timeline">Timeline</a></li> -->
+            <li class="btn-wave" data-ui-sref-active="active" ng-if="current_user.id == company.id">
+              <a data-ui-sref="company.docs(company)">Documenti</a>
+            </li>
+            <li class="btn-wave" data-ui-sref-active="active" ng-if="current_user.id != company.id"
+              permission permission-only="['LAWYER', 'ADMIN']">
+              <a data-ui-sref="company.docs(company)">Documenti</a>
+            </li>
           </ul>
           <data ui-view></data>
         </div>
