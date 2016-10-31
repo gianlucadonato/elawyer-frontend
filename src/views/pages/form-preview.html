@@ -1,0 +1,32 @@
+<div class="container m-t-25 retainer-agreement retainer-agreement-list">
+  <div class="card">
+    <div class="card-header">
+      <h1>
+        {{form.title}} <br/><small>{{form.description}}</small>
+      </h1>
+      <hr/>
+    </div>
+
+
+    <div class="card-body card-padding">
+      <div class="question" ng-repeat="i in form.items">
+
+        <div>
+          <div class="form-group">
+            <h4>{{$index + 1}}. {{i.title}}</h4>
+          </div>
+
+
+          <span ng-if="i.type == 'select'" style="padding-top: 25px">
+            <div ng-repeat="q in i.options" ng-include="'views/pages/form-preview-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();"></div>
+          </span>
+
+          <span ng-if="i.type == 'radio'" style="padding-top: 25px">
+            <div style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{i.color}}" ng-init="i.color=getClass();" ng-repeat="q in i.options" ng-include="'views/pages/form-preview-recursive.html'"></div>
+          </span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

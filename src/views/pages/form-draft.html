@@ -18,7 +18,7 @@
         <table ng-table="retainer_agreementsTable" class="table table-striped table-vmiddle">
           <tr ng-repeat="m in forms">
             <td data-title="'Title'" sortable="'title'">
-              {{ m.title }}
+              <a ui-sref="page.form-preview({id: m.id})">{{ m.title }}</a>
             </td>
             <td data-title="'Domande'" sortable="'items.length'">
               {{ m.items.length }}

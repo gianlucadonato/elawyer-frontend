@@ -10,7 +10,7 @@
     </div>
 
 
-    <div class="card-body card-padding" ng-if="review">
+    <div class="card-body card-padding" permission permission-only="['CUSTOMER']" ng-if="review">
       <div class="question" ng-repeat="i in form.items">
 
         <div ng-if="i.type == 'date'" ng-init="i.value = ensureDate(i.value)"></div>

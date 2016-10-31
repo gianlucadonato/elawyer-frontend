@@ -244,6 +244,13 @@
         templateUrl: helper.pagesPath('form-answer.html'),
         controller: 'FormAnswerCtrl'
       })
+      .state('page.form-preview', {
+        url: '/forms/:id/preview',
+        title: 'Forms Preview',
+        requireLogin: true,
+        templateUrl: helper.pagesPath('form-preview.html'),
+        controller: 'FormPreviewCtrl'
+      })
       .state('page.form-edit', {
         url: '/forms/:id/edit',
         title: 'Forms Edit',

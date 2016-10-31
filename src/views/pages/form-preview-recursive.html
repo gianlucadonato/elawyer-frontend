@@ -1,0 +1,21 @@
+<div ng-init="q.color=getClassLight();" style="border: 2px solid #ddd; padding: 15px; margin-bottom: 5px">
+  <p><span>Se l'utente risponde</span> <strong style="text-decoration: underline">{{q.title}}</strong> alla domanda <span style="font-style: italic">"{{s.title || i.title}}"</span>, mostra il seguente questionario: </p>
+
+  <div class="question" ng-repeat="s in q.subItems">
+    <div>
+      <div class="form-group">
+        <h4>{{s.title}}</h4>
+      </div>
+
+
+      <span ng-if="s.type == 'select'" style="padding-top: 25px">
+        <div ng-repeat="q in s.options" ng-include="'views/pages/form-preview-recursive.html'" style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{s.color}}" ng-init="s.color=getClass();"></div>
+      </span>
+
+      <span ng-if="s.type == 'radio'" style="padding-top: 25px">
+        <div style="margin-left: 5px; padding-left: 15px; border-left: 2px solid {{s.color}}" ng-init="s.color=getClass();" ng-repeat="q in s.options" ng-include="'views/pages/form-preview-recursive.html'"></div>
+      </span>
+
+    </div>
+  </div>
+</div>
