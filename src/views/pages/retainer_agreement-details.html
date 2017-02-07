@@ -27,14 +27,22 @@
             </div>
             <div class="col-sm-6 text-right">
               <h4>
-                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
-                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Gentile</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">Spett.le</span>
                 {{retainer_agreement.matter.customer.name}}
               </h4>
               <p>
-                <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.matter.customer.domicile && retainer_agreement.matter.customer_type == 'User'">
+                  {{retainer_agreement.matter.customer.domicile}}
+                </span>
+                <span ng-if="retainer_agreement.matter.customer.address && retainer_agreement.matter.customer_type == 'Company'">
+                  {{retainer_agreement.matter.customer.address}}
+                </span>
+                <br/>
+                <!-- <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/> -->
+                <span ng-if="retainer_agreement.matter.customer.vat_number && retainer_agreement.matter.customer_type == 'Company'">
+                  P.I. {{retainer_agreement.matter.customer.vat_number}}
+                </span>
               </p>
             </div>
           </div>
@@ -194,15 +202,24 @@
             <div class="col-sm-6"></div>
             <div class="col-sm-6 text-right">
               <h4>
-                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
-                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Gentile</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">Spett.le</span>
                 {{retainer_agreement.matter.customer.name}}
               </h4>
               <p>
-                <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.matter.customer.domicile && retainer_agreement.matter.customer_type == 'User'">
+                  {{retainer_agreement.matter.customer.domicile}}
+                </span>
+                <span ng-if="retainer_agreement.matter.customer.address && retainer_agreement.matter.customer_type == 'Company'">
+                  {{retainer_agreement.matter.customer.address}}
+                </span>
+                <br/>
+                <!-- <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/> -->
+                <span ng-if="retainer_agreement.matter.customer.vat_number && retainer_agreement.matter.customer_type == 'Company'">
+                  P.I. {{retainer_agreement.matter.customer.vat_number}}
+                </span>
               </p>
+
             </div>
           </div>
           <div class="row">
@@ -218,7 +235,7 @@
               <i class="zmdi zmdi-arrow-back"></i><span> Indietro</span>
             </button>
             <span ng-if="current_user.id == retainer_agreement.matter.customer.id ||
-              current_user.companies.indexOf(retainer_agreement.matter.customer.id)">
+              current_user.companies.indexOf(retainer_agreement.matter.customer.id) != -1">
               <button class="btn btn-primary waves-effect" ng-click="openPaymentModal()">
                 <span>Effettua Pagamento</span>
               </button>
@@ -247,14 +264,22 @@
             <div class="col-sm-6"></div>
             <div class="col-sm-6 text-right">
               <h4>
-                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Spett.le</span>
-                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">All'attenzione di</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'User'">Gentile</span>
+                <span ng-if="retainer_agreement.matter.customer_type == 'Company'">Spett.le</span>
                 {{retainer_agreement.matter.customer.name}}
               </h4>
               <p>
-                <span ng-if="retainer_agreement.matter.customer.address">{{retainer_agreement.matter.customer.address}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="retainer_agreement.matter.customer.vat_number">P.I. {{retainer_agreement.matter.customer.vat_number}}</span>
+                <span ng-if="retainer_agreement.matter.customer.domicile && retainer_agreement.matter.customer_type == 'User'">
+                  {{retainer_agreement.matter.customer.domicile}}
+                </span>
+                <span ng-if="retainer_agreement.matter.customer.address && retainer_agreement.matter.customer_type == 'Company'">
+                  {{retainer_agreement.matter.customer.address}}
+                </span>
+                <br/>
+                <!-- <span ng-if="retainer_agreement.matter.customer.fiscal_code">C.F. {{retainer_agreement.matter.customer.fiscal_code}}</span><br/> -->
+                <span ng-if="retainer_agreement.matter.customer.vat_number && retainer_agreement.matter.customer_type == 'Company'">
+                  P.I. {{retainer_agreement.matter.customer.vat_number}}
+                </span>
               </p>
             </div>
           </div>

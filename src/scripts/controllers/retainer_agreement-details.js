@@ -25,6 +25,7 @@
       } else {
         RetainerAgreement.api.get($stateParams.id).then(function(data) {
           $scope.retainer_agreement = data;
+          console.log('retainer_agreement', data)
           if(data.deposit)
             $scope.invoice_type = 'deposit';
           if(data.invoices.length)

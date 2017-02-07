@@ -19,6 +19,7 @@
     function getInvoice() {
       return Invoice.get($stateParams.id).then(function(data) {
         $scope.invoice = data;
+        console.log('data', data);
       }).catch(function(err){
         Notify.error('Error!', 'Unable to load invoice');
       });

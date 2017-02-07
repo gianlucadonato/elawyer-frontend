@@ -36,11 +36,11 @@
           <div class="invoice-letter-header">
             <img src="images/logo.png" alt="">
             <div class="pull-left">
-              <h4>Spett.le {{invoice.matter.customer.name}}</h4>
+              <h4>Avv. {{invoice.matter.owner.name}}</h4>
               <p>
-                <span ng-if="invoice.matter.customer.address">{{invoice.matter.customer.address}}</span><br/>
-                <span ng-if="invoice.matter.customer.fiscal_code">C.F. {{invoice.matter.customer.fiscal_code}}</span><br/>
-                <span ng-if="invoice.matter.customer.vat_number">P.I. {{invoice.matter.customer.vat_number}}</span>
+                <span ng-if="invoice.matter.owner.address">{{invoice.matter.owner.address}}</span><br/>
+                <span ng-if="invoice.matter.owner.fiscal_code">C.F. {{invoice.matter.owner.fiscal_code}}</span><br/>
+                <span ng-if="invoice.matter.owner.vat_number">P.I. {{invoice.matter.owner.vat_number}}</span>
               </p>
             </div>
             <div class="clearfix"></div>
@@ -57,11 +57,16 @@
         <div class="card-body card-padding">
           <div class="row">
             <div class="col-sm-6">
-              <h4>Avv. {{invoice.matter.owner.name}}</h4>
-              <p>
-                <span ng-if="invoice.matter.owner.address">{{invoice.matter.owner.address}}</span><br/>
-                <span ng-if="invoice.matter.owner.fiscal_code">C.F. {{invoice.matter.owner.fiscal_code}}</span><br/>
-                <span ng-if="invoice.matter.owner.vat_number">P.I. {{invoice.matter.owner.vat_number}}</span>
+              <h4 ng-if="invoice.matter.customer_type == 'User'">Gentile {{invoice.matter.customer.name}}</h4>
+              <p ng-if="invoice.matter.customer_type == 'User'">
+                <span ng-if="invoice.matter.customer.domicile">{{invoice.matter.customer.domicile}}</span><br/>
+                <!-- <span ng-if="invoice.matter.customer.fiscal_code">C.F. {{invoice.matter.customer.fiscal_code}}</span><br/> -->
+                <span ng-if="invoice.matter.customer.vat_number">P.I. {{invoice.matter.customer.vat_number}}</span>
+              </p>
+              <h4 ng-if="invoice.matter.customer_type == 'Company'">Spett.le {{invoice.matter.customer.name}}</h4>
+              <p ng-if="invoice.matter.customer_type == 'Company'">
+                <span ng-if="invoice.matter.customer.address">{{invoice.matter.customer.address}}</span><br/>
+                <span ng-if="invoice.matter.customer.vat_number">P.I. {{invoice.matter.customer.vat}}</span>
               </p>
             </div>
             <div class="col-sm-6 text-right">
